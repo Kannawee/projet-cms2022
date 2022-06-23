@@ -27,7 +27,7 @@ abstract class Sql
     /**
      * @param int $id
      */
-    public function setId(?int $id): object
+    public function checkId(?int $id): object
     {
         $sql = "SELECT * FROM ".$this->table." WHERE id=".$id;
         $query = $this->pdo->query($sql);
