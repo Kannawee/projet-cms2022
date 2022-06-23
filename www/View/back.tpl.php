@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Template BACK</title>
+    <title>Administration du site</title>
     <meta name="description" content="Description de ma page">
 </head>
 <body>

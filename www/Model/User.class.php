@@ -183,4 +183,12 @@ class User extends Sql
         ];
     }
 
+    public function checkLogin(): object
+    {
+        $where = [
+          'email' => $this->email
+        ];
+        return $this->select($where, 1);
+    }
+
 }
