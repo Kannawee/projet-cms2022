@@ -29,3 +29,7 @@
   security:
     - admin
     - user
+
+/mail:
+  controller: myMail
+  action: testMail
