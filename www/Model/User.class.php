@@ -11,6 +11,7 @@ class User extends Sql
     protected $password;
     protected $status = 0;
     protected $token = null;
+    public static $table = "esgi_user";
 
     public function __construct()
     {

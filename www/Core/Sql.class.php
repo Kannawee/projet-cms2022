@@ -59,5 +59,20 @@ abstract class Sql
 
     }
 
+    public function select($where, $limit)
+    {
+        $sql = "SELECT * FROM ".$this->table." WHERE ";
+
+        foreach ($where as $col => $val) {
+            $sql .= $col."='".$val."' AND ";
+        }
+
+        $sql = trim($sql, " AND ");
+        $sql .= " LIMIT ".$limit;
+
+        return $this->pdo->query($sql)->fetch();
+
+    }
+
 
 }
