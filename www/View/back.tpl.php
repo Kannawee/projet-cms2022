@@ -7,7 +7,9 @@
 </head>
 <body>
 
-    <?php include "View/".$this->view.".view.php"; ?>
+<!--    <?php include "View/".$this->view.".view.php"; ?>-->
+    <p>TEMPLATE BACK</p>
+    <p>View Dashboard</p>
 
 </body>
 </html>

@@ -1,0 +1,18 @@
+.form-input{
+	border: solid 1px $color;
+	border-radius: 5px;
+	height: 30px;
+	padding: 0;
+
+	&::placeholder{
+		color: $color-input-text;
+	}
+}
+
+.form-select{
+	height: 30px;
+	border: solid 1px $color;
+	border-radius: 5px;
+	background-color: white;
+	color: $color-input-text;
+}

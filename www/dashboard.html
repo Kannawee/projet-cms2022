@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link href="style.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script type="text/javascript" src="js/main.js"></script>
+
+</head>
+
+<body class="body-dashboard">
+
+  <nav class="navbar">
+
+    <section class="logo">
+      <img src="images/logo.svg">
+    </section>
+    
+    <ul>
+      <li class="nav-button selected" onclick="hideShowSection(this);"><img class="icon-nav" src="images/icones/icon_dashboard.svg"><a href="dashboard.html">Dashboard</a></li>
+      <li class="nav-button" onclick="hideShowSection(this);"><img class="icon-nav" src="images/icones/icon_users.svg"><a href="users.html">Users</a></li>
+      <li class="nav-button" onclick="event.preventDefault(); hideShowSection(this);"><img class="icon-nav" src="images/icones/icon_projects.svg"><a href="#">Projects</a></li>
+      <li class="nav-button" onclick="event.preventDefault(); hideShowSection(this);"><img class="icon-nav" src="images/icones/icon_concerts.svg"><a href="#">Concerts</a></li>
+      <li class="nav-button" onclick="event.preventDefault(); hideShowSection(this);"><img class="icon-nav" src="images/icones/icon_newsletter.svg"><a href="#">Newsletter</a></li>
+      <li class="nav-button" onclick="hideShowSection(this);"><img class="icon-nav" src="images/icones/icon_templates.svg"><a href="templates.html">Template</a></li>
+      <li class="nav-title-sub">
+        <img class="icon-nav" src="images/icones/icon_pages.svg">Pages
+        <span class="nav-subsection">
+          <ul>
+            <li class="nav-button">Discography</li>
+            <li class="nav-button">Concerts</li>
+            <li class="nav-button">About us</li>
+          </ul>
+        </span>
+      </li>
+      <li class="nav-button" onclick="event.preventDefault();alert('EXPLOSION BOOM');"><img class="icon-nav" src="images/icones/icon_logout.svg"><a href="#">Log out</a></li>
+    </ul>
+  </nav>
+
+  <section class="section-content">
+    <section class="card-block">
+      <h1>Main Data</h1>
+
+      <section class="section-selection-data">
+
+        <span class="button-selection-data selected" onclick="event.preventDefault(); selectDataDashboard(this);">
+          <i class="fa-solid fa-users fa-2xl icon-data"></i>
+          <span class="info-data">
+            <span class="title-data">Connections</span>
+            <span class="number-data">666K</span>
+          </span>
+        </span>
+
+        <span class="button-selection-data" onclick="event.preventDefault(); selectDataDashboard(this);">
+          <i class="fa-solid fa-heart fa-2xl icon-data"></i>
+          <span class="info-data">
+            <span class="title-data">Likes</span>
+            <span class="number-data">75K</span>
+          </span>
+        </span>
+
+        <span class="button-selection-data" onclick="event.preventDefault(); selectDataDashboard(this);">
+          <i class="fa-solid fa-headphones-simple fa-2xl icon-data"></i>
+          <span class="info-data">
+            <span class="title-data">Most streams</span>
+            <span class="number-data">103K</span>
+          </span>
+        </span>
+
+      </section>
+
+      <section class="dashboard-graph">
+        <span class="button-big-graph-legend">
+          <button class="btn-legend">16.248&nbsp;&nbsp;<i class="fa-solid fa-user"></i></button>
+        </span>
+        <img src="images/big-graph.svg" class="big-graph">
+      </section>
+
+    </section>
+
+    <section class="card-block">
+      <h1>Details</h1>
+      
+      <section class="area-detail-data">
+        <section class="detail-data">
+          <span class="title-data-detail">
+            <i class="fa-solid fa-music icon-data-detail"></i>
+            Song Records
+          </span>
+
+          <article class="content-detail-data">
+            <section class="row-detail-data">
+              <section class="detail-data-info">
+                <p class="legend-row">Most streamed</p>
+                <p class="media-title">Song's title here</p>
+              </section>
+
+              <section class="detail-data-number">
+                3056<i class="fa-solid fa-headphones-simple icon-data-number"></i>
+              </section>
+            </section>
+
+            <section class="row-detail-data">
+              <section class="detail-data-info"> 
+                <p class="legend-row">Most Liked</p>
+                <p class="media-title">Song's title here</p>
+              </section>
+
+              <section class="detail-data-number">
+                18.942<i class="fa-solid fa-heart icon-data-number"></i>
+              </section>
+            </section>
+
+          </article>
+
+        </section>
+
+        <section class="detail-data">
+          <span class="title-data-detail">
+            <i class="fa-solid fa-compact-disc icon-data-detail"></i>
+            Album Records
+          </span>
+
+          <article class="content-detail-data">
+            <article class="row-detail-data">
+              <section class="detail-data-info">
+                <p class="legend-row">Most streamed</p>
+                <p class="media-title">Album's title here</p>
+              </section>
+
+              <section class="detail-data-number">
+                641<i class="fa-solid fa-headphones-simple icon-data-number"></i>
+              </section>
+            </article>
+
+            <article class="row-detail-data">
+              <section class="detail-data-info"> 
+                <p class="legend-row">Most Liked</p>
+                <p class="media-title">Album's title here</p>
+              </section>
+
+              <section class="detail-data-number">
+                7682<i class="fa-solid fa-heart icon-data-number"></i>
+              </section>
+            </article>
+
+          </article>
+
+        </section>
+
+        <section class="detail-data">
+          <span class="title-data-detail">
+            <i class="fa-solid fa-ticket-simple icon-data-detail"></i>
+            Tickets Sold
+          </span>
+
+          <article class="content-detail-data display-row">
+            <article class="detail-data-number-compose">
+              <span class="first-number">420</span>
+              <span class="second-number">600</span>
+            </article>
+
+            <article class="detail-data-graph">
+              <!-- <div id="piechart"></div> -->
+              <img src="images/camembert.svg" class="img-camembert-soon">
+            </article>
+          </article>
+
+        </section>
+      </section>
+
+    </section>
+  </section>
+
+</body>
+</html>

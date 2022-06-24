@@ -1,0 +1,23 @@
+@import "colors";
+
+/**
+ * DASHBOARD
+**/
+$color-input-text: #D1D1D1;
+
+
+
+/**
+ * COLOR BODY SECTION
+**/
+$nav-gradient-blue: linear-gradient(180deg, $main-blue 10%, $dark-blue 100%);
+$body-gradient-blue: linear-gradient(180deg, rgba(233, 233, 233, 0) 0%, #DEF4F8 100%);
+$btn-gradient-blue: linear-gradient(270deg, #2ECFF0 0%, #497BFB 91.15%);
+
+$color: $light-blue;
+$color-title1: $very-dark-blue;
+$color-title2: $main-blue;
+$color-number: $dark-blue;
+
+
+/****/
