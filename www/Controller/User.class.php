@@ -21,8 +21,8 @@ class User {
             if ($user->getEmail() === $res['email'] && password_verify($_POST['password'], $res['password'])){
                 $_SESSION["idUser"] = $res['id'];
                 if ($res['status'] === "1") {
-                    $view = new View("test", "back" );
-                    $view->assign("user", $user);
+                    $_SESSION['isAdmin'] = 1;
+                    header("Location: /dashboard" );
                 }
             }
         } else {
