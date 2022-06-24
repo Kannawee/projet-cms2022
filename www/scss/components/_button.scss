@@ -1,0 +1,13 @@
+.form-btn-add{
+	margin-left: 30px;
+	border-radius: 8px;
+	height: 30px;
+    width: 60px;
+    border: none;
+    background: $btn-gradient-blue;
+    color: white;
+
+    &:hover{
+        opacity: 0.8;
+    } 
+}

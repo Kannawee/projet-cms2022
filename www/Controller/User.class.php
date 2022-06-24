@@ -14,23 +14,21 @@ class User {
         $user = new UserModel();
         if ( !empty($_POST)) {
             $result = Verificator::checkForm($user->getLoginForm(), $_POST);
+            /* SI RESULT != EMPTY -> REDIRECT /LOGIN */
             $user->setEmail($_POST['email']);
             $user->setPassword($_POST['password']);
             $res = $user->checkLogin();
-            if ($user->getEmail() === $res[0]['email'] && $user->getPassword() === $res[0]['password']){
-                $_SESSION["idUser"] = $res[0]['id'];
-                if ($res[0]['status'] === 1) {
-                    $view = new View("Login", "back");
+            if ($user->getEmail() === $res['email'] && password_verify($_POST['password'], $res['password'])){
+                $_SESSION["idUser"] = $res['id'];
+                if ($res['status'] === "1") {
+                    $view = new View("test", "back" );
+                    $view->assign("user", $user);
                 }
-
             }
-            // AJOUTER LA REDIRECTION SI USER=ADMIN-> DASHBOARD BACK
-            /*$view = new View("Contact", "front" );
-            $view->assign("user", $user);*/
         } else {
             // AJOUTER LA REDIRECTION SI USER!=ADMIN-> HOME PAGE
-            /*$view = new View("Contact", "front" );
-            $view->assign("user", $user);*/
+            $view = new View("Login", "front" );
+            $view->assign("user", $user);
         }
 
 

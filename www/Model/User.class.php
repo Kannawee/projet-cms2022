@@ -184,7 +184,7 @@ class User extends Sql
         ];
     }
 
-    public function checkLogin(): object
+    public function checkLogin(): array
     {
         $where = [
           'email' => $this->email
