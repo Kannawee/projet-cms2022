@@ -23,12 +23,16 @@
   action: pwdforget
 
 
-/dashboard:
+/administration/dashboard:
   controller: admin
   action: dashboard
   security:
     - admin
     - user
+
+/administration/users:
+  controller: admin
+  action: users
 
 /mail:
   controller: myMail
