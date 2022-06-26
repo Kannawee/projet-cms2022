@@ -37,3 +37,7 @@
 /mail:
   controller: myMail
   action: testMail
+
+/testsam:
+  controller: testSam
+  action: test
