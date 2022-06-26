@@ -2,4 +2,4 @@ docker-compose.yml
 .idea/*
 package-lock.json
 www/node_modules
-db_data/ibtmp1
+db_data
