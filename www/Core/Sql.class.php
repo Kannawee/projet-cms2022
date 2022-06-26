@@ -27,7 +27,7 @@ abstract class Sql
     /**
      * @param int $id
      */
-    public function setId(?int $id): object
+    public function checkId(?int $id): object
     {
         $sql = "SELECT * FROM ".$this->table." WHERE id=".$id;
         $query = $this->pdo->query($sql);
@@ -56,6 +56,21 @@ abstract class Sql
         $queryPrepared = $this->pdo->prepare($sql);
         var_dump($queryPrepared);
         $queryPrepared->execute( $columns );
+
+    }
+
+    public function select($where, $limit)
+    {
+        $sql = "SELECT * FROM ".$this->table." WHERE ";
+
+        foreach ($where as $col => $val) {
+            $sql .= $col."='".$val."' AND ";
+        }
+
+        $sql = trim($sql, " AND ");
+        $sql .= " LIMIT ".$limit;
+
+        return $this->pdo->query($sql)->fetch();
 
     }
 
