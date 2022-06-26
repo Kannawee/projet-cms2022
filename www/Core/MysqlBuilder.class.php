@@ -8,7 +8,7 @@
 
         public function select (string $table, array $columns): QueryBuilder;
 
-        public function where (string $column, string $value, string $operator='='): QueryBuilder;
+        public function where (string $column, string $value, string $operator='=', string $table=''): QueryBuilder;
 
         public function limit (int $from, int $offset): QueryBuilder;
 
@@ -31,13 +31,28 @@
         public function select (string $table, array $columns): QueryBuilder {
             $this->init();
 
-            $this->query->base = "SELECT " . implode(',', $columns) . " FROM ".$table;
+            $tmp_str = "SELECT ";
+
+            foreach ($columns as $col) {
+                $tmp_str .= " " . $table . "." . $col . ", ";
+            }
+
+            $tmp_str = trim($tmp_str, ", ")." FROM ".$table;
+
+            $this->query->base = $tmp_str;
             return $this;
         }
 
-        public function where (string $column, string $value, string $operator = '='): QueryBuilder {
+        public function where (string $column, string $value, string $operator = '=', string $table=''): QueryBuilder {
+            $tmp_str = "";
 
-            $this->query->where[] = ' ' . $column . $operator . "'" . $value . "'" ;
+            if ($table!="") {
+                $tmp_str = ' ' . $table . ".";
+            }
+
+            $tmp_str .= $column . $operator . "'" . $value . "'";
+
+            $this->query->where[] = $tmp_str;
             return $this;
         }
 
