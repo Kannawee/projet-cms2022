@@ -6,7 +6,7 @@
             <li><a href="#">Concerts</a></li>
         </ul>
         <ul>
-            <li><a href="/register">Créer un compte</a></li>
+            <li><a href="/register">S'inscrire</a></li>
             <li><a href="/login">Se connecter</a></li>
         </ul>
     </nav>
@@ -16,7 +16,7 @@
 </div>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Manrope&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400&display=swap');
 
     body {
         margin: 0 !important;

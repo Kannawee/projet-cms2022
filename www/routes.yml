@@ -34,6 +34,31 @@
   controller: admin
   action: users
 
+/administration/projects:
+  controller: admin
+  action: projects
+
+/administration/projects/add:
+  controller: project
+  action: add
+
+/administration/projects/delete:
+  controller: project
+  action: delete
+
+
+/administration/concerts:
+  controller: admin
+  action: concerts
+
+/administration/newsletter:
+  controller: admin
+  action: newsletter
+
+/administration/templates:
+  controller: admin
+  action: templates
+
 /mail:
   controller: myMail
   action: testMail
