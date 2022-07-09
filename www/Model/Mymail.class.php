@@ -19,7 +19,7 @@ class Mymail
 		$this->mailer->isSMTP();
 		$this->mailer->SMTPDebug = 0;
 		$this->mailer->SMTPAuth = true;
-		$this->mailer->SMTPSecure = 'ssl';
+		$this->mailer->SMTPSecure = 'tls';
 		$this->mailer->Host = 'smtp.gmail.com';
 		$this->mailer->Port = 587;
 		$this->mailer->Username = "artistery.projetcms@gmail.com";
