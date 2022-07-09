@@ -16,14 +16,14 @@ class Mymail
 	public function __construct() 
 	{
 		$this->mailer = new PHPMailer();
-		$this->mailer->IsSMTP();
-		$this->mailer->SMTPDebug = 1;
+		$this->mailer->isSMTP();
+		$this->mailer->SMTPDebug = 0;
 		$this->mailer->SMTPAuth = true;
-		$this->mailer->SMTPSecure = 'ssl';
+		$this->mailer->SMTPSecure = 'tls';
 		$this->mailer->Host = 'smtp.gmail.com';
-		$this->mailer->Port = 465;
+		$this->mailer->Port = 587;
 		$this->mailer->Username = "artistery.projetcms@gmail.com";
-		$this->mailer->Password = "esgigang2022PA";
+		$this->mailer->Password = "odmwqkjvqpebzjic";
 		$this->mailer->SetFrom("artistery.projetcms@gmail.com", "Artistery Team");
 	}
 

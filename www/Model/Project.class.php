@@ -29,7 +29,9 @@ class Project extends Sql
      */
     public function getAll(): ?array
     {
-        return $this->id;
+        $res = $this->select();
+        return $res;
+
     }
 
     /**

@@ -64,12 +64,14 @@ abstract class Sql
 
     }
 
-    public function select($where, $limit=null)
+    public function select($where=array(), $limit=null)
     {
         $this->builder->select($this->table, ["*"]);
 
-        foreach ($where as $col => $val) {
-            $this->builder->where($col, $this->table);
+        if (count($where)>0) {
+            foreach ($where as $col => $val) {
+                $this->builder->where($col, $this->table);
+            }
         }
 
         if (!is_null($limit)) {
@@ -79,7 +81,12 @@ abstract class Sql
         $sql = $this->builder->getQuery();
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($where);
+        if(count($where)>0){
+            $stmt->execute($where);
+        } else {
+            $stmt->execute();
+        }
+        
         return $stmt->fetchAll($this->pdo::FETCH_ASSOC);
     }
 

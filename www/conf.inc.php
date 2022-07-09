@@ -1,6 +1,6 @@
 <?php
 
-define("DBUSER", "rootsql");
+define("DBUSER", "root");
 define("DBPWD", "password");
 define("DBHOST", "database");
 define("DBNAME", "db-projet-annuel");

@@ -33,11 +33,17 @@
 <section class="card-block">
     <h1>Details</h1>
 
-    <div>
-        <?php
-            var_dump($project);
-        ?>
-    </div>
+        <div>
+            <?php
+                foreach($projectTab as $key=>$val) { 
+            ?>
+                <h2><?=$val['name']?></h2>
+                <p><?=$val['description']?></p>
+            <?php                
+                }
+            ?>
+        </div>
+    </section>
 </section>
 
 
