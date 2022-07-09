@@ -34,8 +34,6 @@
   controller: admin
   action: users
 
-<<<<<<< HEAD
-=======
 /administration/projects:
   controller: admin
   action: projects
@@ -61,7 +59,6 @@
   controller: admin
   action: templates
 
->>>>>>> 19752dae2c190f36969ac2558fbc7ba5b7380d00
 /mail:
   controller: myMail
   action: testMail
