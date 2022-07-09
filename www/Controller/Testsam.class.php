@@ -2,24 +2,26 @@
 
     namespace App\Controller;
 
-    use App\Core\MysqlBuilder as MysqlBuilder;
+    use App\Core\Sql;
+    use App\Model\Testsam as TestSamModel;
+    use App\Model\Mymail as MymailModel;
 
-    class TestSam extends MysqlBuilder
+    class TestSam
     {
 
         public function test()
         {
-
-            $col = ["col1", "col2", "col3"];
-            $this->init();
-            $this->select('MaTable', $col);
-            $this->where("col1", "val1", "=", "MaTable");
-            $this->where("col2", "val2", "=", "MaTable");
-            $this->limit(0, 1);
-
-            echo '<pre>'.$this->getQuery();
+            $mail = new MymailModel();
+            
+            $addresse = array(
+                "Samuel GUENIER" => "guenier.samuel@gmail.com"
+            );
+    
+            $mail->setupMyMail("Test Sujet", "Test Body", $addresse);
+    
+            $response = $mail->sendMyMail();
+    
+            echo $response;
         }
-
-
 
     }

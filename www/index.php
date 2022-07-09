@@ -16,7 +16,9 @@ function myAutoloader($class)
 
 spl_autoload_register("App\myAutoloader");
 
-
+if (session_status() != PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 //Réussir à récupérer l'URI
 $uri = $_SERVER["REQUEST_URI"];
@@ -28,12 +30,24 @@ if(!file_exists($routeFile)){
 
 $routes = yaml_parse_file($routeFile);
 
+// $matched_routes = array();
+// $res_routes = array();
+
+// foreach ($routes as $k=>$v) {
+//     $tmp_routes = preg_replace('/({.*)/', '', $k);
+//     echo '<pre>';
+//     var_dump($tmp_routes);
+//     echo '</pre>';
+// }
+// die;
+
 if( empty($routes[$uri]) ||  empty($routes[$uri]["controller"])  ||  empty($routes[$uri]["action"])){
     die("Erreur 404");
 }
 
 $controller = ucfirst(strtolower($routes[$uri]["controller"]));
 $action = strtolower($routes[$uri]["action"]);
+$params = isset($routes[$uri]["parameters"])?$routes[$uri]["parameters"]:false;
 
 
 /*
@@ -64,4 +78,9 @@ if( !method_exists($objectController, $action)){
     die("L'action ".$action." n'existe pas");
 }
 // $action = login ou logout ou register ou home
-$objectController->$action();
+
+if ($params!=false) {
+    $objectController->$action($params);
+}else{
+    $objectController->$action();
+}
