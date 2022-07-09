@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\View;
 use App\Model\User as UserModel;
 use App\Model\Project as ProjectModel;
+use App\Model\Concert as ConcertModel;
 
 
 class Admin
@@ -12,11 +13,7 @@ class Admin
 
     public function dashboard()
     {
-<<<<<<< HEAD
-        if (isset($_SESSION["userId"]) && isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"] === 1){
-=======
         if (isset($_SESSION["userId"]) && isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"] === 1) {
->>>>>>> 19752dae2c190f36969ac2558fbc7ba5b7380d00
             echo "Ceci est un beau dashboard";
         } else {
             if (isset($_SESSION["userId"])) {
@@ -27,10 +24,6 @@ class Admin
         }
     }
 
-<<<<<<< HEAD
-    public function isAdmin() {
-        if (isset($_SESSION["userId"]) && isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"] === 1){
-=======
     public function users() {
         $view = new View("users", "back");
     }
@@ -42,7 +35,9 @@ class Admin
     }
 
     public function concerts() {
+        $concert = new ConcertModel();
         $view = new View("concerts", "back");
+        $view->assign("concert", $concert);
     }
 
     public function newsletter() {
@@ -55,7 +50,6 @@ class Admin
 
     public function isAdmin() {
         if (isset($_SESSION["userId"]) && isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"] === 1) {
->>>>>>> 19752dae2c190f36969ac2558fbc7ba5b7380d00
             echo "Ceci est un beau dashboard";
         } else {
             if (isset($_SESSION["userId"])) {
