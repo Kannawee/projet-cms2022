@@ -62,7 +62,12 @@
 
         <div>
             <?php
-                var_dump($project);
+                foreach($projectTab as $key=>$val) { 
+            ?>
+                <h2><?=$val['name']?></h2>
+                <p><?=$val['description']?></p>
+            <?php                
+                }
             ?>
         </div>
     </section>
