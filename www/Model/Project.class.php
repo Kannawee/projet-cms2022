@@ -9,7 +9,6 @@ class Project extends Sql
     protected $name;
     protected $releaseDate;
     protected $description;
-    protected $author;
     public static $table = "esgi_project";
 
     public function __construct()
@@ -79,22 +78,6 @@ class Project extends Sql
     public function setDescription(string $description): void
     {
         $this->description = $description;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAuthor(): int
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param int $author
-     */
-    public function setAuthor(int $author): void
-    {
-        $this->author = $author;
     }
 
     public function getAddForm(): array

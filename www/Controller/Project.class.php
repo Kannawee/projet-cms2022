@@ -16,7 +16,6 @@ class Project {
         $project->setName($_POST['name']);
         $project->setDate($_POST['releaseDate']);
         $project->setDescription($_POST['description']);
-        $project->setAuthor($_SESSION['idUser']);
         $project->save();
         header('Location: /administration/projects');
     }

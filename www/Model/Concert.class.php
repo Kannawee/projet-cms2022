@@ -27,9 +27,9 @@ class Concert extends Sql
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -71,7 +71,7 @@ class Concert extends Sql
      */
     public function setVenue(string $venue): void
     {
-        $this->venue = $venue;
+        $this->venue = trim($venue);
     }
 
     /**
@@ -87,7 +87,7 @@ class Concert extends Sql
      */
     public function setLink(string $link): void
     {
-        $this->link = $link;
+        $this->link = trim($link);
     }
 
     /**
@@ -103,7 +103,7 @@ class Concert extends Sql
      */
     public function setCity(string $city): void
     {
-        $this->city = $city;
+        $this->city = trim($city);
     }
 
     public function getAddForm(): array

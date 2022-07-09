@@ -9,6 +9,7 @@
             id="<?= $input["id"]??"" ?>"
             class="<?= $input["class"]??"" ?>"
             <?= empty($input["required"])?"":'required="required"' ?>
+            <?= empty($input["accept"])?"":'accept="'.$input["accept"].'"' ?>
     >
 
     <?php endforeach; } ?>
