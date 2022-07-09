@@ -21,16 +21,12 @@ class User {
             $res = $user->checkLogin()[0];
             if ($user->getEmail() === $res['email'] && password_verify($_POST['password'], $res['password'])) {
                 $_SESSION["idUser"] = $res['id'];
-                $token = $user->generateToken();
-                $_SESSION['token'] =$token;
-                var_dump($_SESSION);
                 if ($res['status'] == "1") {
                     $_SESSION['isAdmin'] = 1;
                     header("Location: /administration/projects");
                 }
                 $view = new View("Home", "front");
                 $view->assign("user", $user);
-                $view->assign("firstname", 'test');
             }
         } else {
             // AJOUTER LA REDIRECTION SI USER!=ADMIN-> HOME PAGE

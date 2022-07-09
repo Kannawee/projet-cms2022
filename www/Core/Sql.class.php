@@ -2,10 +2,13 @@
 
 namespace App\Core;
 
+use App\Core\MysqlBuilder as MysqlBuilder;
+
 abstract class Sql
 {
     private $pdo;
     private $table;
+    private $builder;
 
     public function __construct()
     {
@@ -21,13 +24,15 @@ abstract class Sql
         //Si l'id n'est pas null alors on fait un update sinon on fait un insert
         $calledClassExploded = explode("\\",get_called_class());
         $this->table = strtolower(DBPREFIXE.end($calledClassExploded));
+        $this->builder = new MysqlBuilder();
+        $this->builder->init();
 
     }
 
     /**
      * @param int $id
      */
-    public function setId(?int $id): object
+    public function checkId(?int $id): object
     {
         $sql = "SELECT * FROM ".$this->table." WHERE id=".$id;
         $query = $this->pdo->query($sql);
@@ -59,5 +64,38 @@ abstract class Sql
 
     }
 
+    public function select($where, $limit=null)
+    {
+        $this->builder->select($this->table, ["*"]);
+
+        foreach ($where as $col => $val) {
+            $this->builder->where($col, $this->table);
+        }
+
+        if (!is_null($limit)) {
+            $this->builder->limit($limit);
+        }
+
+        $sql = $this->builder->getQuery();
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($where);
+        return $stmt->fetchAll($this->pdo::FETCH_ASSOC);
+    }
+
+    public function delete($where)
+    {
+        $this->builder->delete($this->table);
+
+        foreach ($where as $col=>$val) {
+            $this->builder->where($col, $this->table);
+        }
+
+        $sql = $this->builder->getQuery();
+
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($where);
+
+    }
 
 }

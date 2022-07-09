@@ -11,3 +11,10 @@
 
 </body>
 </html>
+
+<style>
+    html, body {
+        height: 100% !important;
+        margin: 0 !important;
+    }
+</style>
