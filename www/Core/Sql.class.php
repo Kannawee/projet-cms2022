@@ -2,7 +2,17 @@
 
     namespace App\Core;
 
+<<<<<<< HEAD
     use App\Core\MysqlBuilder as MysqlBuilder;
+=======
+use App\Core\MysqlBuilder as MysqlBuilder;
+
+abstract class Sql
+{
+    private $pdo;
+    private $table;
+    private $builder;
+>>>>>>> 19752dae2c190f36969ac2558fbc7ba5b7380d00
 
     abstract class Sql
     {
@@ -29,6 +39,7 @@
 
         }
 
+<<<<<<< HEAD
         /**
          * @param int $id
          */
@@ -38,12 +49,31 @@
             $query = $this->pdo->query($sql);
             return $query->fetchObject(get_called_class());
         }
+=======
+        //Si l'id n'est pas null alors on fait un update sinon on fait un insert
+        $calledClassExploded = explode("\\",get_called_class());
+        $this->table = strtolower(DBPREFIXE.end($calledClassExploded));
+        $this->builder = new MysqlBuilder();
+        $this->builder->init();
+>>>>>>> 19752dae2c190f36969ac2558fbc7ba5b7380d00
 
         public function save()
         {
 
+<<<<<<< HEAD
             $columns = get_object_vars($this);
             $columns = array_diff_key($columns, get_class_vars(get_class()));
+=======
+    /**
+     * @param int $id
+     */
+    public function checkId(?int $id): object
+    {
+        $sql = "SELECT * FROM ".$this->table." WHERE id=".$id;
+        $query = $this->pdo->query($sql);
+        return $query->fetchObject(get_called_class());
+    }
+>>>>>>> 19752dae2c190f36969ac2558fbc7ba5b7380d00
 
             if($this->getId() == null){
                 $sql = "INSERT INTO ".$this->table." (".implode(",",array_keys($columns)).") 
@@ -91,7 +121,43 @@
                 $this->builder->where($col, $this->table);
             }
 
+<<<<<<< HEAD
             $sql = $this->builder->getQuery();
+=======
+    public function select($where, $limit=null)
+    {
+        $this->builder->select($this->table, ["*"]);
+
+        foreach ($where as $col => $val) {
+            $this->builder->where($col, $this->table);
+        }
+
+        if (!is_null($limit)) {
+            $this->builder->limit($limit);
+        }
+
+        $sql = $this->builder->getQuery();
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($where);
+        return $stmt->fetchAll($this->pdo::FETCH_ASSOC);
+    }
+
+    public function delete($where)
+    {
+        $this->builder->delete($this->table);
+
+        foreach ($where as $col=>$val) {
+            $this->builder->where($col, $this->table);
+        }
+
+        $sql = $this->builder->getQuery();
+
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($where);
+
+    }
+>>>>>>> 19752dae2c190f36969ac2558fbc7ba5b7380d00
 
             $stmt = $this->pdo->prepare($sql);
             return $stmt->execute($where);

@@ -9,8 +9,14 @@ class Verificator
     public static function checkForm($config, $data): array
     {
         $result = [];
-        //Le nb de inputs envoyés ?
-        if( count($data) != count($config['inputs'])){
+
+        if (isset($config['textAreas'])) {
+            $nbFields = count($config['inputs']) + count($config['textAreas']);
+        } else {
+            $nbFields = count($config['inputs']);
+        }
+
+        if( count($data) != $nbFields){
             die("Tentative de hack !!!!");
         }
 
@@ -35,8 +41,18 @@ class Verificator
             if(!empty($input["confirm"]) && $data[$name] != $data[$input["confirm"]]){
                 $result[] = $input["error"];
             }
+        }
 
+        if (isset($config['textAreas'])) {
+            foreach ($config['textAreas'] as $name=>$textArea) {
+                if(!isset($data[$name]) ){
+                    $result[] = "Le champs ".$name." n'existe pas";
+                }
 
+                if(empty($data[$name]) && !empty($textArea["required"]) ) {
+                    $result[] = "Le champs ".$name." ne peut pas être vide";
+                }
+            }
         }
 
 

@@ -4,6 +4,11 @@ namespace App;
 
 require "conf.inc.php";
 
+if (session_status() != PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+
 function myAutoloader($class)
 {
     // $class => CleanWords
