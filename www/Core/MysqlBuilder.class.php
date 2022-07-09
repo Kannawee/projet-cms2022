@@ -8,7 +8,7 @@
 
         public function select (string $table, array $columns): QueryBuilder;
 
-        public function where (string $column, string $value, string $operator='=', string $table=''): QueryBuilder;
+        public function where (string $column, string $table, string $operator='='): QueryBuilder;
 
         public function limit (int $from, int $offset): QueryBuilder;
 
@@ -29,8 +29,6 @@
         }
 
         public function select (string $table, array $columns): QueryBuilder {
-            $this->init();
-
             $tmp_str = "SELECT ";
 
             foreach ($columns as $col) {
@@ -43,21 +41,27 @@
             return $this;
         }
 
-        public function where (string $column, string $value, string $operator = '=', string $table=''): QueryBuilder {
-            $tmp_str = "";
+        public function where (string $column, string $table, string $operator = '='): QueryBuilder 
+        {
+            $tmp_str = $table . ".";
 
-            if ($table!="") {
-                $tmp_str = ' ' . $table . ".";
-            }
-
-            $tmp_str .= $column . $operator . "'" . $value . "'";
+            $tmp_str .= $column . $operator . ":" . $column;
 
             $this->query->where[] = $tmp_str;
             return $this;
         }
 
-        public function limit (int $from, int $offset): QueryBuilder {
-            $this->query->limit = ' LIMIT ' . $from . ', ' . $offset; 
+        public function delete($table): QueryBuilder
+        {
+            $this->query->base = "DELETE FROM $table";
+            return $this;
+        }
+
+        public function limit (int $from, int $offset=0): QueryBuilder {
+            $this->query->limit = 'LIMIT ' . $from;
+            if ($offset!=0) {
+                $this->query->limit .= ', ' . $offset;
+            } 
             return $this;
         }
 
