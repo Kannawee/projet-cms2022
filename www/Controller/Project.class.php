@@ -21,9 +21,5 @@ class Project {
         header('Location: /administration/projects');
     }
 
-    public function test()
-    {
-        echo "toto";
-    }
 
 }

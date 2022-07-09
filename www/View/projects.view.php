@@ -63,7 +63,6 @@
         <div>
             <?php
                 var_dump($project);
-                $project->test();
             ?>
         </div>
     </section>
