@@ -41,3 +41,8 @@
 /testsam:
   controller: testSam
   action: test
+
+# /page/{nompage}/: 
+#   controller: testSam
+#   action: test
+#   parameters: {nompage}

@@ -17,7 +17,7 @@ class User {
             /* SI RESULT != EMPTY -> REDIRECT /LOGIN */
             $user->setEmail($_POST['email']);
             $user->setPassword($_POST['password']);
-            $res = $user->checkLogin();
+            $res = $user->checkLogin(); 
             if ($user->getEmail() === $res['email'] && password_verify($_POST['password'], $res['password'])){
                 $_SESSION["idUser"] = $res['id'];
                 if ($res['status'] === "1") {
@@ -67,8 +67,3 @@ class User {
     }
 
 }
-
-
-
-
-
