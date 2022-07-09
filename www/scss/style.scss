@@ -37,11 +37,6 @@ body{
 	height: 100%;
 	background: $nav-gradient-blue;
 
-	.logo{
-		transform: translate(35%, 35%);
-		margin-bottom: 100px;
-	}
-
 	ul{
 		list-style: none;
 		padding-inline-start: 0%;
@@ -61,6 +56,7 @@ body{
 				color: white;
 				font-size: 18px;
 				line-height: 24px;
+				font-weight: 200;
 			}
 		}
 
