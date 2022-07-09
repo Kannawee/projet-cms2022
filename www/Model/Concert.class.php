@@ -26,6 +26,15 @@ class Concert extends Sql
     }
 
     /**
+     * @return null|array
+     */
+    public function getAll(): ?array
+    {
+        $res = $this->select();
+        return $res;
+    }
+
+    /**
      * @return null|string
      */
     public function getName(): ?string

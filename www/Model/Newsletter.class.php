@@ -44,6 +44,15 @@ class Newsletter extends Sql
     }
 
     /**
+     * @return null|array
+     */
+    public function getAll(): ?array
+    {
+        $res = $this->select();
+        return $res;
+    }
+
+    /**
      * @return string
      */
     public function getTitle(): string

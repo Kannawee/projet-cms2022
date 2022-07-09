@@ -36,13 +36,11 @@
 
         <div>
             <?php
-                foreach($projectTab as $key=>$val) { 
+                foreach($tabProjects as $key=>$val) {
             ?>
-                <h2><?=$val->getName()?></h2>
-                <p><?=$val->getDescription()?></p>
-                <a href="/administration/project/edit/<?=$val->getId()?>" class="button">EDIT</a>
-                &nbsp;
-                <a href="/administration/project/delete/<?=$val->getId()?>" class="button">DELETE</a>
+                <h2><?=$val['name']?></h2>
+                <p><?=$val['releaseDate']?></p>
+                <p><?=$val['description']?></p>
             <?php                
                 }
             ?>
