@@ -6,6 +6,7 @@ use App\Core\View;
 use App\Model\User as UserModel;
 use App\Model\Project as ProjectModel;
 use App\Model\Concert as ConcertModel;
+use App\Model\Newsletter as NewsletterModel;
 
 
 class Admin
@@ -41,7 +42,9 @@ class Admin
     }
 
     public function newsletter() {
+        $newsletter = new newsletterModel();
         $view = new View("newsletter", "back");
+        $view->assign("newsletter", $newsletter);
     }
 
     public function templates() {

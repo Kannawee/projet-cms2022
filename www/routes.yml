@@ -22,7 +22,6 @@
   controller: user
   action: pwdforget
 
-
 /administration/dashboard:
   controller: admin
   action: dashboard
@@ -58,6 +57,10 @@
 /administration/newsletter:
   controller: admin
   action: newsletter
+
+/administration/newsletter/add:
+  controller: newsletter
+  action: add
 
 /administration/templates:
   controller: admin
