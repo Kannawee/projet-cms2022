@@ -1,8 +1,7 @@
 docker-compose.yml
 .idea/*
 package-lock.json
-<<<<<<< HEAD
 www/node_modules
-=======
 www/node_modules
->>>>>>> 42967218a5c9e98971f64270c38e6dcf3add4777
+db_data/*
+db_data
