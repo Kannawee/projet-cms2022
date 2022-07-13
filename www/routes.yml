@@ -78,33 +78,45 @@
   security:
     - admin
 
-/administration/newsletter/edit:
+/administration/newsletter/edit/{idnews}:
   controller: newsletter
   action: edit
+  param:
+    - idnews
   security:
     - admin
 
-/administration/newsletter/subscribeuser:
+/administration/newsletter/subscribeuser/{iduser}/{idnews}:
   controller: newsletter
   action: subscribe
+  param:
+    - iduser
+    - idnews
   security:
     - admin
 
-/administration/newsletter/unsubscribeuser:
+/administration/newsletter/unsubscribeuser/{iduser}/{idnews}:
   controller: newsletter
   action: unsubscribe
+  param:
+    - iduser
+    - idnews
   security:
     - admin
 
-/administration/newsletter/send:
+/administration/newsletter/send/{idnews}:
   controller: newsletter
   action: send
+  param:
+   - idnews
   security:
     - admin
 
-/administration/newsletter/delete:
+/administration/newsletter/delete/{idnews}:
   controller: newsletter
   action: delete
+  param:
+   - idnews
   security:
     - admin
 

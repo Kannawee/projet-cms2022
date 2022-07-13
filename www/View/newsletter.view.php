@@ -19,11 +19,8 @@ $this->includePartial("form", $newsletter->getAddForm());
                     <td><?=$val['date']?></td>
                     <td><?=$val['title']?></td>
                     <td>
-                        <a class="button" href="/administration/newsletter/edit?id=<?=$val['id']?>">EDIT</a>
-                        <form action="" method="post">
-                            <input type="hidden" name="id_newsletter">
-                            <input type="submit" value="SUPPRIMER">
-                        </form>
+                        <a class="button" href="/administration/newsletter/edit/<?=$val['id']?>">EDIT</a>
+                        <a class="button" href="/administration/newsletter/delete/<?=$val['id']?>">DEL</a>
                     </td>
                 </tr>
             <?php } ?>

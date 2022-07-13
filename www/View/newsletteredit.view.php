@@ -17,15 +17,10 @@
 </div>
 
 <div class="form-action">
-    <form action="/administration/newsletter/send" method="post">
-        <input type="hidden" name="id_news" value="<?=$newsletter->getId()?>">
-        <input type="submit" value="SEND">
-    </form>
 
-    <form action="/administration/newsletter/delete" method="post">
-        <input type="hidden" name="id_news" value="<?=$newsletter->getId()?>">
-        <input type="submit" value="DELETE">
-    </form>
+    <a href="/administration/newsletter/send/<?=$newsletter->getId()?>" class="button">SEND</a>
+    &nbsp;&nbsp;&nbsp;
+    <a href="/administration/newsletter/delete/<?=$newsletter->getId()?>" class="button">DEL</a>
 </div>
 
 <div class="div-table">
@@ -42,11 +37,7 @@
                 <td><?=$user['login']?></td>
                 <td><?=$user['email']?></td>
                 <td>
-                    <form action="/administration/newsletter/unsubscribeuser" method="post">
-                        <input type="hidden" name="id_user" value="<?=$user['id']?>">
-                        <input type="hidden" name="id_newsletter" value="<?=$newsletter->getId()?>">
-                        <input type="submit" value="DEL">
-                    </form>
+                    <a href="/administration/newsletter/unsubscribeuser/<?=$user['id']?>/<?=$newsletter->getId()?>" class="button">DEL</a>
                 </td>
             </tr>
         <?php } ?>
@@ -68,11 +59,7 @@
                 <td><?=$user['login']?></td>
                 <td><?=$user['email']?></td>
                 <td>
-                    <form action="/administration/newsletter/subscribeuser" method="post">
-                        <input type="hidden" name="id_user" value="<?=$user['id']?>">
-                        <input type="hidden" name="id_newsletter" value="<?=$newsletter->getId()?>">
-                        <input type="submit" value="ADD">
-                    </form>
+                    <a href="/administration/newsletter/subscribeuser/<?=$user['id']?>/<?=$newsletter->getId()?>" class="button">ADD</a>
                 </td>
             </tr>
         <?php } ?>
@@ -97,5 +84,19 @@
 
     .form-action form {
         margin-right: 15px;
+    }
+
+    .button {
+        display: block;
+        width: 75px;
+        height: 15px;
+        background: #4E9CAF;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        line-height: 15px;
+        margin-bottom: 10px;
     }
 </style>

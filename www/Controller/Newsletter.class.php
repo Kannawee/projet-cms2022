@@ -30,8 +30,9 @@ class Newsletter {
         header('Location: /administration/newsletter');
     }
 
-    public function edit()
+    public function edit($data)
     {
+
         $newsletter = new newsletterModel();
         
         if (!empty($_POST)) {
@@ -46,12 +47,12 @@ class Newsletter {
             $res = $newsletter->save();
 
             if ($res) {
-                header('Location: /administration/newsletter/edit?id='.$newsletter->getId().'&success=ok');
+                header('Location: /administration/newsletter/edit/'.$newsletter->getId().'?success=ok');
             } else {
-                header('Location: /administration/newsletter/edit?id='.$newsletter->getId().'&success=notok');
+                header('Location: /administration/newsletter/edit/'.$newsletter->getId().'?success=notok');
             }
         } else {
-            $id = htmlspecialchars($_GET['id']);
+            $id = htmlspecialchars($data['idnews']);
             $success = (isset($_GET['success']))?htmlspecialchars($_GET['success']):"";
             $where = array(
                 "id"=>$id
@@ -82,13 +83,13 @@ class Newsletter {
         }
     }
 
-    public function subscribe()
+    public function subscribe($data=array())
     {
         $newsletter = new newsletterModel();
 
-        if (!empty($_POST)) {
-            $id_news = addslashes($_POST['id_newsletter']);
-            $id_user = addslashes($_POST['id_user']);
+        if (!empty($data) && count($data)>0) {
+            $id_news = addslashes($data['idnews']);
+            $id_user = addslashes($data['iduser']);
 
             $data = array(
                 "id_user"=>$id_user,
@@ -98,19 +99,19 @@ class Newsletter {
             $res = $newsletter->subscribe($data);
             
             if ($res) {
-                header('Location: /administration/newsletter/edit?id='.$id_news);
+                header('Location: /administration/newsletter/edit/'.$id_news);
             }
         }
     }
 
 
-    public function unsubscribe()
+    public function unsubscribe($data)
     {
         $newsletter = new newsletterModel();
 
-        if (!empty($_POST)) {
-            $id_news = addslashes($_POST['id_newsletter']);
-            $id_user = addslashes($_POST['id_user']);
+        if (!empty($data)) {
+            $id_news = addslashes($data['idnews']);
+            $id_user = addslashes($data['iduser']);
 
             $data = array(
                 "id_user"=>$id_user,
@@ -120,46 +121,52 @@ class Newsletter {
             $res = $newsletter->unsubscribe($data);
             
             if ($res) {
-                header('Location: /administration/newsletter/edit?id='.$id_news);
+                header('Location: /administration/newsletter/edit/'.$id_news);
             }
         }
     }
 
 
-    public function send()
+    public function send($data=array())
     {
         $newsletter = new newsletterModel();
 
-        if (!empty($_POST)) {
-            $id_news = addslashes($_POST['id_news']);
-            $emails = $newsletter->listemail($id_news);
-            $newscontent = $newsletter->getNewsById($id_news)[0];
-            $newsletter->setFromArray($newscontent);
+        if (!empty($data) && count($data)>0) {
+            $id_news = addslashes($data['idnews']);
+            $tmp_tab = $newsletter->getNewsById($id_news);
+            
+            if (count($tmp_tab)>0) {
+                $newscontent = $tmp_tab[0];
+                $newsletter->setFromArray($newscontent);
+                $emails = $newsletter->listemail($id_news);
 
-            foreach ($emails as $email) {
-                $tmp_mail = array();
-                $tmp_mail[] = $email['email'];
+                foreach ($emails as $email) {
+                    $tmp_mail = array();
+                    $tmp_mail[] = $email['email'];
 
-                $mail = new mymailModel();
-                $mail->setupMyMail($newsletter->getTitle(), $newsletter->getContent(), $tmp_mail);
-                $res = $mail->sendMyMail();
+                    $mail = new mymailModel();
+                    $mail->setupMyMail($newsletter->getTitle(), $newsletter->getContent(), $tmp_mail);
+                    $res = $mail->sendMyMail();
 
-                if ($res!="OK") {
-                    header('Location: /administration/newsletter/edit?id='.$id_news.'&success=notsent');
+                    if ($res!="OK") {
+                        header('Location: /administration/newsletter/edit/'.$id_news.'?success=notsent');
+                        exit();
+                    }
                 }
             }
 
-            header('Location: /administration/newsletter/edit?id='.$id_news.'&success=sent');
+            header('Location: /administration/newsletter/edit/'.$id_news.'?success=sent');
+            exit();
         }
     }
 
 
-    public function delete()
+    public function delete($data=array())
     {
         $newsletter = new newsletterModel();
 
-        if (!empty($_POST)) {
-            $id_news = addslashes($_POST['id_news']);
+        if (!empty($data) && count($data)>0) {
+            $id_news = addslashes($data['idnews']);
 
             $res = $newsletter->delete($id_news);
 
