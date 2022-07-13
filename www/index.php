@@ -26,7 +26,8 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 }
 
 //Réussir à récupérer l'URI
-$uri = $_SERVER["REQUEST_URI"];
+$uri =  strtok($_SERVER["REQUEST_URI"], '?');
+
 
 $routeFile = "routes.yml";
 if(!file_exists($routeFile)){
@@ -35,19 +36,18 @@ if(!file_exists($routeFile)){
 
 $routes = yaml_parse_file($routeFile);
 
-// $matched_routes = array();
-// $res_routes = array();
-
-// foreach ($routes as $k=>$v) {
-//     $tmp_routes = preg_replace('/({.*)/', '', $k);
-//     echo '<pre>';
-//     var_dump($tmp_routes);
-//     echo '</pre>';
-// }
-// die;
-
 if( empty($routes[$uri]) ||  empty($routes[$uri]["controller"])  ||  empty($routes[$uri]["action"])){
     die("Erreur 404");
+}
+
+if (!empty($routes[$uri]['security'])) {
+    foreach ($routes[$uri]['security'] as $role) {
+        if ($role=='admin' && isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']!=1) {
+            die('Error : pas la permission.');
+        } else if ($role=='user' && !isset($_SESSION['idUser'])) {
+            die('Error : pas la permission.');
+        }
+    }
 }
 
 $controller = ucfirst(strtolower($routes[$uri]["controller"]));

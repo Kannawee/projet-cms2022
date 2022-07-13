@@ -43,12 +43,6 @@ class Admin
         $view->assign("concert", $concert);
     }
 
-    public function newsletter() {
-        $newsletter = new newsletterModel();
-        $view = new View("newsletter", "back");
-        $view->assign("newsletter", $newsletter);
-    }
-
     public function templates() {
         $view = new View("templates", "back");
     }

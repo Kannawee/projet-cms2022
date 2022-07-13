@@ -25,6 +25,7 @@ class MySqlBuilder implements QueryBuilder {
     }
 
     public function insert (string $table, array $values) : QueryBuilder {
+        $this->query->base = "INSERT INTO ".$table." (".implode(",",array_keys($values)).") VALUES ( :".implode(",:",array_keys($values)).")";
         return $this;
     }
 
@@ -32,7 +33,7 @@ class MySqlBuilder implements QueryBuilder {
         $tmp_str = "SELECT ";
 
         foreach ($columns as $col) {
-            $tmp_str .= " " . $table . "." . $col . ", ";
+            $tmp_str .= " " . $col . ", ";
         }
 
         $tmp_str = trim($tmp_str, ", ")." FROM ".$table;
@@ -45,7 +46,11 @@ class MySqlBuilder implements QueryBuilder {
     {
         $tmp_str = $table . ".";
 
-        $tmp_str .= $column . $operator . ":" . $column;
+        if ($operator=="NOT IN") {
+            $tmp_str .= $column . " " . $operator . "(?)";
+        } else {
+            $tmp_str .= $column . $operator . ":" . $column;
+        }
 
         $this->query->where[] = $tmp_str;
         return $this;
@@ -65,9 +70,19 @@ class MySqlBuilder implements QueryBuilder {
         return $this;
     }
 
+    public function join($table1, $table2, $on1, $on2, $type="")
+    {
+        $this->query->join[] = "$type JOIN ".$table1." ON($table1.$on1=$table2.$on2)";
+        return $this;
+    }
+
     public function getQuery () {
 
         $sql = $this->query->base;
+
+        if (!empty($this->query->join)) {
+            $sql .= implode(" ", $this->query->join);
+        }
 
         if(!empty($this->query->where)) {
             $sql .= " WHERE " . implode(" AND ",$this->query->where);

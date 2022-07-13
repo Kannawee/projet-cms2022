@@ -59,8 +59,8 @@ abstract class Sql
         //echo $sql;
         //die();
         $queryPrepared = $this->pdo->prepare($sql);
-        var_dump($queryPrepared);
-        $queryPrepared->execute( $columns );
+        // var_dump($queryPrepared);    
+        return $queryPrepared->execute( $columns );
 
     }
 
@@ -103,6 +103,32 @@ abstract class Sql
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($where);
 
+    }
+
+    public function execute($data=array(),$fetch=false)
+    {
+        if (is_array($data) && count($data)>0) {
+            $stmt = $this->pdo->prepare($this->builder->getQuery());
+
+            if (!$fetch) {
+                return $stmt->execute($data);
+            }
+            $stmt->execute($data);
+            return $stmt->fetchAll($this->pdo::FETCH_ASSOC);
+        }
+
+        $stmt = $this->pdo->query($this->builder->getQuery());
+        return $stmt->execute();
+    }
+
+    public function getBuilder()
+    {
+        return $this->builder;
+    }
+
+    public function reset()
+    {
+        $this->builder->init();
     }
 
 }

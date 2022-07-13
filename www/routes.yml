@@ -54,14 +54,6 @@
   controller: concert
   action: add
 
-/administration/newsletter:
-  controller: admin
-  action: newsletter
-
-/administration/newsletter/add:
-  controller: newsletter
-  action: add
-
 /administration/templates:
   controller: admin
   action: templates
@@ -73,6 +65,36 @@
 /testsam:
   controller: testSam
   action: test
+
+/administration/newsletter:
+  controller: newsletter
+  action: list
+  security:
+    - admin
+
+/administration/newsletter/add:
+  controller: newsletter
+  action: add
+  security:
+    - admin
+
+/administration/newsletter/edit:
+  controller: newsletter
+  action: edit
+  security:
+    - admin
+
+/administration/newsletter/subscribeuser:
+  controller: newsletter
+  action: subscribe
+  security:
+    - admin
+
+/administration/newsletter/unsubscribeuser:
+  controller: newsletter
+  action: unsubscribe
+  security:
+    - admin
 
 # /page/{nompage}/: 
 #   controller: testSam
