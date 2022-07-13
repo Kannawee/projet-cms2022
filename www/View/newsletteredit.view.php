@@ -1,5 +1,11 @@
 <h1>Newsletter</h1>
 
+<?php if ($success=="ok") { ?>
+    <span style="color:green;">Changement apporté avec succès</span>
+<?php } elseif($success=="notok") { ?>
+    <span style="color:red;">Erreur dans le changement.</span>
+<?php } ?>
+
 <?php
 
 $this->includePartial("form", $newsletter->getEditForm());

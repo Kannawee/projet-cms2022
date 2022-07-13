@@ -46,8 +46,9 @@ class Newsletter {
 
             if ($res) {
                 header('Location: /administration/newsletter/edit?id='.$newsletter->getId().'&success=ok');
+            } else {
+                header('Location: /administration/newsletter/edit?id='.$newsletter->getId().'&success=notok');
             }
-            header('Location: /administration/newsletter/edit?id='.$newsletter->getId().'&success=notok');
         } else {
             $id = htmlspecialchars($_GET['id']);
             $success = (isset($_GET['success']))?htmlspecialchars($_GET['success']):"";
