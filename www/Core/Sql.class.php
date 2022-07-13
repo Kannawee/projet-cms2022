@@ -118,7 +118,13 @@ abstract class Sql
         }
 
         $stmt = $this->pdo->query($this->builder->getQuery());
-        return $stmt->execute();
+
+        if (!$fetch) {
+            return $stmt->execute();
+        }
+        $stmt->execute();
+        return $stmt->fetchAll($this->pdo::FETCH_ASSOC);
+
     }
 
     public function getBuilder()

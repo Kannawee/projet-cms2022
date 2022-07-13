@@ -13,6 +13,7 @@
             <li class="nav-button selected"><img class="icon-nav" src="/assets/icones/icon_dashboard.svg" alt="logo dashboard"><a href="/administration/dashboard">Dashboard</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_users.svg" alt="logo user"><a href="/administration/users">Users</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_projects.svg" alt="logo projets"><a href="/administration/projects">Projects</a></li>
+            <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_projects.svg" alt="logo projets"><a href="/administration/medias">Medias</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_concerts.svg" alt="logo concerts"><a href="/administration/concerts">Concerts</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_newsletter.svg" alt="logo newsletters"><a href="/administration/newsletter">Newsletter</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_templates.svg" alt="logo templates"><a href="/administration/templates">Templates</a></li>

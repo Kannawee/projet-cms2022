@@ -172,4 +172,10 @@ class Newsletter {
     }
 
 
+    public function test($data)
+    {
+        echo "ID USER : ".$data['iduser']."<br>ID NEWS : ".$data['idnews'];die;
+    }
+
+
 }

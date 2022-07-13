@@ -35,9 +35,65 @@ if(!file_exists($routeFile)){
 }
 
 $routes = yaml_parse_file($routeFile);
+$tmp_param = array();
+$tmp_controller = $tmp_action = "";
+$checkRoute = false;
+
 
 if( empty($routes[$uri]) ||  empty($routes[$uri]["controller"])  ||  empty($routes[$uri]["action"])){
-    die("Erreur 404");
+    
+    $explode_uri = explode('/',trim($uri, "/"));
+
+    foreach ($routes as $path => $val) {
+
+        $param = array();
+        $tmp_explode_uri = $explode_uri;
+
+        $checkRoute = false;
+        
+        if (!empty($val['param'])) {
+            $tmp_explode_path = explode("/", trim($path,"/"));
+            
+            foreach ($tmp_explode_path as $key => $value) {
+
+                if (preg_match('/{.*}/',$value)==1) {
+
+                    unset($tmp_explode_path[$key]);
+
+                    if (isset($tmp_explode_uri[$key])) {
+                        unset($tmp_explode_uri[$key]);
+                    } else {
+                        $checkRoute = false;
+                        break;
+                    }
+                }
+            }
+            if (implode("/", $tmp_explode_path)==implode("/", $tmp_explode_uri)) {
+                $checkRoute = true;
+            }
+
+            if ($checkRoute) {
+                foreach ($val['param'] as $key => $prm) {
+                    $tmp_explode = explode("/", trim($path,"/"));
+                    foreach ($tmp_explode as $ind => $value) {
+                        if ($value=="{".$prm."}") {
+                            $param[$prm] = $explode_uri[$ind];
+                        }
+                    }
+                }
+                $tmp_param = $param;
+                $tmp_controller = $val['controller'];
+                $tmp_action = $val['action'];
+
+                break;
+            }
+
+        }
+    }
+    
+    if (!$checkRoute) {
+        die("Erreur 404");
+    }
 }
 
 if (!empty($routes[$uri]['security'])) {
@@ -50,10 +106,17 @@ if (!empty($routes[$uri]['security'])) {
     }
 }
 
-$controller = ucfirst(strtolower($routes[$uri]["controller"]));
-$action = strtolower($routes[$uri]["action"]);
-$params = isset($routes[$uri]["parameters"])?$routes[$uri]["parameters"]:false;
+$controller = $action = "";
+$params = array();
 
+if (!$checkRoute) {
+    $controller = ucfirst(strtolower($routes[$uri]["controller"]));
+    $action = strtolower($routes[$uri]["action"]);
+} else {
+    $controller = ucfirst(strtolower($tmp_controller));
+    $action = strtolower($tmp_action);
+    $params = $tmp_param;
+}
 
 /*
  *
@@ -84,7 +147,7 @@ if( !method_exists($objectController, $action)){
 }
 // $action = login ou logout ou register ou home
 
-if ($params!=false) {
+if (count($params)>0) {
     $objectController->$action($params);
 }else{
     $objectController->$action();

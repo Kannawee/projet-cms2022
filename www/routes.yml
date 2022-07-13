@@ -107,3 +107,18 @@
   action: delete
   security:
     - admin
+
+/administration/media:
+  controller: project
+  action: list
+  security:
+    - admin
+
+/administration/newsletter/test/{idnews}/{iduser}:
+  controller: newsletter
+  action: test
+  param: 
+    - idnews
+    - iduser
+  security:
+    - admin

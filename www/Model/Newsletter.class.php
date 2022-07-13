@@ -191,7 +191,7 @@ class Newsletter extends Sql
         $this->reset();
         $this->getBuilder()->delete('esgi_newsletter_list');
         $this->getBuilder()->where('id_newsletter', 'esgi_newsletter_list');
-
+        
         $res = $this->execute($data);
 
         $data = array(
