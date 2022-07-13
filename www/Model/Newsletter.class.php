@@ -93,33 +93,6 @@ class Newsletter extends Sql
     }
 
 
-    public function getAddForm(): array
-    {
-        return [
-            "config"=>[
-                "class"=>"formAddNewsletter",
-                "method"=>"POST",
-                "action"=>"newsletter/add",
-                "submit"=>"Add"
-            ],
-            'inputs'=>[
-                "title"=>[
-                    "type"=>"text",
-                    "placeholder"=>"Newsletter title...",
-                    "required"=>true,
-                    "error"=>"Incorrect title"
-                ],
-            ],
-            'textAreas'=>[
-                "content"=>[
-                    "placeholder"=>"Newsletter content...",
-                    "require"=>true,
-                    "error"=>"Incorrect content"
-                ]
-            ]
-        ];
-    }
-
     public function getSubscribedUsers($id)
     {
         $where = array(
@@ -129,6 +102,7 @@ class Newsletter extends Sql
         $this->reset();
         $this->getBuilder()->select('esgi_newsletter_list', ['esgi_user.login','esgi_user.email','esgi_user.id']);
         $this->getBuilder()->join('esgi_user','esgi_newsletter_list','id','id_user');
+        $this->getBuilder()->where('id_newsletter','esgi_newsletter_list');
         $res = $this->execute($where, true);
 
         return $res;        
@@ -175,6 +149,88 @@ class Newsletter extends Sql
             return $res;
         }
         return false;
+    }
+
+    public function listemail($id_news)
+    {
+        $data = array(
+            "id_newsletter"=>$id_news
+        );
+
+        $this->reset();
+        $this->getBuilder()->select('esgi_user', ['esgi_user.email', 'esgi_user.login']);
+        $this->getBuilder()->join('esgi_newsletter_list', 'esgi_user', 'id_user', 'id', 'INNER');
+        $this->getBuilder()->where('id_newsletter', 'esgi_newsletter_list');
+        
+        $res = $this->execute($data,true);
+
+        return $res;
+    }
+
+    public function getNewsById($id_news)
+    {
+        $data = array(
+            "id"=>$id_news
+        );
+
+        $this->reset();
+        $this->getBuilder()->select('esgi_newsletter', ['*']);
+        $this->getBuilder()->where('id', 'esgi_newsletter');
+        
+        $res = $this->execute($data, true);
+        return $res;
+    }
+
+
+    public function delete($id)
+    {
+        $data = array(
+            "id_newsletter"=>$id
+        );
+
+        $this->reset();
+        $this->getBuilder()->delete('esgi_newsletter_list');
+        $this->getBuilder()->where('id_newsletter', 'esgi_newsletter_list');
+
+        $res = $this->execute($data);
+
+        $data = array(
+            "id"=>$id
+        );
+
+        $this->reset();
+        $this->getBuilder()->delete('esgi_newsletter');
+        $this->getBuilder()->where('id', 'esgi_newsletter');
+
+        $res = $this->execute($data);
+        return $res;
+    }
+
+    public function getAddForm(): array
+    {
+        return [
+            "config"=>[
+                "class"=>"formAddNewsletter",
+                "method"=>"POST",
+                "action"=>"newsletter/add",
+                "submit"=>"Add"
+            ],
+            'inputs'=>[
+                "title"=>[
+                    "type"=>"text",
+                    "placeholder"=>"Newsletter title...",
+                    "required"=>true,
+                    "error"=>"Incorrect title"
+                ],
+            ],
+            'textAreas'=>[
+                "content"=>[
+                    "placeholder"=>"Newsletter content...",
+                    "require"=>true,
+                    "error"=>"Incorrect content"
+                ]
+            ]
+        ];
     }
 
     public function getEditForm(): array

@@ -7,6 +7,7 @@ use App\Core\Verificator;
 use App\Core\View;
 use App\Model\Newsletter as newsletterModel;
 use App\Model\User as userModel;
+use App\Model\Mymail as mymailModel;
 
 class Newsletter {
 
@@ -120,6 +121,52 @@ class Newsletter {
             
             if ($res) {
                 header('Location: /administration/newsletter/edit?id='.$id_news);
+            }
+        }
+    }
+
+
+    public function send()
+    {
+        $newsletter = new newsletterModel();
+
+        if (!empty($_POST)) {
+            $id_news = addslashes($_POST['id_news']);
+            $emails = $newsletter->listemail($id_news);
+            $newscontent = $newsletter->getNewsById($id_news)[0];
+            $newsletter->setFromArray($newscontent);
+
+            foreach ($emails as $email) {
+                $tmp_mail = array();
+                $tmp_mail[] = $email['email'];
+
+                $mail = new mymailModel();
+                $mail->setupMyMail($newsletter->getTitle(), $newsletter->getContent(), $tmp_mail);
+                $res = $mail->sendMyMail();
+
+                if ($res!="OK") {
+                    header('Location: /administration/newsletter/edit?id='.$id_news.'&success=notsent');
+                }
+            }
+
+            header('Location: /administration/newsletter/edit?id='.$id_news.'&success=sent');
+        }
+    }
+
+
+    public function delete()
+    {
+        $newsletter = new newsletterModel();
+
+        if (!empty($_POST)) {
+            $id_news = addslashes($_POST['id_news']);
+
+            $res = $newsletter->delete($id_news);
+
+            if ($res) {
+                header('Location: /administration/newsletter?success=ok');
+            } else {
+                header('Location: /administration/newsletter?success=notok');
             }
         }
     }

@@ -1,16 +1,32 @@
 <h1>Newsletter</h1>
 
+<div><a href="/administration/newsletter">Revenir à la liste des news</a></div><br>
+
 <?php if ($success=="ok") { ?>
     <span style="color:green;">Changement apporté avec succès</span>
 <?php } elseif($success=="notok") { ?>
     <span style="color:red;">Erreur dans le changement.</span>
+<?php } elseif($success=="sent") { ?>
+    <span style="color:green;">News envoyée avec succès</span>
+<?php } elseif($success=="notsent") {?>
+    <span style="color:red;">Erreur dans l'envoie de la news.</span>
 <?php } ?>
 
-<?php
+<div class="form">
+    <?php $this->includePartial("form", $newsletter->getEditForm()); ?>
+</div>
 
-$this->includePartial("form", $newsletter->getEditForm());
+<div class="form-action">
+    <form action="/administration/newsletter/send" method="post">
+        <input type="hidden" name="id_news" value="<?=$newsletter->getId()?>">
+        <input type="submit" value="SEND">
+    </form>
 
-?>
+    <form action="/administration/newsletter/delete" method="post">
+        <input type="hidden" name="id_news" value="<?=$newsletter->getId()?>">
+        <input type="submit" value="DELETE">
+    </form>
+</div>
 
 <div class="div-table">
     <h2>Subscribed users : </h2>
@@ -64,4 +80,22 @@ $this->includePartial("form", $newsletter->getEditForm());
     <?php } else {
         echo 'No subscribed user.';
     } ?>
-</div
+</div>
+
+
+<style>
+    .form form {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+    }
+
+    .form-action {
+        display: flex;
+        margin-top: 15px;
+    }
+
+    .form-action form {
+        margin-right: 15px;
+    }
+</style>

@@ -72,7 +72,7 @@ class MySqlBuilder implements QueryBuilder {
 
     public function join($table1, $table2, $on1, $on2, $type="")
     {
-        $this->query->join[] = "$type JOIN ".$table1." ON($table1.$on1=$table2.$on2)";
+        $this->query->join[] = " $type JOIN ".$table1." ON($table1.$on1=$table2.$on2)";
         return $this;
     }
 

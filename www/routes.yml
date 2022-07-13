@@ -96,7 +96,14 @@
   security:
     - admin
 
-# /page/{nompage}/: 
-#   controller: testSam
-#   action: test
-#   parameters: {nompage}
+/administration/newsletter/send:
+  controller: newsletter
+  action: send
+  security:
+    - admin
+
+/administration/newsletter/delete:
+  controller: newsletter
+  action: delete
+  security:
+    - admin
