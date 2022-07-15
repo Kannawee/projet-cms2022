@@ -21,6 +21,12 @@
             <?php if(!empty($input["readonly"]) && $input["readonly"]) {
                 echo 'readonly';
             }?>
+            <?php if ($input['type']=='number' && isset($input['min'])) {
+                echo 'min="'.$input['min'].'"';
+            } ?>
+            <?php if ($input['type']=='number' && isset($input['max'])) {
+                echo 'max="'.$input['max'].'"';
+            } ?>
 
     >
 
@@ -45,6 +51,19 @@
                 echo $textArea["value"];
         }?></textarea>
 
+    <?php endforeach; } ?>
+
+    <?php if (isset($data["select"])) { foreach ($data["select"] as $name => $select) :?>
+        <select name="<?=$name?>">
+        <?php foreach ($select['options'] as $val => $lib) { ?>
+            <option value="<?=$val?>"
+            <?php if (isset($select['value']) && $val==$select['value']) {
+                echo " selected";
+            } ?>
+            ><?=$lib?></option>
+            
+        <?php } ?>
+        </select>
     <?php endforeach; } ?>
 
     <input type="submit" value="<?= $data["config"]["submit"]??"Valider" ?>">

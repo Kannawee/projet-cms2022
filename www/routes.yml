@@ -1,10 +1,15 @@
+# ROUTING INSTALL
+
+# ROUTING FRONT
 /:
   controller: main
   action: home
 
-/contact:
-  controller: main
-  action: contact
+# /contact:
+#   controller: main
+#   action: contact
+
+# ROUTING CONNECTON/INSCRIPTION/MDP OUBLIÉ 
 
 /login:
   controller: user
@@ -22,29 +27,14 @@
   controller: user
   action: pwdforget
 
+
+### ROUTING BACK
+
 /administration/dashboard:
   controller: admin
   action: dashboard
   security:
     - admin
-    - user
-
-/administration/users:
-  controller: admin
-  action: users
-
-/administration/projects:
-  controller: admin
-  action: projects
-
-/administration/projects/add:
-  controller: project
-  action: add
-
-/administration/projects/delete:
-  controller: project
-  action: delete
-
 
 /administration/concerts:
   controller: admin
@@ -65,6 +55,54 @@
 /testsam:
   controller: testSam
   action: test
+
+# ROUTING POSTS
+
+/administration/posts:
+  controller: post
+  action: list
+  security:
+    - admin
+
+/administration/post/add:
+  controller: post
+  action: add
+  security:
+    - admin
+
+/administration/post/edit/{id}:
+  controller: post
+  action: edit
+  param:
+    - id
+  security:
+    - admin
+
+/administration/post/delete/{id}:
+  controller: post
+  action: delete
+  param:
+    - id
+  security:
+    - admin
+
+# ROUTING USERS
+
+/administration/users:
+  controller: user
+  action: list
+  security:
+    - admin
+
+/administration/user/role/{id}:
+  controller: user
+  action: role
+  param:
+    - id
+  security:
+    - admin
+
+# ROUTING NEWSLETTER
 
 /administration/newsletter:
   controller: newsletter
@@ -120,17 +158,96 @@
   security:
     - admin
 
+# ROUTING PROJECT
+
+/administration/projects:
+  controller: project
+  action: list
+  security:
+    - admin
+
+/administration/project/add:
+  controller: project
+  action: add
+  security:
+    - admin
+
+/administration/project/edit/{id}:
+  controller: project
+  action: edit
+  param:
+    - id
+  security:
+    - admin
+
+/administration/project/delete/{id}:
+  controller: project
+  action: delete
+  param: 
+    - id
+  security:
+    - admin
+
 /administration/media:
   controller: project
   action: list
   security:
     - admin
 
-/administration/newsletter/test/{idnews}/{iduser}:
-  controller: newsletter
-  action: test
-  param: 
-    - idnews
-    - iduser
+# ROUTING DES PAGES
+/administration/page:
+  controller: page
+  action: list
   security:
     - admin
+
+/administration/page/add:
+  controller: page
+  action: add
+  security:
+    - admin
+
+/administration/page/edit/{id}:
+  controller: page
+  action: edit
+  param: 
+    - id
+  security:
+    - admin
+
+# ROUTING PAGE ELEMENT
+/administration/element/add/{id}:
+  controller: elementpage
+  action: add
+  param:
+    - id
+  security:
+    - admin
+
+/administration/elementpage/edit/{id_page}/{id}:
+  controller: elementpage
+  action: edit
+  param:
+    - id_page
+    - id
+  security:
+    -admin
+
+/administration/elementpage/delete/{id_page}/{id}:
+  controller: elementpage
+  action: delete
+  param:
+    - id_page
+    - id
+  security:
+    -admin
+
+/administration/elementpage/changeordre/{id_page}/{id}/{change}:
+  controller: elementpage
+  action: changeordre
+  param:
+    - id_page
+    - id
+    - change
+  security:
+    -admin

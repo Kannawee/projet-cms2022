@@ -37,8 +37,11 @@
             <?php
                 foreach($projectTab as $key=>$val) { 
             ?>
-                <h2><?=$val['name']?></h2>
-                <p><?=$val['description']?></p>
+                <h2><?=$val->getName()?></h2>
+                <p><?=$val->getDescription()?></p>
+                <a href="/administration/project/edit/<?=$val->getId()?>" class="button">EDIT</a>
+                &nbsp;
+                <a href="/administration/project/delete/<?=$val->getId()?>" class="button">DELETE</a>
             <?php                
                 }
             ?>
@@ -86,5 +89,19 @@
         justify-content: space-evenly;
         align-items: center;
         flex-direction: column;
+    }
+
+    .button {
+        display: block;
+        width: 75px;
+        height: 15px;
+        background: #4E9CAF;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        line-height: 15px;
+        margin-bottom: 10px;
     }
 </style>

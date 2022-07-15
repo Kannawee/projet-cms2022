@@ -58,25 +58,29 @@ class Newsletter {
                 "id"=>$id
             );
 
-            $res = $newsletter->select($where)['0'];
-            $newsletter->setFromArray($res);
-            $tabSubscribed = $newsletter->getSubscribedUsers($id);
+            // $res = $newsletter->select($where)['0'];
+            $newsletter = $newsletter->getById($id, $col=['*']);
+
+            $users = new userModel();
+            
+            $subscribedUsers = $users->getSubscribedUsers($id);
+
             $idSub = array();
-            foreach ($tabSubscribed as $user) {
-                $idSub[] = $user['id'];
+            foreach ($subscribedUsers as $user) {
+                $idSub[] = $user->getId();
             }
             $user = new userModel();
             $listUser = $user->select();
 
             foreach ($listUser as $key => $value) {
-                if (in_array($value['id'], $idSub)) {
+                if (in_array($value->getId(), $idSub)) {
                     unset($listUser[$key]);
                 }
             }
 
             $view = new View("newsletteredit", "back");
             $view->assign("newsletter", $newsletter);
-            $view->assign("subscribed", $tabSubscribed);
+            $view->assign("subscribed", $subscribedUsers);
             $view->assign("userlist",$listUser);
             $view->assign("success",$success);
 

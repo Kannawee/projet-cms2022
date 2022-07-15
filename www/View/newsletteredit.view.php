@@ -34,10 +34,10 @@
             </tr>
         <?php foreach ($subscribed as $user) { ?>
             <tr>
-                <td><?=$user['login']?></td>
-                <td><?=$user['email']?></td>
+                <td><?=$user->getLogin()?></td>
+                <td><?=$user->getEmail()?></td>
                 <td>
-                    <a href="/administration/newsletter/unsubscribeuser/<?=$user['id']?>/<?=$newsletter->getId()?>" class="button">DEL</a>
+                    <a href="/administration/newsletter/unsubscribeuser/<?=$user->getId()?>/<?=$newsletter->getId()?>" class="button">DEL</a>
                 </td>
             </tr>
         <?php } ?>
@@ -56,10 +56,10 @@
             </tr>
         <?php foreach ($userlist as $user) { ?>
             <tr>
-                <td><?=$user['login']?></td>
-                <td><?=$user['email']?></td>
+                <td><?=$user->getLogin()?></td>
+                <td><?=$user->getEmail()?></td>
                 <td>
-                    <a href="/administration/newsletter/subscribeuser/<?=$user['id']?>/<?=$newsletter->getId()?>" class="button">ADD</a>
+                    <a href="/administration/newsletter/subscribeuser/<?=$user->getId()?>/<?=$newsletter->getId()?>" class="button">ADD</a>
                 </td>
             </tr>
         <?php } ?>
@@ -84,19 +84,5 @@
 
     .form-action form {
         margin-right: 15px;
-    }
-
-    .button {
-        display: block;
-        width: 75px;
-        height: 15px;
-        background: #4E9CAF;
-        padding: 10px;
-        text-align: center;
-        border-radius: 5px;
-        color: white;
-        font-weight: bold;
-        line-height: 15px;
-        margin-bottom: 10px;
     }
 </style>

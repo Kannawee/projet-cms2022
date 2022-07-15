@@ -10,31 +10,76 @@ use App\Model\User as UserModel;
 
 class User {
 
+    public function list()
+    {
+        $user = new userModel();
+        $listUser = $user->select();
+        $success = (!empty($_GET) && isset($_GET['success']))?htmlspecialchars($_GET['success']):"";
+        $view = new View("Users", 'back');
+        $view->assign("listUser",$listUser);
+        $view->assign("success", $success);
+    }
+
+    public function role($data=array())
+    {
+        if (count($data)>0 && isset($data['id'])) {
+            $id = htmlspecialchars($data['id']);
+            $user = new userModel();
+
+            $user = $user->getById($id, ['id', 'login', 'email', 'status', 'token']);
+
+            if (!$user) {
+                die("404 : User not found");
+            }
+
+            if (!empty($_POST)) {
+                $status = htmlspecialchars($_POST['status']);
+                $user->setStatus($status);
+                $res = $user->save();
+
+                if ($res) {
+                    header("Location: /administration/users?success=ok");
+                    exit();
+                }
+
+                header("Location: /administration/users?success=notok");
+                exit();
+            }
+        }
+    }
+
     public function login()
     {
         $user = new UserModel();
+        $error = array();
         if (!empty($_POST)) {
             $result = Verificator::checkForm($user->getLoginForm(), $_POST);
             /* SI RESULT != EMPTY -> REDIRECT /LOGIN */
             $user->setEmail($_POST['email']);
             $user->setPassword($_POST['password']);
-            $res = $user->checkLogin()[0];
-            if ($user->getEmail() === $res['email'] && password_verify($_POST['password'], $res['password'])) {
-                $_SESSION["idUser"] = $res['id'];
-                if ($res['status'] == "1") {
-                    $_SESSION['isAdmin'] = 1;
-                    header("Location: /administration/projects");
+            $req = $user->checkLogin();
+            if (count($req)>0) {
+                $res = $req[0];
+                if ($user->getEmail() === $res->getEmail() && password_verify($_POST['password'], $res->getPassword())) {
+                    $_SESSION["idUser"] = $res->getId();
+                    if ($res->getStatus() == "1") {
+                        $_SESSION['isAdmin'] = 1;
+                        header("Location: /administration/project");
+                        exit();
+                    }
+                    header("Location: /home");
+                    exit();
+                } else {
+                    $error[] = "Mot de passe incorrect";
                 }
-                $view = new View("Home", "front");
-                $view->assign("user", $user);
+            } else {
+                $error[] = "Email incorrect.";
             }
-        } else {
-            // AJOUTER LA REDIRECTION SI USER!=ADMIN-> HOME PAGE
-            $view = new View("Login", "front" );
-            $view->assign("user", $user);
         }
-
-
+            // AJOUTER LA REDIRECTION SI USER!=ADMIN-> HOME PAGE
+        $view = new View("Login", "front" );
+        $view->assign("user", $user);
+        $view->assign("errors", $error);
     }
 
 
@@ -51,6 +96,8 @@ class User {
             $user->setPassword($_POST['password']);
 
             $user->save();
+            header('Location: /login');
+            exit();
         }
 
         $view = new View("register");

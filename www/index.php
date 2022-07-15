@@ -27,6 +27,7 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
 //Réussir à récupérer l'URI
 $uri =  strtok($_SERVER["REQUEST_URI"], '?');
+$uri = ($uri=="/")?$uri:rtrim($uri, "/");
 
 
 $routeFile = "routes.yml";
@@ -77,7 +78,11 @@ if( empty($routes[$uri]) ||  empty($routes[$uri]["controller"])  ||  empty($rout
                     $tmp_explode = explode("/", trim($path,"/"));
                     foreach ($tmp_explode as $ind => $value) {
                         if ($value=="{".$prm."}") {
-                            $param[$prm] = $explode_uri[$ind];
+                            if (isset($explode_uri[$ind])) {
+                                $param[$prm] = $explode_uri[$ind];
+                            } else {
+                                $checkRoute = false;
+                            }
                         }
                     }
                 }
@@ -85,7 +90,9 @@ if( empty($routes[$uri]) ||  empty($routes[$uri]["controller"])  ||  empty($rout
                 $tmp_controller = $val['controller'];
                 $tmp_action = $val['action'];
 
-                break;
+                if ($checkRoute) {
+                    break;
+                }
             }
 
         }

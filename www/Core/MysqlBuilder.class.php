@@ -42,14 +42,15 @@ class MySqlBuilder implements QueryBuilder {
         return $this;
     }
 
-    public function where (string $column, string $table, string $operator = '='): QueryBuilder
+    public function where (string $column, string $table, string $operator = '=', $ind=null): QueryBuilder
     {
         $tmp_str = $table . ".";
 
         if ($operator=="NOT IN") {
             $tmp_str .= $column . " " . $operator . "(?)";
         } else {
-            $tmp_str .= $column . $operator . ":" . $column;
+            $tmp = (!is_null($ind))?$ind:"";
+            $tmp_str .= $column . $operator . ":" . $column . $tmp;
         }
 
         $this->query->where[] = $tmp_str;
@@ -76,6 +77,22 @@ class MySqlBuilder implements QueryBuilder {
         return $this;
     }
 
+    public function update($table, $data)
+    {
+        $this->query->base = "UPDATE $table SET ";
+
+        foreach ($data as $col => $val) {
+            $this->query->base .= $col."=:".$col.", ";
+        }
+
+        $this->query->base = trim($this->query->base, ", ");
+    }
+
+    public function order($order)
+    {
+        $this->query->order[] = $order;
+    }
+
     public function getQuery () {
 
         $sql = $this->query->base;
@@ -91,6 +108,16 @@ class MySqlBuilder implements QueryBuilder {
         if(isset($this->query->limit)) {
             $sql .= " " . $this->query->limit;
         }
+
+        $tmp_order = "";
+        if(isset($this->query->order) && count($this->query->order)>0) {
+            $tmp_order = " ORDER BY";
+            foreach ($this->query->order as $ord) {
+                $tmp_order .= " ".$ord.",";
+            }
+            $tmp_order = trim($tmp_order,",");
+        }
+        $sql.= $tmp_order;
 
         $sql .= ';';
 

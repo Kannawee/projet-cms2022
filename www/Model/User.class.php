@@ -11,7 +11,6 @@ class User extends Sql
     protected $password;
     protected $status = 0;
     protected $token = null;
-    public static $table = "esgi_user";
 
     public function __construct()
     {
@@ -106,6 +105,21 @@ class User extends Sql
         $this->token = substr(bin2hex(random_bytes(128)), 0, 255);
     }
 
+    public function getSubscribedUsers($id)
+    {
+        $where = array(
+            "id_newsletter"=>$id
+        );
+
+        $this->reset();
+        $this->builder->select('art_newsletterlist', ['login','email','art_user.id as id']);
+        $this->builder->join('art_user','art_newsletterlist','id','id_user');
+        $this->builder->where('id_newsletter','art_newsletterlist');
+        $res = $this->execute($where, true, true);
+
+        return $res;        
+    }
+
 
     public function getRegisterForm(): array
     {
@@ -171,14 +185,38 @@ class User extends Sql
                     "required"=>true,
                     "class"=>"inputForm",
                     "id"=>"emailForm",
-                    "error"=>"Email incorrect"
+                    "error"=>"Email incorrect",
+                    "value"=>(isset($this->email))?$this->email:""
                 ],
                 "password"=>[
                     "type"=>"password",
                     "placeholder"=>"Votre mot de passe ...",
                     "required"=>true,
                     "class"=>"inputForm",
+                    "error"=>"Incorrect password", 
                     "id"=>"pwdForm"
+                ]
+            ]
+        ];
+    }
+
+    public function getRoleForm(): array
+    {
+
+        return [
+            "config"=>[
+                "class"=>"formAddNewsletter",
+                "method"=>"POST",
+                "action"=>"/administration/user/role/".$this->id,
+                "submit"=>"OK"
+            ],
+            "select"=>[
+                "status"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect visible",
+                    "options"=>ROLES,
+                    "value"=>$this->status,
+                    "label"=>"Role"
                 ]
             ]
         ];
@@ -189,7 +227,8 @@ class User extends Sql
         $where = [
           'email' => $this->email
         ];
-        return $this->select($where, 1);
+
+        return $this->select($where);
     }
 
 }

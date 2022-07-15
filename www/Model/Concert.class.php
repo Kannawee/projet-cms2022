@@ -11,8 +11,7 @@ class Concert extends Sql
     protected $venue;
     protected $city;
     protected $link;
-    public static $table = "esgi_concert";
-
+    
     public function __construct()
     {
         parent::__construct();

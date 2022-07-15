@@ -8,8 +8,7 @@ class Media extends Sql
     protected $id = null;
     protected $name;
     protected $fileName;
-    public static $table = "esgi_media";
-
+    
     public function __construct()
     {
         parent::__construct();

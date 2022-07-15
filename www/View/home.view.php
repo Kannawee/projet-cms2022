@@ -6,8 +6,12 @@
             <li><a href="#">Concerts</a></li>
         </ul>
         <ul>
-            <li><a href="/register">S'inscrire</a></li>
-            <li><a href="/login">Se connecter</a></li>
+            <?php if (!$connect) { ?>
+                <li><a href="/register">S'inscrire</a></li>
+                <li><a href="/login">Se connecter</a></li>
+            <?php } else { ?>
+                <li><a href="/logout">Se déconnecter</a></li>
+            <?php } ?>
         </ul>
     </nav>
     <div id="title">

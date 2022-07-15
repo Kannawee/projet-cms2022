@@ -9,7 +9,6 @@ class Tracklist extends Sql
     protected $project;
     protected $media;
     protected $position;
-    public static $table = "esgi_tracklist";
 
     public function __construct()
     {

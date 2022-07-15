@@ -16,11 +16,11 @@ $this->includePartial("form", $newsletter->getAddForm());
             </tr>
             <?php foreach ($list as $key=>$val) { ?>
                 <tr>
-                    <td><?=$val['date']?></td>
-                    <td><?=$val['title']?></td>
+                    <td><?=$val->getDate()?></td>
+                    <td><?=$val->getTitle()?></td>
                     <td>
-                        <a class="button" href="/administration/newsletter/edit/<?=$val['id']?>">EDIT</a>
-                        <a class="button" href="/administration/newsletter/delete/<?=$val['id']?>">DEL</a>
+                        <a class="button" href="/administration/newsletter/edit/<?=$val->getId()?>">EDIT</a>
+                        <a class="button" href="/administration/newsletter/delete/<?=$val->getId()?>">DEL</a>
                     </td>
                 </tr>
             <?php } ?>
@@ -40,19 +40,5 @@ $this->includePartial("form", $newsletter->getAddForm());
 
     .table-liste td{
         padding: 20px;
-    }
-
-    .button {
-        display: block;
-        width: 75px;
-        height: 15px;
-        background: #4E9CAF;
-        padding: 10px;
-        text-align: center;
-        border-radius: 5px;
-        color: white;
-        font-weight: bold;
-        line-height: 15px;
-        margin-bottom: 10px;
     }
 </style>

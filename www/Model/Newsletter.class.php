@@ -2,6 +2,7 @@
 namespace App\Model;
 
 use App\Core\Sql;
+use App\Model\User as userModel;
 
 class Newsletter extends Sql
 {
@@ -9,8 +10,7 @@ class Newsletter extends Sql
     protected $title;
     protected $content;
     protected $date;
-    public static $table = "esgi_newsletter";
-
+    
     public function __construct()
     {
         parent::__construct();
@@ -92,37 +92,21 @@ class Newsletter extends Sql
         $this->date = $date;
     }
 
-
-    public function getSubscribedUsers($id)
-    {
-        $where = array(
-            "id_newsletter"=>$id
-        );
-
-        $this->reset();
-        $this->getBuilder()->select('esgi_newsletter_list', ['esgi_user.login','esgi_user.email','esgi_user.id']);
-        $this->getBuilder()->join('esgi_user','esgi_newsletter_list','id','id_user');
-        $this->getBuilder()->where('id_newsletter','esgi_newsletter_list');
-        $res = $this->execute($where, true);
-
-        return $res;        
-    }
-
     public function subscribe($data)
     {
         $data = array_map('intval', $data);
         $this->reset();
-        $this->getBuilder()->select('esgi_newsletter_list', ['id']);
-        $this->getBuilder()->where('id_user','esgi_newsletter_list');
-        $this->getBuilder()->where('id_newsletter','esgi_newsletter_list');
+        $this->builder->select('art_newsletterlist', ['id']);
+        $this->builder->where('id_user','art_newsletterlist');
+        $this->builder->where('id_newsletter','art_newsletterlist');
 
         $check = count($this->execute($data, true));
 
         if ($check===0) {
             $this->reset();
-            $this->getBuilder()->insert('esgi_newsletter_list',$data);
+            $this->builder->insert('art_newsletterlist',$data);
 
-            // echo $this->getBuilder()->getQuery();die;
+            // echo $this->builder->getQuery();die;
             $res = $this->execute($data);
             return $res;
         }
@@ -133,17 +117,17 @@ class Newsletter extends Sql
     {
         $data = array_map('intval', $data);
         $this->reset();
-        $this->getBuilder()->select('esgi_newsletter_list', ['id']);
-        $this->getBuilder()->where('id_user','esgi_newsletter_list');
-        $this->getBuilder()->where('id_newsletter','esgi_newsletter_list');
+        $this->builder->select('art_newsletterlist', ['id']);
+        $this->builder->where('id_user','art_newsletterlist');
+        $this->builder->where('id_newsletter','art_newsletterlist');
 
         $check = count($this->execute($data, true));
 
         if ($check===1) {
             $this->reset();
-            $this->getBuilder()->delete('esgi_newsletter_list');
-            $this->getBuilder()->where('id_user', 'esgi_newsletter_list');
-            $this->getBuilder()->where('id_newsletter', 'esgi_newsletter_list');
+            $this->builder->delete('art_newsletterlist');
+            $this->builder->where('id_user', 'art_newsletterlist');
+            $this->builder->where('id_newsletter', 'art_newsletterlist');
 
             $res = $this->execute($data);
             return $res;
@@ -158,9 +142,9 @@ class Newsletter extends Sql
         );
 
         $this->reset();
-        $this->getBuilder()->select('esgi_user', ['esgi_user.email', 'esgi_user.login']);
-        $this->getBuilder()->join('esgi_newsletter_list', 'esgi_user', 'id_user', 'id', 'INNER');
-        $this->getBuilder()->where('id_newsletter', 'esgi_newsletter_list');
+        $this->builder->select('art_user', ['art_user.email', 'art_user.login']);
+        $this->builder->join('art_newsletterlist', 'art_user', 'id_user', 'id', 'INNER');
+        $this->builder->where('id_newsletter', 'art_newsletterlist');
         
         $res = $this->execute($data,true);
 
@@ -174,8 +158,8 @@ class Newsletter extends Sql
         );
 
         $this->reset();
-        $this->getBuilder()->select('esgi_newsletter', ['*']);
-        $this->getBuilder()->where('id', 'esgi_newsletter');
+        $this->builder->select('art_newsletter', ['*']);
+        $this->builder->where('id', 'art_newsletter');
         
         $res = $this->execute($data, true);
         return $res;
@@ -189,8 +173,8 @@ class Newsletter extends Sql
         );
 
         $this->reset();
-        $this->getBuilder()->delete('esgi_newsletter_list');
-        $this->getBuilder()->where('id_newsletter', 'esgi_newsletter_list');
+        $this->builder->delete('art_newsletterlist');
+        $this->builder->where('id_newsletter', 'art_newsletterlist');
         
         $res = $this->execute($data);
 
@@ -199,8 +183,8 @@ class Newsletter extends Sql
         );
 
         $this->reset();
-        $this->getBuilder()->delete('esgi_newsletter');
-        $this->getBuilder()->where('id', 'esgi_newsletter');
+        $this->builder->delete('art_newsletter');
+        $this->builder->where('id', 'art_newsletter');
 
         $res = $this->execute($data);
         return $res;

@@ -9,11 +9,29 @@ class Project extends Sql
     protected $name;
     protected $releaseDate;
     protected $description;
-    public static $table = "esgi_project";
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function setFromArray($data)
+    {
+        if (isset($data['id'])) {
+            $this->id = $data['id'];
+        }
+
+        if (isset($data['name'])) {
+            $this->name = $data['name'];
+        }
+
+        if (isset($data['releaseDate'])) {
+            $this->releaseDate = $data['releaseDate'];
+        }
+
+        if (isset($data['description'])) {
+            $this->description = $data['description'];
+        }
     }
 
     /**
@@ -88,7 +106,7 @@ class Project extends Sql
             "config"=>[
                 "class"=>"formAddProject",
                 "method"=>"POST",
-                "action"=>"projects/add",
+                "action"=>"/administration/project/add",
                 "submit"=>"Add"
             ],
             'inputs'=>[
@@ -110,6 +128,43 @@ class Project extends Sql
                     "placeholder"=>"A few words about your project...",
                     "required"=>true,
                     "error"=>"Incorrect description"
+                ],
+            ]
+        ];
+    }
+
+    public function getEditForm(): array
+    {
+        return [
+            "config"=>[
+                "class"=>"formAddProject",
+                "method"=>"POST",
+                "action"=>"/administration/project/edit/".$this->getId(),
+                "submit"=>"Edit"
+            ],
+            'inputs'=>[
+                "name"=>[
+                    "type"=>"text",
+                    "placeholder"=>"Project name...",
+                    "required"=>true,
+                    "error"=>"Incorrect name",
+                    "value"=>$this->getName()
+                ],
+                "releaseDate"=>[
+                    "type"=>"date",
+                    "placeholder"=>"",
+                    "required"=>true,
+                    "error"=>"Incorrect date",
+                    "value"=>$this->getDate(),
+                    "readonly"=>true
+                ],
+            ],
+            'textAreas'=>[
+                "description"=>[
+                    "placeholder"=>"A few words about your project...",
+                    "required"=>true,
+                    "error"=>"Incorrect description",
+                    "value"=>$this->getDescription()
                 ],
             ]
         ];

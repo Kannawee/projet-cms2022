@@ -29,14 +29,6 @@ class Admin
         $view = new View("users", "back");
     }
 
-    public function projects() {
-        $project = new ProjectModel();
-        $tabProjects = $project->getAll();
-        $view = new View("projects", "back");
-        $view->assign("project", $project);
-        $view->assign("projectTab", $tabProjects);
-    }
-
     public function concerts() {
         $concert = new ConcertModel();
         $view = new View("concerts", "back");

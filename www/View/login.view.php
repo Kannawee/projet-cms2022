@@ -16,6 +16,14 @@
                 <h1>Se connecter</h1>
             </div>
             <?php $this->includePartial("form", $user->getLoginForm()) ?>
+            <?php if ( count($errors)>0 ) { ?>
+            <div class="error-login">
+                <h2>Error : </h2>
+                <?php  foreach ($errors as $key => $error) {
+                    echo "(".($key+1).") ".$error."<br>";
+                } ?> 
+            </div>
+            <?php } ?>
         </div>
     </div>
 </div>
@@ -27,6 +35,10 @@
         margin: 0 !important;
         font-family: 'Manrope', sans-serif;
         color: whitesmoke;
+    }
+
+    .error-login {
+        color: red;
     }
 
     #welcome {
