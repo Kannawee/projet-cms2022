@@ -1,5 +1,3 @@
-# ROUTING INSTALL
-
 # ROUTING FRONT
 /:
   controller: main

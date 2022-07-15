@@ -1,10 +1,7 @@
 <?php
 
-define("DBUSER", "root");
-define("DBPWD", "password");
-define("DBHOST", "database");
-define("DBNAME", "db-artistery");
-define("DBPORT", "3306");
-define("DBDRIVER", "mysql");
-define("DBPREFIXE", "art_");
 define("ROLES", [0=>"none", 1=>"super admin", 2=>"moderateur", 3=>"banni"]);
+
+if (file_exists('conf_perso.inc.php')) {
+    include('conf_perso.inc.php');
+}
