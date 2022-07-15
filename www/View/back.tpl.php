@@ -1,3 +1,4 @@
+<!-- J'ai un peu modifié l'ordre et ajouter les Pages et les posts peut être leur trouver un logo -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>

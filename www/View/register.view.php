@@ -1,3 +1,4 @@
+<!-- je n'y ai pas touché mais en gros il faudrait prévoir une section ou je peux display des errors tu peux mettre en dur, je m'occuperai d'appliquer le php dessus :) -->
 <div id="welcome">
     <nav id="navbar">
         <ul>

@@ -1,3 +1,4 @@
+<!-- mini modif -->
 <div id="welcome">
     <nav id="navbar">
         <ul>
@@ -17,11 +18,13 @@
             </div>
             <?php $this->includePartial("form", $user->getLoginForm()) ?>
             <?php if ( count($errors)>0 ) { ?>
+            <!-- modif : j'ai rajouté une div dans laquelle on va boucler sur un tableau $errors et display les error a chaque fois -->
             <div class="error-login">
                 <h2>Error : </h2>
-                <?php  foreach ($errors as $key => $error) {
-                    echo "(".($key+1).") ".$error."<br>";
-                } ?> 
+                <?php  foreach ($errors as $key => $error) { ?>
+                    <!-- modif : ici qu'on display l'error -->
+                    (<?=($key+1)?>) &nbsp; <?=$error?> <br>;
+                <?php } ?> 
             </div>
             <?php } ?>
         </div>

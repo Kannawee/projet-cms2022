@@ -1,3 +1,4 @@
+ <!-- J'ai juste rajouter une condition pour voir si user est connecté -->
  <div id="welcome">
     <nav id="navbar">
         <ul>

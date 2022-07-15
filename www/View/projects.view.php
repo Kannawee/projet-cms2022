@@ -1,3 +1,4 @@
+<!-- je n'y ai pas touché, j'ai juste changé les $val[''] en $val->getMachin() pcq mnt la fonction select renvoie des objets et non des tableaux :) -->
 <!--  ROW CARDS PROJECTS  -->
 <section class="card-block">
     <h1>Your projects</h1>

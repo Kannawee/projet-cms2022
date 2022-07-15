@@ -1,13 +1,18 @@
+<!-- style mais a faire mais la page va évoluer je te dirais qd c bon -->
 <h1>Page Edit</h1>
+<!-- modif : lien de retour a la liste -->
 <a href="/administration/page">Revenir à la liste des pages</a>
 <br><br><br>
 <h2>Modif page</h2>
+<!-- modif : form edit voir config dans model page getEditForm, attribut class pour changer les classes css -->
 <?php $this->includePartial("form", $page->getEditForm()); ?>
 <div class="edit-page">
+    <!-- modif : va être la section où on affiche les elements de la page en prévisualisation -->
     <div class="body-class" id="body-class">
         <h2 id="page-title"><?=$page->getTitle()?></h2>
     </div>
 
+    <!-- modif : va etre la section où j'affiche les form des modifications des elems -->
     <div class="tab-edit">
         
     </div>

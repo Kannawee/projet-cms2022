@@ -1,5 +1,6 @@
+<!-- style a faire -->
 <h1>Gestion Users</h1>
-
+<!-- gestion de success encore pareil, si success existe et !="" on display une span avec un style en dur en gros success peut être ok et not ok sinon c vide -->
 <?php if(isset($success) && $success!="") { ?>
     <div class="success">
         <?php if ($success=="ok") { ?>
