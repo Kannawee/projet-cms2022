@@ -144,8 +144,8 @@ class Elementpage extends Sql
             "id_page"=>$id_page
         );
         $this->reset();
-        $this->builder->select('art_elementpage', ['MAX(ordre)+1 as max']);
-        $this->builder->where('id_page','art_elementpage');
+        $this->builder->select(DBPREFIXE.'elementpage', ['MAX(ordre)+1 as max']);
+        $this->builder->where('id_page',DBPREFIXE.'elementpage');
         $res = $this->execute($where, true);
         $max = 1;
         if (count($res)>0) {
@@ -159,8 +159,8 @@ class Elementpage extends Sql
             "id_page"=>$id_page
         );
         $this->reset();
-        $this->builder->select('art_elementpage', ['MIN(ordre) as min']);
-        $this->builder->where('id_page','art_elementpage');
+        $this->builder->select(DBPREFIXE.'elementpage', ['MIN(ordre) as min']);
+        $this->builder->where('id_page',DBPREFIXE.'elementpage');
         $res = $this->execute($where, true);
         $min = 1;
         if (count($res)>0) {

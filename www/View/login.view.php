@@ -23,7 +23,7 @@
                 <h2>Error : </h2>
                 <?php  foreach ($errors as $key => $error) { ?>
                     <!-- modif : ici qu'on display l'error -->
-                    (<?=($key+1)?>) &nbsp; <?=$error?> <br>;
+                    (<?=($key+1)?>) &nbsp; <?=$error?> <br>
                 <?php } ?> 
             </div>
             <?php } ?>

@@ -112,9 +112,9 @@ class User extends Sql
         );
 
         $this->reset();
-        $this->builder->select('art_newsletterlist', ['login','email','art_user.id as id']);
-        $this->builder->join('art_user','art_newsletterlist','id','id_user');
-        $this->builder->where('id_newsletter','art_newsletterlist');
+        $this->builder->select(DBPREFIXE.'newsletterlist', ['login','email',DBPREFIXE.'user.id as id']);
+        $this->builder->join(DBPREFIXE.'user',DBPREFIXE.'newsletterlist','id','id_user');
+        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
         $res = $this->execute($where, true, true);
 
         return $res;        
@@ -138,6 +138,7 @@ class User extends Sql
                     "id"=>"emailForm",
                     "error"=>"Email incorrect",
                     "unicity"=>"true",
+                    "value"=>(isset($this->email) && !is_null($this->email))?$this->email:"",
                     "errorUnicity"=>"Email déjà en bdd",
                 ],
                 "login"=>[
@@ -147,7 +148,8 @@ class User extends Sql
                     "id"=>"loginForm",
                     "min"=>2,
                     "max"=>50,
-                    "error"=>"Login incorrect"
+                    "error"=>"Login incorrect",
+                    "value"=>(isset($this->login) && !is_null($this->login))?$this->login:"",
                 ],
                 "password"=>[
                     "type"=>"password",
@@ -155,7 +157,7 @@ class User extends Sql
                     "required"=>true,
                     "class"=>"inputForm",
                     "id"=>"pwdForm",
-                    "error"=>"Votre mot de passe doit faire au min 8 caractères avec majuscule, minuscules et des chiffres",
+                    "error"=>"Votre mot de passe doit faire au min 8 caractères avec majuscule, minuscules et des chiffres"
                     ],
                 "passwordConfirm"=>[
                     "type"=>"password",

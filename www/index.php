@@ -125,15 +125,6 @@ if (!$checkRoute) {
     $params = $tmp_param;
 }
 
-/*
- *
- *  Vérfification de la sécurité, est-ce que la route possède le paramètr security
- *  Si oui est-ce que l'utilisation a les droits et surtout est-ce qu'il est connecté ?
- *  Sinon rediriger vers la home ou la page de login
- *
- */
-
-
 $controllerFile = "Controller/".$controller.".class.php";
 if(!file_exists($controllerFile)){
     die("Le controller ".$controllerFile." n'existe pas");

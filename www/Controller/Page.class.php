@@ -87,4 +87,20 @@ class Page {
             }
         }
     }
+
+    public function delete($data=array())
+    {
+        if (count($data)>0) {
+            $id = htmlspecialchars($data['id']);
+
+            $page = new pageModel();
+            $page = $page->getById($id);
+
+            if ($page!=false) {
+                $page->delete();
+            }
+
+            $this->list();
+        }
+    }
 }

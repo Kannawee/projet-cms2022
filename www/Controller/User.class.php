@@ -62,9 +62,10 @@ class User {
                 $res = $req[0];
                 if ($user->getEmail() === $res->getEmail() && password_verify($_POST['password'], $res->getPassword())) {
                     $_SESSION["idUser"] = $res->getId();
+                    $_SESSION["token"] = $res->getToken();
                     if ($res->getStatus() == "1") {
                         $_SESSION['isAdmin'] = 1;
-                        header("Location: /administration/project");
+                        header("Location: /administration");
                         exit();
                     }
                     header("Location: /home");
@@ -86,7 +87,8 @@ class User {
     public function register()
     {
 
-        $user = new UserModel();
+        $user = new UserModel();     
+        $error = array();
 
         if( !empty($_POST)){
 
@@ -95,13 +97,46 @@ class User {
             $user->setLogin($_POST['login']);
             $user->setPassword($_POST['password']);
 
-            $user->save();
-            header('Location: /login');
-            exit();
+            $error = $this->getUnique($user);
+
+            if (count($error)==0) {
+                $user->generateToken();
+                $user->save();
+                header('Location: /login');
+                exit();
+            }
+        
         }
 
         $view = new View("register");
         $view->assign("user", $user);
+        $view->assign("errors",$error);
+        exit();
+    }
+
+    public function getUnique($user)
+    {
+        $error = array();
+        $email = array(
+            "email"=>$user->getEmail()
+        );
+
+        $login = array(
+            "login"=>$user->getLogin()
+        );
+        
+        $mailcheck = $user->getUnique(['*'],$email);
+        $logincheck = $user->getUnique(['*'], $login);
+
+        if ($mailcheck!=false) {
+            $error[] = "Mail déjà utilisé.";
+        }
+
+        if ($logincheck!=false) {
+            $error[] = "Login déjà utilisé.";
+        }
+        
+        return $error;
     }
 
 

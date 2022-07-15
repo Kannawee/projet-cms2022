@@ -19,7 +19,7 @@
                 <td><?=$page->getTitle()?></td>
                 <td><?=$page->getVisible()?></td>
                 <td><?=$page->getCreatedAt()?></td>
-                <td><a href="/administration/page/edit/<?=$page->getId()?>" class="button">EDIT</a><a class="button">DEL</a></td>
+                <td><a href="/administration/page/edit/<?=$page->getId()?>" class="button">EDIT</a><a href="/administration/page/delete/<?=$page->getId()?>" class="button">DEL</a></td>
             </tr>
         <?php } ?>
     </table>

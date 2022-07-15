@@ -16,6 +16,13 @@
             <div>
                 <h1>S'inscrire</h1>
             </div>
+            <?php if(count($errors)>0) { ?>
+                <div class="error">
+                    <?php foreach ($errors as $key => $error) { ?>
+                        <p>(<?=$key?>) <?=$error?></p>
+                    <?php } ?>
+                </div>
+            <?php } ?>
             <?php $this->includePartial("form", $user->getRegisterForm()) ?>
         </div>
     </div>
@@ -23,6 +30,10 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400&display=swap');
+    
+    .error{
+        color: red;
+    }
 
     body {
         margin: 0 !important;

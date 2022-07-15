@@ -169,15 +169,22 @@ class Newsletter {
     {
         $newsletter = new newsletterModel();
 
-        if (!empty($data) && count($data)>0) {
-            $id_news = addslashes($data['idnews']);
+        if (count($data)>0 && isset($data['id'])) {
 
-            $res = $newsletter->delete($id_news);
+            $tmp_data = array(
+                "id"=>htmlspecialchars($data['id'])
+            );
+
+            $newsletter->setFromArray($tmp_data);
+
+            $res = $newsletter->delete();
 
             if ($res) {
                 header('Location: /administration/newsletter?success=ok');
+                exit();
             } else {
                 header('Location: /administration/newsletter?success=notok');
+                exit();
             }
         }
     }

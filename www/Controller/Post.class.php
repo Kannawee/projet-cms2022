@@ -86,7 +86,9 @@ class Post {
                 "id"=>$id,
             );
 
-            $res = $this->delete($where);
+            $post->setFromArray($where);
+
+            $res = $post->delete();
 
             if ($res) {
                 header("Location: /administration/posts?success=ok");

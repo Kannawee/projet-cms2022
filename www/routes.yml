@@ -30,8 +30,8 @@
 
 ### ROUTING BACK
 
-/administration/dashboard:
-  controller: admin
+/administration:
+  controller: dashboard
   action: dashboard
   security:
     - admin
@@ -150,11 +150,11 @@
   security:
     - admin
 
-/administration/newsletter/delete/{idnews}:
+/administration/newsletter/delete/{id}:
   controller: newsletter
   action: delete
   param:
-   - idnews
+   - id
   security:
     - admin
 
@@ -211,6 +211,14 @@
   controller: page
   action: edit
   param: 
+    - id
+  security:
+    - admin
+
+/administration/page/delete/{id}:
+  controller: page
+  action: delete
+  param:
     - id
   security:
     - admin

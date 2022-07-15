@@ -96,15 +96,15 @@ class Newsletter extends Sql
     {
         $data = array_map('intval', $data);
         $this->reset();
-        $this->builder->select('art_newsletterlist', ['id']);
-        $this->builder->where('id_user','art_newsletterlist');
-        $this->builder->where('id_newsletter','art_newsletterlist');
+        $this->builder->select(DBPREFIXE.'newsletterlist', ['id']);
+        $this->builder->where('id_user',DBPREFIXE.'newsletterlist');
+        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
 
         $check = count($this->execute($data, true));
 
         if ($check===0) {
             $this->reset();
-            $this->builder->insert('art_newsletterlist',$data);
+            $this->builder->insert(DBPREFIXE.'newsletterlist',$data);
 
             // echo $this->builder->getQuery();die;
             $res = $this->execute($data);
@@ -117,17 +117,17 @@ class Newsletter extends Sql
     {
         $data = array_map('intval', $data);
         $this->reset();
-        $this->builder->select('art_newsletterlist', ['id']);
-        $this->builder->where('id_user','art_newsletterlist');
-        $this->builder->where('id_newsletter','art_newsletterlist');
+        $this->builder->select(DBPREFIXE.'newsletterlist', ['id']);
+        $this->builder->where('id_user',DBPREFIXE.'newsletterlist');
+        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
 
         $check = count($this->execute($data, true));
 
         if ($check===1) {
             $this->reset();
-            $this->builder->delete('art_newsletterlist');
-            $this->builder->where('id_user', 'art_newsletterlist');
-            $this->builder->where('id_newsletter', 'art_newsletterlist');
+            $this->builder->delete(DBPREFIXE.'newsletterlist');
+            $this->builder->where('id_user', DBPREFIXE.'newsletterlist');
+            $this->builder->where('id_newsletter', DBPREFIXE.'newsletterlist');
 
             $res = $this->execute($data);
             return $res;
@@ -142,9 +142,9 @@ class Newsletter extends Sql
         );
 
         $this->reset();
-        $this->builder->select('art_user', ['art_user.email', 'art_user.login']);
-        $this->builder->join('art_newsletterlist', 'art_user', 'id_user', 'id', 'INNER');
-        $this->builder->where('id_newsletter', 'art_newsletterlist');
+        $this->builder->select(DBPREFIXE.'user', [DBPREFIXE.'user.email', DBPREFIXE.'user.login']);
+        $this->builder->join(DBPREFIXE.'newsletterlist', DBPREFIXE.'user', 'id_user', 'id', 'INNER');
+        $this->builder->where('id_newsletter', DBPREFIXE.'newsletterlist');
         
         $res = $this->execute($data,true);
 
@@ -158,35 +158,10 @@ class Newsletter extends Sql
         );
 
         $this->reset();
-        $this->builder->select('art_newsletter', ['*']);
-        $this->builder->where('id', 'art_newsletter');
+        $this->builder->select(DBPREFIXE.'newsletter', ['*']);
+        $this->builder->where('id', DBPREFIXE.'newsletter');
         
         $res = $this->execute($data, true);
-        return $res;
-    }
-
-
-    public function delete($id)
-    {
-        $data = array(
-            "id_newsletter"=>$id
-        );
-
-        $this->reset();
-        $this->builder->delete('art_newsletterlist');
-        $this->builder->where('id_newsletter', 'art_newsletterlist');
-        
-        $res = $this->execute($data);
-
-        $data = array(
-            "id"=>$id
-        );
-
-        $this->reset();
-        $this->builder->delete('art_newsletter');
-        $this->builder->where('id', 'art_newsletter');
-
-        $res = $this->execute($data);
         return $res;
     }
 
@@ -196,7 +171,7 @@ class Newsletter extends Sql
             "config"=>[
                 "class"=>"formAddNewsletter",
                 "method"=>"POST",
-                "action"=>"newsletter/add",
+                "action"=>"/administration/newsletter/add",
                 "submit"=>"Add"
             ],
             'inputs'=>[

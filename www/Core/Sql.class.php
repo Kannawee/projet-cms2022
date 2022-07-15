@@ -6,7 +6,7 @@ use App\Core\MysqlBuilder as MysqlBuilder;
 
 abstract class Sql
 {
-    protected $pdo = null;
+    protected static $pdo = null;
     protected $table;
     protected $builder;
 
@@ -14,9 +14,9 @@ abstract class Sql
     {
         //Se connecter à la bdd
         //il faudra mettre en place le singleton
-        if (is_null($this->pdo)) {
+        if (is_null(self::$pdo)) {
             try{
-                $this->pdo = new \PDO( DBDRIVER.":host=".DBHOST.";port=".DBPORT.";dbname=".DBNAME
+                self::$pdo = new \PDO( DBDRIVER.":host=".DBHOST.";port=".DBPORT.";dbname=".DBNAME
                     ,DBUSER, DBPWD , [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING]);
             }catch (\Exception $e){
                 die("Erreur SQL : ".$e->getMessage());
@@ -37,7 +37,7 @@ abstract class Sql
     public function checkId(?int $id): object
     {
         $sql = "SELECT * FROM ".$this->table." WHERE id=".$id;
-        $query = $this->pdo->query($sql);
+        $query = self::$pdo->query($sql);
         return $query->fetchObject(get_called_class());
     }
 
@@ -74,14 +74,14 @@ abstract class Sql
             $sql = "UPDATE ".$this->table." SET ".implode(",",$update)." WHERE id=".$this->getId() ;
         }
         
-        $queryPrepared = $this->pdo->prepare($sql);
+        $queryPrepared = self::$pdo->prepare($sql);
         $res = $queryPrepared->execute( $columns );
 
         if (!$is_insert) {
             return $res;
         }
 
-        return $this->pdo->lastInsertId();
+        return self::$pdo->lastInsertId();
         
     }
 
@@ -108,14 +108,14 @@ abstract class Sql
 
         $sql = $this->builder->getQuery();
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = self::$pdo->prepare($sql);
         if(count($where)>0){
             $stmt->execute($where);
         } else {
             $stmt->execute();
         }
         
-        return $stmt->fetchAll($this->pdo::FETCH_CLASS, get_called_class());
+        return $stmt->fetchAll(self::$pdo::FETCH_CLASS, get_called_class());
     }
 
     public function getById($id, $col=['*'])
@@ -123,19 +123,44 @@ abstract class Sql
         $this->builder->select($this->table, $col);
         $this->builder->where("id", $this->table);
         $sql = $this->builder->getQuery();
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = self::$pdo->prepare($sql);
         $stmt->execute(["id"=>$id]);
 
-        $stmt->setFetchMode($this->pdo::FETCH_CLASS, get_called_class());
+        $stmt->setFetchMode(self::$pdo::FETCH_CLASS, get_called_class());
 
         $res = $stmt->fetch();
         return $res;
 
     }
 
-    public function delete($where)
+    public function getUnique($col, $where)
+    {
+        $this->reset();
+        $this->builder->select($this->table, $col);
+
+        foreach ($where as $col => $val) {
+            $this->builder->where($col, $this->table);
+        }
+
+        $sql = $this->builder->getQuery();
+        $stmt = self::$pdo->prepare($sql);
+        $stmt->execute($where);
+
+        $stmt->setFetchMode(self::$pdo::FETCH_CLASS, get_called_class());
+
+        $res = $stmt->fetch();
+        return $res;
+    }
+
+    public function delete($where=array())
     {
         $this->builder->delete($this->table);
+
+        if (count($where)==0) {
+            $where = array(
+                "id"=>$this->getId()
+            );
+        }
 
         foreach ($where as $col=>$val) {
             $this->builder->where($col, $this->table);
@@ -143,7 +168,7 @@ abstract class Sql
 
         $sql = $this->builder->getQuery();
 
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = self::$pdo->prepare($sql);
         return $stmt->execute($where);
 
     }
@@ -152,7 +177,7 @@ abstract class Sql
     {
 
         if (is_array($data) && count($data)>0) {
-            $stmt = $this->pdo->prepare($this->builder->getQuery());
+            $stmt = self::$pdo->prepare($this->builder->getQuery());
 
             if (!$fetch) {
                 return $stmt->execute($data);
@@ -160,22 +185,22 @@ abstract class Sql
             $stmt->execute($data);
             
             if ($obj) {
-                return $stmt->fetchAll($this->pdo::FETCH_CLASS, get_called_class());
+                return $stmt->fetchAll(self::$pdo::FETCH_CLASS, get_called_class());
             }
 
-            return $stmt->fetchAll($this->pdo::FETCH_ASSOC);
+            return $stmt->fetchAll(self::$pdo::FETCH_ASSOC);
         }
 
-        $stmt = $this->pdo->query($this->builder->getQuery());
+        $stmt = self::$pdo->query($this->builder->getQuery());
 
         if (!$fetch) {
             return $stmt->execute();
         }
         $stmt->execute();
         if($obj) {
-            return $stmt->fetchAll($this->pdo::FETCH_CLASS, get_called_class());
+            return $stmt->fetchAll(self::$pdo::FETCH_CLASS, get_called_class());
         }
-        return $stmt->fetchAll($this->pdo::FETCH_ASSOC);
+        return $stmt->fetchAll(self::$pdo::FETCH_ASSOC);
     }
 
     public function getBuilder()
