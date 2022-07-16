@@ -22,8 +22,8 @@ class Mymail
 		$this->mailer->SMTPSecure = 'tls';
 		$this->mailer->Host = 'smtp.gmail.com';
 		$this->mailer->Port = 587;
-		$this->mailer->Username = "artistery.projetcms@gmail.com";
-		$this->mailer->Password = "odmwqkjvqpebzjic";
+		$this->mailer->Username = NEWSMAIL;
+		$this->mailer->Password = NEWSPWD;
 		$this->mailer->SetFrom("artistery.projetcms@gmail.com", "Artistery Team");
 		$this->mailer->IsHTML(true);
 		$this->mailer->CharSet="utf-8";

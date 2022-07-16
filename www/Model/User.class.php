@@ -158,6 +158,19 @@ class User extends Sql
         return $res;
     }
 
+    public function checkSuperAdmin()
+    {
+        $where = array(
+            "status"=>1
+        );
+        $res = $this->select($where);
+
+        if ($res!==false && count($res)>0) {
+            return false;
+        }
+        return true;
+    }
+
     public function getResetPwdForm()
     {
         return [

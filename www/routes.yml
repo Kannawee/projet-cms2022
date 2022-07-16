@@ -1,3 +1,12 @@
+# ROUTING INSTALL
+/install/step2:
+  controller: installer
+  action: step2
+
+/install/step3:
+  controller: installer
+  action: step3
+
 # ROUTING FRONT
 /:
   controller: main

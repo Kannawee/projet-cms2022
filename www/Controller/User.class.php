@@ -71,7 +71,7 @@ class User {
             if (count($req)>0) {
                 $res = $req[0];
                 if ($user->getEmail() === $res->getEmail() && password_verify($_POST['password'], $res->getPassword())) {
-                    if ($user->getConfirmed()==1) {
+                    if ($res->getConfirmed()==1) {
                         $_SESSION["idUser"] = $res->getId();
                         $_SESSION["token"] = $res->getToken();
                         if ($res->getStatus() == "1") {
