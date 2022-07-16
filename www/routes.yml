@@ -279,3 +279,29 @@
     - change
   security:
     -admin
+
+# ROUTING MOD COMMENTS
+/administration/commentmod:
+  controller: comment
+  action: listUnmod
+  security:
+    - modo
+    - admin
+
+/administration/comment/accept/{id}:
+  controller: comment
+  action: accept
+  param:
+    - id
+  security: 
+    - modo
+    - admin
+
+/administration/comment/decline/{id}:
+  controller: comment
+  action: decline
+  param:
+    - id
+  security: 
+    - modo
+    - admin

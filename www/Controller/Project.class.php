@@ -7,6 +7,7 @@ use App\Core\Verificator;
 use App\Core\View;
 use App\Model\Media as mediaModel;
 use App\Model\Project as projectModel;
+use App\Model\Comment as commentModel;
 
 class Project {
 
@@ -48,14 +49,25 @@ class Project {
                 exit();
             } else {
                 $project = $project->getById($id);
-                $success = (isset($_GET['success']))?htmlspecialchars($_GET["success"]):"";
-                $view = new View("projectedit", "back");
-                $view->assign('project', $project);
-                $view->assign('success',$success);
+                if ($project!==false) {
+                    $success = (isset($_GET['success']))?htmlspecialchars($_GET["success"]):"";
+
+                    $comment = new commentModel();
+                    $listComment = $comment->getModedCommentFromObjId($project->getId(), "project");
+
+                    $view = new View("projectedit", "back");
+                    $view->assign("listComment",$listComment);
+                    $view->assign('project', $project);
+                    $view->assign('success',$success);
+                    exit();
+                }
+                
+                header("Location: /administration/projects");
                 exit();
             }
 
         }
+
     }
 
     public function add()

@@ -81,7 +81,16 @@ class Installer {
         $dbh = new \PDO( $driver.":host=".$host.";port=".$dbport.";dbname=".$db
             ,$user, $pass , [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING]);
     
-        $sql = "CREATE TABLE `".$prefix."concert` (
+        $sql = "CREATE TABLE `".$prefix."comment` (
+          `id` int(11) NOT NULL,
+          `moded` int(11) NOT NULL,
+          `type` enum('project','concert') NOT NULL,
+          `content` text NOT NULL,
+          `id_user` int(11) NOT NULL,
+          `id_project` int(11) DEFAULT NULL,
+          `id_concert` int(11) DEFAULT NULL
+          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+          CREATE TABLE `".$prefix."concert` (
             `id` int(11) NOT NULL,
             `name` varchar(50) DEFAULT NULL,
             `date` date NOT NULL,
@@ -149,6 +158,11 @@ class Installer {
             `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updatedAt` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+          ALTER TABLE `".$prefix."comment`
+          ADD PRIMARY KEY (`id`),
+          ADD KEY `id_user` (`id_user`),
+          ADD KEY `id_project` (`id_project`),
+          ADD KEY `id_concert` (`id_concert`);
           ALTER TABLE `".$prefix."concert`
             ADD PRIMARY KEY (`id`);
           ALTER TABLE `".$prefix."elementpage`
@@ -176,6 +190,8 @@ class Installer {
           ALTER TABLE `".$prefix."user`
             ADD PRIMARY KEY (`id`),
             ADD UNIQUE KEY `email` (`email`);
+          ALTER TABLE `".$prefix."comment`
+            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."concert`
             MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
           ALTER TABLE `".$prefix."elementpage`
@@ -196,6 +212,10 @@ class Installer {
             MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."user`
             MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+          ALTER TABLE `".$prefix."comment`
+            ADD CONSTRAINT `".$prefix."comment_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `".$prefix."user` (`id`) ON DELETE CASCADE,
+            ADD CONSTRAINT `".$prefix."comment_ibfk_2` FOREIGN KEY (`id_project`) REFERENCES `".$prefix."project` (`id`) ON DELETE CASCADE,
+            ADD CONSTRAINT `".$prefix."comment_ibfk_3` FOREIGN KEY (`id_concert`) REFERENCES `".$prefix."concert` (`id`) ON DELETE CASCADE;
           ALTER TABLE `".$prefix."elementpage`
             ADD CONSTRAINT `".$prefix."elementpage_ibfk_1` FOREIGN KEY (`id_page`) REFERENCES `".$prefix."page` (`id`) ON DELETE CASCADE,
             ADD CONSTRAINT `".$prefix."elementpage_ibfk_2` FOREIGN KEY (`id_project`) REFERENCES `".$prefix."project` (`id`) ON DELETE CASCADE,

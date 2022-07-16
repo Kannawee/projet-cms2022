@@ -18,6 +18,7 @@
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_concerts.svg" alt="logo concerts"><a href="/administration/concerts">Concerts</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_pages.svg" alt="logo pages"><a href="/administration/page">Pages</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_newsletter.svg" alt="logo newsletters"><a href="/administration/newsletter">Newsletter</a></li>
+            <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_pages.svg" alt="logo projects"><a href="/administration/commentmod">Comment Moderation</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_templates.svg" alt="logo templates"><a href="/administration/templates">Templates</a></li>
             <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_logout.svg"><a href="/logout">Log out</a></li>
         </ul>
