@@ -2,6 +2,7 @@
 namespace App\Model;
 
 use App\Core\Sql;
+use App\Model\Mymail as mymailModel;
 
 class User extends Sql
 {
@@ -11,6 +12,7 @@ class User extends Sql
     protected $password;
     protected $status = 0;
     protected $token = null;
+    protected $confirmed;
 
     public function __construct()
     {
@@ -39,6 +41,16 @@ class User extends Sql
     public function setEmail(string $email): void
     {
         $this->email = strtolower(trim($email));
+    }
+
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(string $confirmed): void
+    {
+        $this->confirmed = strtolower(trim($confirmed));
     }
 
     /**
@@ -118,6 +130,83 @@ class User extends Sql
         $res = $this->execute($where, true, true);
 
         return $res;        
+    }
+
+    public function sendResetPwd()
+    {
+        $mail = new mymailModel();
+        $body = "<a href=\"http://".$_SERVER['HTTP_HOST']."/resetpwd/".$this->id."/".$this->token."\">Cliquer ici pour réinitialiser votre mot de passe</a>";
+        // echo $body;die;
+        $subject = "Reset Password ".$this->login;
+        $addr = [$this->email];
+        $mail->setupMyMail($subject, $body, $addr);
+        $res = $mail->sendMyMail();
+
+        return $res;
+    }
+
+    public function sendConfirm($id)
+    {
+        $mail = new mymailModel();
+        $body = "<a href=\"http://".$_SERVER['HTTP_HOST']."/confirmuser/".$id."/".$this->token."\">Cliquer ici pour confirmer votre compte</a>";
+        // echo $body;die;
+        $subject = "Confirmer votre compte ".$this->login;
+        $addr = [$this->email];
+        $mail->setupMyMail($subject, $body, $addr);
+        $res = $mail->sendMyMail();
+
+        return $res;
+    }
+
+    public function getResetPwdForm()
+    {
+        return [
+            "config"=>[
+                "method"=>"POST",
+                "action"=>"/resetpwd/".$this->id."/".$this->token,
+                "submit"=>"Confirmer"
+            ],
+            "inputs"=>[
+                "password"=>[
+                    "type"=>"password",
+                    "required"=>true,
+                    "class"=>"inputForm",
+                    "id"=>"pwdForm",
+                    "error"=>"Password incorrect",
+                ],
+                "passwordConfirm"=>[
+                    "type"=>"password",
+                    "required"=>true,
+                    "class"=>"inputForm",
+                    "id"=>"pwdConfForm",
+                    "error"=>"Password confirm incorrect",
+                ]
+            ]
+        ];
+    }
+
+
+    public function getFgtPwdForm(): array
+    {
+        return [
+            "config"=>[
+                "method"=>"POST",
+                "action"=>"/forgottenpwd",
+                "submit"=>"S'inscrire"
+            ],
+            "inputs"=>[
+                "email"=>[
+                    "type"=>"email",
+                    "placeholder"=>"Votre email ...",
+                    "required"=>true,
+                    "class"=>"inputForm",
+                    "id"=>"emailForm",
+                    "error"=>"Email incorrect",
+                    "unicity"=>"true",
+                    "errorUnicity"=>"Email déjà en bdd",
+                ]
+            ]
+        ];
     }
 
 

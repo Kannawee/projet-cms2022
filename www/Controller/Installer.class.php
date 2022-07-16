@@ -138,6 +138,7 @@ class Installer {
                 `email` varchar(320) NOT NULL,
                 `login` varchar(50) DEFAULT NULL,
                 `password` varchar(255) NOT NULL,
+                `confirmed` int(11) NOT NULL,
                 `status` tinyint(4) NOT NULL DEFAULT '0',
                 `token` char(255) DEFAULT NULL,
                 `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -235,14 +236,16 @@ class Installer {
             "email"=>addslashes(htmlspecialchars($data['emailAdmin'])),
             "login"=>addslashes(htmlspecialchars($data['loginAdmin'])),
             "password"=>password_hash(addslashes(htmlspecialchars($data['password'])), PASSWORD_DEFAULT),
-            "status"=>1
+            "status"=>1,
+            "token"=>substr(bin2hex(random_bytes(128)), 0, 255),
+            "confirmed"=>1
         );
 
         try{
             $dbh = new \PDO( $driver.":host=".$host.";port=".$dbport.";dbname=".$db
                 ,$user, $pass , [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING]);
 
-            $sql = "INSERT INTO ".$prefix."user (email, login, password, status) VALUES (:email, :login, :password, :status)";
+            $sql = "INSERT INTO ".$prefix."user (email, login, password, confirmed, status, token) VALUES (:email, :login, :password, :confirmed, :status, :token)";
             $stmt = $dbh->prepare($sql);
 
             if(!$stmt) {

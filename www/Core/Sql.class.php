@@ -143,6 +143,7 @@ abstract class Sql
         }
 
         $sql = $this->builder->getQuery();
+        
         $stmt = self::$pdo->prepare($sql);
         $stmt->execute($where);
 

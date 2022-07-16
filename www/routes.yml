@@ -21,10 +21,23 @@
   controller: user
   action: register
 
-/forget:
+/forgottenpwd:
   controller: user
-  action: pwdforget
+  action: forgottenpwd
 
+/resetpwd/{id}/{token}:
+  controller: user
+  action: resetpwd
+  param:
+    - id
+    - token
+
+/confirmuser/{id}/{token}:
+  controller: user
+  action: confirmuser
+  param:
+    - id
+    - token
 
 ### ROUTING BACK
 

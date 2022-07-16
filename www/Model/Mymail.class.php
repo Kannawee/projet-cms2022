@@ -25,6 +25,9 @@ class Mymail
 		$this->mailer->Username = "artistery.projetcms@gmail.com";
 		$this->mailer->Password = "odmwqkjvqpebzjic";
 		$this->mailer->SetFrom("artistery.projetcms@gmail.com", "Artistery Team");
+		$this->mailer->IsHTML(true);
+		$this->mailer->CharSet="utf-8";
+
 	}
 
 	/**
@@ -36,7 +39,9 @@ class Mymail
 	public function setupMyMail($subject, $body, $adressee) :void
 	{
 		$this->mailer->Subject = $subject;
-		$this->mailer->Body = $body;
+
+		$this->mailer->set('Body', $body);
+		// echo $this->mailer->Body;die;
 		foreach ($adressee as $email) {
 			$this->mailer->AddAddress($email);
 		}

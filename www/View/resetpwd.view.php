@@ -1,48 +1,39 @@
-<!-- mini modif -->
-
-        <div class="card">
-            <div>
-                <h1>Se connecter</h1>
-            </div>
-            <?php if ( count($errors)>0 ) { ?>
-            <!-- modif : j'ai rajouté une div dans laquelle on va boucler sur un tableau $errors et display les error a chaque fois -->
-            <div class="error-login">
-                <h2>Error : </h2>
-                <?php  foreach ($errors as $key => $error) { ?>
-                    <!-- modif : ici qu'on display l'error -->
-                    (<?=($key+1)?>) &nbsp; <?=$error?> <br>
-                <?php } ?> 
-            </div>
+<div>
+    <div class="card">
+        <div>
+            <?php if (count($errors)>0) { ?>
+                <div class="error">
+                <?php foreach ($errors as $key => $error) {
+                    echo '('.$key.') '.$error.'<br>';
+                } ?>
+                </div>
             <?php } ?>
-            <?php if ( count($success)>0 ) { ?>
-            <!-- modif : j'ai rajouté une div dans laquelle on va boucler sur un tableau $success et display les error a chaque fois -->
-            <div class="success-login">
-                <h2>Success : </h2>
-                <?php  foreach ($success as $key => $succ) { ?>
-                    <!-- modif : ici qu'on display succ -->
-                    (<?=($key+1)?>) &nbsp; <?=$succ?> <br>
-                <?php } ?> 
-            </div>
-            <?php } ?>
-            <?php $this->includePartial("form", $user->getLoginForm()) ?>
-            <a href="/forgottenpwd">Mot de passe oublié</a>
+            <h1>Reset mot de passe</h1>
+                
+            <?php 
+            if ($user!==false) {
+                $this->includePartial("form", $user->getResetPwdForm());
+            } ?>
         </div>
+    </div>
+</div>
+
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400&display=swap');
+    
+    .error{
+        color: red;
+    }
+
+    .success{
+        color: green;
+    }
 
     body {
         margin: 0 !important;
         font-family: 'Manrope', sans-serif;
         color: whitesmoke;
-    }
-
-    .error-login {
-        color: red;
-    }
-
-    .success-login {
-        color: green;
     }
 
     .card {
