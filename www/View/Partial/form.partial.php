@@ -1,4 +1,4 @@
-<form class="<?= $data["config"]["class"]??"" ?>" method="<?= $data["config"]["method"]??"POST" ?>"  action="<?= $data["config"]["action"]??"" ?>">
+<form class="<?= $data["config"]["class"]??"" ?>" method="<?= $data["config"]["method"]??"POST" ?>"  action="<?= $data["config"]["action"]??"" ?>" enctype="<?= $data["config"]["enctype"]??"" ?>" >
 
     <?php if (isset($data["inputs"])) { foreach ($data["inputs"] as $name=>$input) :?>
 

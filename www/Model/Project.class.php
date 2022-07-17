@@ -9,6 +9,8 @@ class Project extends Sql
     protected $name;
     protected $releaseDate;
     protected $description;
+    protected $cover;
+    public static $table = "esgi_project";
 
     public function __construct()
     {
@@ -100,6 +102,28 @@ class Project extends Sql
         $this->description = $description;
     }
 
+    /**
+     * @return string
+     */
+    public function getCover(): string
+    {
+        return $this->cover;
+    }
+
+    /**
+     * @param array $cover
+     */
+    public function setCover(array $cover): void
+    {
+        $image_name = $this->getId();
+        $filename = $cover['name'];
+        $temp_array = explode(".", $filename);
+        $extension = end($temp_array);
+        $image_path = './uploads/covers/' . $image_name . '.' . $extension;
+
+        $this->cover = $image_path;
+    }
+
     public function getAddForm(): array
     {
         return [
@@ -108,6 +132,9 @@ class Project extends Sql
                 "method"=>"POST",
                 "action"=>"/administration/project/add",
                 "submit"=>"Add"
+                // CODE IZIA
+                // "enctype"=>"multipart/form-data",
+                // "action"=>"projects/add",
             ],
             'inputs'=>[
                 "name"=>[
@@ -122,11 +149,19 @@ class Project extends Sql
                     "required"=>true,
                     "error"=>"Incorrect date"
                 ],
+                "cover"=>[
+                    "type"=>"file",
+                    "placeholder"=>"",
+                    "required"=>true,
+                    "accept"=>".jpg, .jpeg, .png",
+                    "error"=>"Incorrect cover"
+                ],
             ],
             'textAreas'=>[
                 "description"=>[
                     "placeholder"=>"A few words about your project...",
                     "required"=>true,
+                    "rows"=>10,
                     "error"=>"Incorrect description"
                 ],
             ]

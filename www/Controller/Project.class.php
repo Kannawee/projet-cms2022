@@ -62,6 +62,17 @@ class Project {
     {
         $project = new projectModel();
         if (!empty($_POST)) {
+            // CODE IZIA
+    //         $result = Verificator::checkForm($project->getAddForm(), $_POST, $_FILES);
+    //         var_dump($result);
+    //         $project->setName($_POST['name']);
+    //         $project->setDate($_POST['releaseDate']);
+    //         $project->setDescription($_POST['description']);
+    //         $project->setCover($_FILES['cover']);
+    //         $project->save();
+    // /*    move_uploaded_file($_FILES['picture1']['tmp_name'], $image_path1);
+    //         header('Location: /administration/projects');*/
+
             $result = Verificator::checkForm($project->getAddForm(), $_POST);
             $data = array(
                 "name"=>htmlspecialchars($_POST['name']),

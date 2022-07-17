@@ -1,3 +1,13 @@
+
+:root {
+  --main-purple: #8B4BF2;
+  --dark-purple: #2B0B71;
+  --main-blue: #5B5DF0;
+  --very-light-purple: #ECDEF8;
+  --shadow-purple: rgba(126, 63, 228, 0.13);
+  --shadow-purple-emphasis: rgba(115, 55, 213, 0.34);
+  --light-grey: #b6b6b6;
+}
 /**
  * CUSTOM BLUE
 **/
@@ -40,7 +50,7 @@
  * CUSTOM PINK
 **/
 .form-input {
-  border: solid 1px #2ECFF0;
+  border: solid 1px var(--main-purple);
   border-radius: 5px;
   height: 30px;
   padding: 0;
@@ -51,7 +61,7 @@
 
 .form-select {
   height: 30px;
-  border: solid 1px #2ECFF0;
+  border: solid 1px var(--main-purple);
   border-radius: 5px;
   background-color: white;
   color: #D1D1D1;
@@ -63,7 +73,7 @@
   height: 30px;
   width: 60px;
   border: none;
-  background: linear-gradient(270deg, #2ECFF0 0%, #497BFB 91.15%);
+  background: linear-gradient(270deg, var(--main-purple) 0%, var(--main-blue) 91.15%);
   color: white;
 }
 .form-btn-add:hover {
@@ -86,17 +96,17 @@
 .card-block .section-selection-data .button-selection-data .icon-data {
   transform: translateY(45%);
   padding-right: 10px;
-  color: #2ECFF0;
+  color: var(--main-purple);
 }
 .card-block .section-selection-data .button-selection-data .info-data {
   display: flex;
   flex-direction: column;
 }
 .card-block .section-selection-data .button-selection-data .info-data .title-data {
-  color: #0E4577;
+  color: var(--dark-purple);
 }
 .card-block .section-selection-data .button-selection-data .info-data .number-data {
-  color: #2ECFF0;
+  color: var(--main-purple);
   font-weight: bold;
   font-size: 35px;
 }
@@ -105,7 +115,7 @@
 }
 .card-block .section-selection-data .selected {
   border-radius: 10px;
-  background: linear-gradient(270deg, #2ECFF0 0%, #497BFB 91.15%);
+  background: linear-gradient(270deg, var(--main-purple) 0%, var(--main-blue) 91.15%);
 }
 .card-block .section-selection-data .selected .icon-data {
   color: white !important;
@@ -119,7 +129,7 @@
 }
 .card-block .section-selection-data .selected:hover {
   opacity: 0.6;
-  background-color: #2ECFF0;
+  background-color: var(--main-purple);
 }
 .card-block .dashboard-graph {
   margin: 30px;
@@ -135,7 +145,7 @@
 }
 .card-block .dashboard-graph .button-big-graph-legend .btn-legend {
   border-radius: 10px;
-  background: linear-gradient(270deg, #2ECFF0 0%, #497BFB 91.15%);
+  background: linear-gradient(270deg, var(--main-purple) 0%, var(--main-blue) 91.15%);
   font-size: 24px;
   font-weight: bold;
   color: white;
@@ -159,7 +169,7 @@
   background-color: white;
 }
 .card-block .area-detail-data .detail-data .title-data-detail {
-  color: #0E4577;
+  color: var(--dark-purple);
 }
 .card-block .area-detail-data .detail-data .title-data-detail .icon-data-detail {
   margin-right: 8px;
@@ -209,12 +219,12 @@
   flex-direction: column;
 }
 .card-block .area-detail-data .detail-data .content-detail-data .row-detail-data .detail-data-info .legend-row {
-  color: #0E4577;
+  color: var(--dark-purple);
   margin-bottom: 7px;
   font-size: 60%;
 }
 .card-block .area-detail-data .detail-data .content-detail-data .row-detail-data .detail-data-info .media-title {
-  color: #2ECFF0;
+  color: var(--main-purple);
   font-weight: bold;
   font-size: 120%;
   margin-top: 0;
@@ -231,11 +241,23 @@
   padding-left: 10px;
 }
 
+.card {
+  background-color: white;
+  box-shadow: var(--shadow-purple) 0px 2px 8px 0px;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.card a {
+  text-decoration: none;
+  color: var(--dark-purple);
+}
+
 h1 {
-  color: #2ECFF0;
+  color: var(--main-purple);
   width: 30%;
   padding-bottom: 6px;
-  border-bottom: solid 1px #0E4577;
+  border-bottom: solid 1px var(--dark-purple);
 }
 
 /**
@@ -258,7 +280,7 @@ body {
 }
 
 body {
-  background: linear-gradient(180deg, rgba(233, 233, 233, 0) 0%, #DEF4F8 100%);
+  background: linear-gradient(180deg, rgba(233, 233, 233, 0) 0%, var(--very-light-purple) 100%);
 }
 
 /**
@@ -267,11 +289,14 @@ body {
 .navbar {
   width: 22%;
   height: 100%;
-  background: linear-gradient(180deg, #2ECFF0 10%, #487AFB 100%);
+  background: linear-gradient(180deg, var(--main-purple) 10%, var(--main-blue) 100%);
+  overflow: scroll;
 }
 .navbar ul {
   list-style: none;
-  padding-inline-start: 0%;
+  padding-inline-start: 0;
+  margin-top: 1rem;
+  overflow: scroll;
 }
 .navbar ul .selected > a {
   font-weight: bold;
@@ -289,18 +314,20 @@ body {
   line-height: 24px;
   font-weight: 200;
 }
-.navbar ul .nav-button:hover {
-  /*background-color: $main-blue;*/
-  font-weight: bold;
+.navbar .nav-title-sub {
+  font-weight: 200;
 }
 .navbar .nav-subsection > ul {
   list-style: circle;
   padding-inline-start: 25%;
   padding-top: 5%;
+  font-weight: 200;
 }
-.navbar .nav-subsection > ul .nav-button:hover {
-  background-color: inherit;
-  font-weight: bold;
+.navbar .nav-subsection a {
+  font-size: 14px;
+}
+.navbar .nav-button:hover a {
+  font-weight: 600;
 }
 
 .icon-nav {
@@ -320,11 +347,15 @@ body {
  * BODY CONTENT
 **/
 .section-content {
-  height: 100%;
+  /*height: 100%;*/
   width: 78%;
   overflow-y: scroll;
   display: block;
-  padding: 0 4rem;
+  padding: 1rem 4rem;
+}
+.section-content h1 {
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 .section-content .area-table-users .table-users {
   display: flex;
@@ -338,7 +369,7 @@ body {
 }
 .section-content .area-table-users thead {
   color: black;
-  background-color: #487AFB;
+  background-color: var(--main-blue);
 }
 .section-content .area-table-users th {
   padding: 12px 15px 12px 15px;
@@ -355,8 +386,8 @@ body {
 }
 .section-content .area-table-users tbody > tr > td:not(td:last-child) {
   border-bottom: none;
-  border-right: 1px solid #487AFB;
-  color: #487AFB;
+  border-right: 1px solid var(--main-blue);
+  color: var(--main-blue);
 }
 .section-content .area-table-users td {
   padding: 10px 10px 10px 10px;
@@ -365,7 +396,7 @@ body {
   border-spacing: 0;
 }
 .section-content .area-table-users td > button {
-  background-color: #487AFB;
+  background-color: var(--main-blue);
   padding: 5px;
   color: #fff;
   border-radius: 5px;
@@ -375,7 +406,7 @@ body {
   text-align: center;
 }
 .section-content .form-area-user {
-  box-shadow: -2px 4px 4px rgba(72, 124, 251, 0.13);
+  box-shadow: -2px 4px 4px var(--shadow-purple);
   background-color: white;
   border-radius: 15px;
 }
@@ -383,7 +414,7 @@ body {
   position: relative;
   margin-left: 17px;
   margin-right: 7px;
-  color: #2ECFF0;
+  color: var(--main-purple);
 }
 .section-content .form-area-user .input-users {
   margin-top: 24px;
@@ -397,10 +428,10 @@ body {
   flex-wrap: wrap;
 }
 .section-content .template-img.selected {
-  background-color: rgba(70, 130, 250, 0.25);
+  background-color: var(--shadow-purple);
 }
 .section-content .template-img:hover .img-template-area {
-  box-shadow: -2px 4px 4px rgba(72, 124, 251, 0.13);
+  box-shadow: -2px 4px 4px var(--shadow-purple);
   transform: translate(-3px, -3px);
 }
 
@@ -418,4 +449,95 @@ body {
   font-weight: bold;
   line-height: 15px;
   margin-bottom: 10px;
+}
+
+.card-projects {
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-style: unset;
+  transition: box-shadow .3s;
+}
+
+.card-projects:hover {
+  box-shadow: var(--shadow-purple-emphasis) 0 2px 8px 0;
+}
+
+.card-projects p {
+  font-size: 14px;
+  color: var(--main-blue);
+}
+
+.card-projects > p:first-child {
+  font-size: 18px;
+  color: var(--main-purple);
+  width: 20%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.card-projects img {
+  color: var(--main-blue);
+}
+
+.div-project-icon {
+  display: flex;
+  align-items: center;
+}
+
+.formAddProject {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.formAddProject > input:not(:last-child),
+.formAddProject > textarea {
+  margin-bottom: 1rem;
+}
+
+.formAddProject > input:not(:last-child) {
+  border: none;
+  border-bottom: 1px solid var(--main-blue);
+  color: var(--main-blue);
+}
+
+.formAddProject > textarea {
+  border-color: var(--main-blue);
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.formAddProject > textarea:hover {
+  border-color: var(--main-purple);
+}
+
+.formAddProject > input::placeholder {
+  color: var(--light-grey);
+}
+
+.formAddProject > input:not(:last-child):hover {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--main-purple);
+}
+
+.btn {
+  padding: 0.75rem;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.formAddProject .btn {
+  border: none;
+  background-color: var(--main-blue);
+  transition: background-color 1s;
+}
+
+.formAddProject .btn:hover {
+  background-color: var(--main-purple);
 }

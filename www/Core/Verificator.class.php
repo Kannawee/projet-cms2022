@@ -6,27 +6,37 @@ namespace App\Core;
 class Verificator
 {
 
-    public static function checkForm($config, $data): array
+    public static function checkForm($config, $data, $files = NULL): array
     {
-        $result = [];
+        $result =  [];
+        $nbFields = 0;
+        $nbdata = count($data);
 
-        if (isset($config['textAreas'])) {
-            $nbFields = count($config['inputs']) + count($config['textAreas']);
-        } else {
-            $nbFields = count($config['inputs']);
+        if(!is_null($files)){
+            $nbdata += count($files);
         }
 
-        if( count($data) != $nbFields){
+        if (isset($config['textAreas'])) {
+            $nbFields += count($config['textAreas']);
+        }
+        if(isset($config['inputs'])) {
+            $nbFields += count($config['inputs']);
+        }
+        if(isset($config['select'])) {
+            $nbFields += count($config['select']);
+        }
+
+        if( $nbdata != $nbFields){
             die("Tentative de hack !!!!");
         }
 
         foreach ($config['inputs'] as $name=>$input){
 
-            if(!isset($data[$name]) ){
+            if(!isset($data[$name]) && !isset($files[$name])){
                 $result[] = "Le champs ".$name." n'existe pas";
             }
 
-            if(empty($data[$name]) && !empty($input["required"]) ){
+            if(empty($data[$name]) && empty($files[$name]) && !empty($input["required"]) ){
                 $result[] = "Le champs ".$name." ne peut pas être vide";
             }
 
@@ -38,9 +48,16 @@ class Verificator
                 $result[] = $input["error"];
             }
 
+            if ($input["type"] == "file" ) {
+                if ($name == "cover" && !self::checkCover($files[$name])) {
+                    $result[] = $input["error"];
+                }
+            }
+
             if(!empty($input["confirm"]) && $data[$name] != $data[$input["confirm"]]){
                 $result[] = $input["error"];
             }
+
         }
 
         if (isset($config['textAreas'])) {
@@ -76,7 +93,33 @@ class Verificator
             ;
     }
 
+    public static function checkCover($cover)/*: bool*/
+    {
+        $format = array(
+            'image/jpeg',
+            'image/jpg',
+            'image/png'
+        );
+        $maxsize = 2097152;
+/*        $uniqueNb = time();*/
 
+        if ((in_array($cover['type'], $format))) {
+            $size = $cover['size'];
+            if ($size >= $maxsize || $size > 0) {
+                return true;
+/*                $image_name = $_SESSION['id'] . '-' . $uniqueNb;
+                $filename = $_FILES['picture1']['name'];
+                $temp_array = explode(".", $filename);
+                $extension = end($temp_array);
+                $image_path1 = '../../../img/products/' . $image_name . '.' . $extension;
+                $insert_bdd_pic1 = 'img/products/' . $image_name . '.' . $extension;*/
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
 
 }
