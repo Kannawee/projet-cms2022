@@ -55,6 +55,7 @@
   action: dashboard
   security:
     - admin
+    - modo
 
 /administration/concerts:
   controller: admin
@@ -242,6 +243,13 @@
     - id
   security:
     - admin
+  
+# ROUTING AFFICHAGE PAGE FRONT
+/page/{route}:
+  controller: page
+  action: displaypage
+  param:
+    - route
 
 # ROUTING PAGE ELEMENT
 /administration/element/add/{id}:

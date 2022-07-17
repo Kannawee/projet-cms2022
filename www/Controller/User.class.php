@@ -74,8 +74,9 @@ class User {
                     if ($res->getConfirmed()==1) {
                         $_SESSION["idUser"] = $res->getId();
                         $_SESSION["token"] = $res->getToken();
-                        if ($res->getStatus() == "1") {
-                            $_SESSION['isAdmin'] = 1;
+                        // var_dump($res->getStatus());die;
+                        if ($res->getStatus() == 1 || $res->getStatus() == 2) {
+                            $_SESSION['isAdmin'] = $res->getStatus();
                             header("Location: /administration");
                             exit();
                         }

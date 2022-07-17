@@ -9,6 +9,9 @@ class Page extends Sql
     protected $title;
     protected $visible;
     protected $created_at;
+    protected $route;
+
+    public static $protectedWords = ['delete','add','edit'];
 
     public function __construct()
     {
@@ -21,9 +24,10 @@ class Page extends Sql
             $this->id = $data['id'];
         }
 
-        $this->title = (isset($data['title']))?$data['title']:"";
-        $this->visible = (isset($data['visible']))?$data['visible']:"";
-        $this->created_at = (isset($data['created_at']))?$data['created_at']:"";
+        $this->title = (isset($data['title']))?$data['title']:null;
+        $this->visible = (isset($data['visible']))?$data['visible']:null;
+        $this->created_at = (isset($data['created_at']))?$data['created_at']:null;
+        $this->route = (isset($data['route']))?$data['route']:null;
         
     }
 
@@ -57,6 +61,16 @@ class Page extends Sql
         return $this->created_at;
     }
 
+    public function setRoute($route)
+    {
+        $this->route = $route;
+    }
+
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
     public function getAddForm(): array
     {
         return [
@@ -69,7 +83,13 @@ class Page extends Sql
             'inputs'=>[
                 "title"=>[
                     "type"=>"text",
-                    "placeholder"=>"Newsletter title...",
+                    "placeholder"=>"Page title...",
+                    "required"=>true,
+                    "error"=>"Incorrect title"
+                ],
+                "route"=>[
+                    "type"=>"text",
+                    "placeholder"=>"Page route...",
                     "required"=>true,
                     "error"=>"Incorrect title"
                 ],
@@ -90,11 +110,19 @@ class Page extends Sql
             'inputs'=>[
                 "title"=>[
                     "type"=>"text",
-                    "placeholder"=>"Newsletter title...",
+                    "placeholder"=>"Page title...",
                     "required"=>true,
                     "error"=>"Incorrect title",
                     "value"=>$this->title,
-                    "label"=>"Titre"
+                    "label"=>"Title"
+                ],
+                "route"=>[
+                    "type"=>"text",
+                    "placeholder"=>"Page route...",
+                    "required"=>true,
+                    "error"=>"Incorrect route",
+                    "value"=>$this->route,
+                    "label"=>"Route"
                 ],
                 "created_at"=>[
                     "type"=>"text",

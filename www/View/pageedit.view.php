@@ -5,6 +5,14 @@
 <br><br><br>
 <h2>Modif page</h2>
 <!-- modif : form edit voir config dans model page getEditForm, attribut class pour changer les classes css -->
+<div class="error">
+    <?php if (isset($errors) && is_array($errors) && count($errors)>0) {
+        foreach ($errors as $key => $error) {
+            echo "(".($key+1).") ".$error."<br>";
+        }
+    } ?>
+</div>
+
 <?php $this->includePartial("form", $page->getEditForm()); ?>
 <div class="edit-page">
     <!-- modif : va être la section où on affiche les elements de la page en prévisualisation -->
@@ -27,6 +35,10 @@
         width: 100%;
         display: flex;
         margin-top: 50px;
+    }
+
+    .error{
+        color: red;
     }
 
     .body-class{

@@ -43,7 +43,7 @@ abstract class Sql
 
     public function save()
     {
-
+        $this->reset();
         $columns = get_object_vars($this);
 
         $columns = array_diff_key($columns, get_class_vars(get_class()));
@@ -87,6 +87,7 @@ abstract class Sql
 
     public function select($where=array(), $limit=null, $orders=null)
     {
+        $this->reset();
         $this->builder->select($this->table, ["*"]);
 
         if (count($where)>0) {
@@ -120,6 +121,7 @@ abstract class Sql
 
     public function getById($id, $col=['*'])
     {
+        $this->reset();
         $this->builder->select($this->table, $col);
         $this->builder->where("id", $this->table);
         $sql = $this->builder->getQuery();
@@ -138,8 +140,8 @@ abstract class Sql
         $this->reset();
         $this->builder->select($this->table, $col);
 
-        foreach ($where as $col => $val) {
-            $this->builder->where($col, $this->table);
+        foreach ($where as $colu => $val) {
+            $this->builder->where($colu, $this->table);
         }
 
         $sql = $this->builder->getQuery();
@@ -155,6 +157,7 @@ abstract class Sql
 
     public function delete($where=array())
     {
+        $this->reset();
         $this->builder->delete($this->table);
 
         if (count($where)==0) {

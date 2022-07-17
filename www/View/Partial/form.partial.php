@@ -54,6 +54,9 @@
     <?php endforeach; } ?>
 
     <?php if (isset($data["select"])) { foreach ($data["select"] as $name => $select) :?>
+        <?php if (!empty($select['label'])) { ?>
+            <label for="<?=$name?>"><?=$select['label']?> : </label>
+        <?php } ?>
         <select name="<?=$name?>">
         <?php foreach ($select['options'] as $val => $lib) { ?>
             <option value="<?=$val?>"

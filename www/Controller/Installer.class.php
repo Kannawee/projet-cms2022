@@ -222,8 +222,8 @@ class Installer {
             ADD CONSTRAINT `".$prefix."elementpage_ibfk_3` FOREIGN KEY (`id_concert`) REFERENCES `".$prefix."concert` (`id`) ON DELETE CASCADE,
             ADD CONSTRAINT `".$prefix."elementpage_ibfk_4` FOREIGN KEY (`id_post`) REFERENCES `".$prefix."post` (`id`) ON DELETE CASCADE;
           ALTER TABLE `".$prefix."newsletterlist`
-            ADD CONSTRAINT `".$prefix."newsletterlist_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `".$prefix."user` (`id`),
-            ADD CONSTRAINT `".$prefix."newsletterlist_ibfk_2` FOREIGN KEY (`id_newsletter`) REFERENCES `".$prefix."newsletter` (`id`);
+            ADD CONSTRAINT `".$prefix."newsletterlist_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `".$prefix."user` (`id`) ON DELETE CASCADE,
+            ADD CONSTRAINT `".$prefix."newsletterlist_ibfk_2` FOREIGN KEY (`id_newsletter`) REFERENCES `".$prefix."newsletter` (`id`) ON DELETE CASCADE;
           COMMIT;";
     
         $res = $dbh->exec($sql);

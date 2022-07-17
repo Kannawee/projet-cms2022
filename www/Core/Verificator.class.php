@@ -6,22 +6,22 @@ namespace App\Core;
 class Verificator
 {
 
-    public static function checkForm($config, $data, $files = NULL): array
+    public static function checkForm($config, $data, $file=null): array
     {
         $result =  [];
         $nbFields = 0;
         $nbdata = count($data);
 
-        if(!is_null($files)){
-            $nbdata += count($files);
+        if(!is_null($file)){
+            $nbdata += count($file);
         }
 
         if (isset($config['textAreas'])) {
             $nbFields += count($config['textAreas']);
-        }
+        } 
         if(isset($config['inputs'])) {
             $nbFields += count($config['inputs']);
-        }
+        } 
         if(isset($config['select'])) {
             $nbFields += count($config['select']);
         }

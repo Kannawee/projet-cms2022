@@ -4,6 +4,12 @@ namespace App;
 
 require "conf.inc.php";
 
+include "./Core/Sql.class.php";
+include "./Model/User.class.php";
+use App\Core\Sql;
+use App\Model\User as userModel;
+
+
 function myAutoloader($class)
 {
     // $class => CleanWords
@@ -196,19 +202,51 @@ if (!file_exists("conf_perso.inc.php")) {
     
     
     if (!empty($routes[$uri]['security'])) {
-    
-        foreach ($routes[$uri]['security'] as $role) {
-    
-            if ($role=='admin' && isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']!=1) {
-    
-                die('Error : pas la permission.');
-    
-            } else if ($role=='user' && !isset($_SESSION['idUser'])) {
-    
-                die('Error : pas la permission.');
-    
+
+        $user = new userModel();
+
+        if (!empty($_SESSION)) {
+
+            if (isset($_SESSION['idUser'])) {
+                $user = $user->getById($_SESSION['idUser'],['id','status','token']);
+
+                if ($user===false) {
+                    session_destroy();
+                    die("User connected not found");
+                }
+
+                if ($user->getToken()!=$_SESSION['token'] ) {
+                    session_destroy();
+                    die("Token different : hack intrusion detected !!!!");
+                } elseif($user->getStatus()!=$_SESSION['isAdmin']) {
+                    session_destroy();
+                    die("Role different : hack intrusion detected !!!");
+                }
             }
-    
+
+            $checkSecu = false;
+
+            foreach ($routes[$uri]['security'] as $role) {
+
+                if ($role=='admin' && (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']==1)) {
+                    $checkSecu = true;
+                    break;
+        
+                } else if ($role=='user' && isset($_SESSION['idUser'])) {
+                    $checkSecu = true;
+                    break;        
+                } else if ($role=="modo" && (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']==2)) {
+                    $checkSecu = true;
+                    break;
+                }
+        
+            }
+
+            if (!$checkSecu) {
+                die("Permission denied : you don't have the right to access this page");
+            }
+        } else {
+            die("Permission denied : you don't have the right to access this page");
         }
     
     }

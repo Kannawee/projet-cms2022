@@ -10,6 +10,8 @@ class Newsletter extends Sql
     protected $title;
     protected $content;
     protected $date;
+    protected $active;
+    protected $type;
     
     public function __construct()
     {
@@ -32,6 +34,14 @@ class Newsletter extends Sql
 
         if (isset($data['date'])) {
             $this->date = $data['date'];
+        }
+
+        if (isset($data['active'])) {
+            $this->active = $data['active'];
+        }
+
+        if (isset($data['type'])) {
+            $this->type = $data['type'];
         }
     }
 
@@ -99,6 +109,26 @@ class Newsletter extends Sql
     public function setDate(string $date): void
     {
         $this->date = $date;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        return $this->type = $type;
+    }
+
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    public function setActive($active)
+    {
+        return $this->active = $active;
     }
 
     public function subscribe($data)
@@ -197,6 +227,15 @@ class Newsletter extends Sql
                     "require"=>true,
                     "error"=>"Incorrect content"
                 ]
+            ],
+            "select"=>[
+                "type"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect statut",
+                    "options"=>NEWSTYPE,
+                    "value"=>$this->type,
+                    "label"=>"Type"
+                ]
             ]
         ];
     }
@@ -248,6 +287,22 @@ class Newsletter extends Sql
                     "error"=>"Incorrect content",
                     "value"=>$content,
                     "label"=>"Contenu"
+                ]
+            ],
+            "select"=>[
+                "active"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect statut",
+                    "options"=>[0=>"Manuel",1=>"Auto"],
+                    "value"=>$this->active,
+                    "label"=>"Statut"
+                ],
+                "type"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect statut",
+                    "options"=>NEWSTYPE,
+                    "value"=>$this->type,
+                    "label"=>"Statut"
                 ]
             ]
         ];
