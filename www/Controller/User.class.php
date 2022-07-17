@@ -68,13 +68,15 @@ class User {
             $user->setEmail($_POST['email']);
             $user->setPassword($_POST['password']);
             $req = $user->checkLogin();
+
             if (count($req)>0) {
                 $res = $req[0];
+                
+
                 if ($user->getEmail() === $res->getEmail() && password_verify($_POST['password'], $res->getPassword())) {
                     if ($res->getConfirmed()==1) {
                         $_SESSION["idUser"] = $res->getId();
                         $_SESSION["token"] = $res->getToken();
-                        // var_dump($res->getStatus());die;
                         if ($res->getStatus() == 1 || $res->getStatus() == 2) {
                             $_SESSION['isAdmin'] = $res->getStatus();
                             header("Location: /administration");

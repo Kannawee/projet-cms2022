@@ -116,7 +116,9 @@ class Installer {
             `id` int(11) NOT NULL,
             `title` varchar(120) NOT NULL,
             `content` text NOT NULL,
-            `date` date NOT NULL
+            `date` date NOT NULL,
+            `active` int(11) NOT NULL,
+            `type` enum('news','concert','project') NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."newsletterlist` (
             `id` int(11) NOT NULL,
@@ -127,7 +129,8 @@ class Installer {
             `id` int(11) NOT NULL,
             `title` varchar(255) NOT NULL,
             `visible` int(11) NOT NULL DEFAULT '0',
-            `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+            `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `route` varchar(255) NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."post` (
             `id` int(11) NOT NULL,
@@ -139,7 +142,8 @@ class Installer {
             `id` int(11) NOT NULL,
             `name` varchar(50) NOT NULL,
             `releaseDate` date NOT NULL,
-            `description` text
+            `description` text,
+            `cover` varchar(255) NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."tracklist` (
             `id` int(11) NOT NULL,

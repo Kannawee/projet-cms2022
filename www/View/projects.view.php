@@ -15,9 +15,9 @@
                 if ($tabProjects) {
                     foreach($tabProjects as $key=>$val) {
             ?>
-                    <a href="/administration/projects/<?=$val['id']?>" style="text-decoration: none">
+                    <a href="/administration/project/edit/<?=$val->getId()?>" style="text-decoration: none">
                         <div class="card card-projects">
-                            <p><?=$val['name']?></p>
+                            <p><?=$val->getName()?></p>
                             <div class="div-project-icon">
                                 <p>10</p>&nbsp;
                                 <svg width="24" height="20" viewBox="0 0 35 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,7 +36,7 @@
                             </div>
                             <p>
                                 <?php
-                                $input = $val['releaseDate'];
+                                $input = $val->getDate();
                                 $date = strtotime($input);
                                 echo date('M/d/Y', $date);
                                 ?>

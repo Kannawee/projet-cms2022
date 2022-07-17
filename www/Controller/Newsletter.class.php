@@ -35,6 +35,7 @@ class Newsletter {
             exit();
         }
 
+        var_dump($res);die;
         header('Location: /administration/newsletter?success=notok');
         exit();
 

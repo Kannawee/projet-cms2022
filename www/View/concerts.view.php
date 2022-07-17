@@ -6,11 +6,11 @@
 <?php
 foreach($tabConcerts as $key=>$val) {
     ?>
-        <h2><?=$val['name']?></h2>
-        <p><?=$val['date']?></p>
-        <p><?=$val['venue']?></p>
-        <p><?=$val['city']?></p>
-        <p><?=$val['link']?></p>
+        <h2><?=$val->getName()?></h2>
+        <p><?=$val->getDate()?></p>
+        <p><?=$val->getVenue()?></p>
+        <p><?=$val->getCity()?></p>
+        <p><?=$val->getLink()?></p>
     <?php
 }
 ?>

@@ -6,14 +6,14 @@ namespace App\Core;
 class Verificator
 {
 
-    public static function checkForm($config, $data, $file=null): array
+    public static function checkForm($config, $data, $files=null): array
     {
         $result =  [];
         $nbFields = 0;
         $nbdata = count($data);
 
-        if(!is_null($file)){
-            $nbdata += count($file);
+        if(!is_null($files)){
+            $nbdata += count($files);
         }
 
         if (isset($config['textAreas'])) {

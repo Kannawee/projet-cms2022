@@ -10,7 +10,6 @@ class Project extends Sql
     protected $releaseDate;
     protected $description;
     protected $cover;
-    public static $table = "esgi_project";
 
     public function __construct()
     {
@@ -33,6 +32,10 @@ class Project extends Sql
 
         if (isset($data['description'])) {
             $this->description = $data['description'];
+        }
+
+        if (isset($data['cover'])) {
+            $this->cover = $data['cover'];
         }
     }
 
@@ -131,10 +134,9 @@ class Project extends Sql
                 "class"=>"formAddProject",
                 "method"=>"POST",
                 "action"=>"/administration/project/add",
-                "submit"=>"Add"
+                "submit"=>"Add",
                 // CODE IZIA
-                // "enctype"=>"multipart/form-data",
-                // "action"=>"projects/add",
+                "enctype"=>"multipart/form-data",
             ],
             'inputs'=>[
                 "name"=>[
