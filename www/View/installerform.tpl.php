@@ -24,10 +24,12 @@
         <input type="text" name="dbhost" required><br>
         <label for="dbname">Database Name : </label><br>
         <input type="text" name="dbname" required><br>
-        <label for="dbport">Database Port : </label><br>
-        <input type="text" name="dbport" required><br>
         <label for="dbprefixe">Database Prefixe : </label><br>
         <input type="text" name="dbprefixe" required><br><br>
+        <label for="dbport">Database Port : </label><br>
+        <input type="text" name="dbport" required><br>
+        <label for="sitename">Displayed Site Name : </label><br>
+        <input type="text" name="sitename" required><br><br>
         <input type="submit">
     </form>
 <?php } elseif ($step == 2) { ?>

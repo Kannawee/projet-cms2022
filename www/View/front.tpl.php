@@ -10,16 +10,23 @@
     <div id="welcome">
         <nav id="navbar">
             <ul>
-                <li><a href="#">Accueil</a></li>
-                <li><a href="#">Projets</a></li>
-                <li><a href="#">Concerts</a></li>
+                <li><a href="/">Home</a></li>
+                <?php if (isset($navLinks) && is_array($navLinks) && count($navLinks)>0) { 
+                    foreach ($navLinks as $nav) { ?>
+                        <li><a href="/page/<?=$nav->getRoute()?>"><?=$nav->getTitle()?></a></li>
+                    <?php } ?>
+                    
+                <?php } ?>
             </ul>
             <ul>
-                <?php if (!isset($connect) || !$connect) { ?>
-                    <li><a href="/register">S'inscrire</a></li>
-                    <li><a href="/login">Se connecter</a></li>
+                <?php if (!isset($_SESSION['idUser'])) { ?>
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Log in</a></li>
                 <?php } else { ?>
-                    <li><a href="/logout">Se déconnecter</a></li>
+                    <?php if (isset($_SESSION['isAdmin']) && ($_SESSION['isAdmin']==1 || $_SESSION['isAdmin']==2)) {?>
+                        <li><a href="/administration">Admin</a></li>
+                    <?php } ?>
+                    <li><a href="/logout">Log out</a></li>
                 <?php } ?>
             </ul>
         </nav>

@@ -117,19 +117,26 @@ class User extends Sql
         $this->token = substr(bin2hex(random_bytes(128)), 0, 255);
     }
 
-    public function getSubscribedUsers($id)
+    public function getSubscribedUsers()
     {
-        $where = array(
-            "id_newsletter"=>$id
-        );
 
         $this->reset();
         $this->builder->select(DBPREFIXE.'newsletterlist', ['login','email',DBPREFIXE.'user.id as id']);
         $this->builder->join(DBPREFIXE.'user',DBPREFIXE.'newsletterlist','id','id_user');
-        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
-        $res = $this->execute($where, true, true);
+        $res = $this->execute([], true, true);
 
         return $res;        
+    }
+
+    public function subscribeNews($id_user)
+    {
+        $data = array(
+            "id_user"=>$id_user
+        );
+        $this->reset();
+        $this->builder->insert(DBPREFIXE."newsletterlist", $data);
+        
+        return $this->execute($data);
     }
 
     public function sendResetPwd()
@@ -185,14 +192,15 @@ class User extends Sql
                     "required"=>true,
                     "class"=>"inputForm",
                     "id"=>"pwdForm",
-                    "error"=>"Password incorrect",
+                    "error"=>"Votre mot de passe doit faire au min 8 caractères avec majuscule, minuscules et des chiffres"
                 ],
                 "passwordConfirm"=>[
                     "type"=>"password",
                     "required"=>true,
                     "class"=>"inputForm",
                     "id"=>"pwdConfForm",
-                    "error"=>"Password confirm incorrect",
+                    "error"=>"Password confirm doesn't match password",
+                    "confirm"=>"password"
                 ]
             ]
         ];
@@ -215,8 +223,6 @@ class User extends Sql
                     "class"=>"inputForm",
                     "id"=>"emailForm",
                     "error"=>"Email incorrect",
-                    "unicity"=>"true",
-                    "errorUnicity"=>"Email déjà en bdd",
                 ]
             ]
         ];
@@ -248,8 +254,8 @@ class User extends Sql
                     "placeholder"=>"Votre login ...",
                     "class"=>"inputForm",
                     "id"=>"loginForm",
-                    "min"=>2,
-                    "max"=>50,
+                    "minLength"=>6,
+                    "maxLength"=>50,
                     "error"=>"Login incorrect",
                     "value"=>(isset($this->login) && !is_null($this->login))?$this->login:"",
                 ],
@@ -260,7 +266,7 @@ class User extends Sql
                     "class"=>"inputForm",
                     "id"=>"pwdForm",
                     "error"=>"Votre mot de passe doit faire au min 8 caractères avec majuscule, minuscules et des chiffres"
-                    ],
+                ],
                 "passwordConfirm"=>[
                     "type"=>"password",
                     "placeholder"=>"Confirmation ...",
@@ -270,6 +276,14 @@ class User extends Sql
                     "confirm"=>"password",
                     "error"=>"Votre mot de passe de confirmation ne correspond pas",
                 ],
+            ],
+            'checkbox'=>[
+                "newssub"=>[
+                    "class"=>"checkbox-news",
+                    "id"=>"checkbox-news",
+                    "error"=>"Subscription to news incorrect",
+                    "label"=>"Sub to mailing list"
+                ]
             ]
         ];
     }
@@ -317,7 +331,8 @@ class User extends Sql
             "select"=>[
                 "status"=>[
                     "required"=>true,
-                    "error"=>"Incorrect visible",
+                    "error"=>"Incorrect role",
+                    "placeholder"=>"Chose a role",
                     "options"=>ROLES,
                     "value"=>$this->status,
                     "label"=>"Role"

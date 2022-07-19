@@ -5,10 +5,16 @@
     <div class="success">
         <?php if ($success=="ok") { ?>
             <span style="color:green;">Succès de(s) modification(s).</span>
-        <?php } else { ?>
-            <span style="color:red;">Erreur de(s) modification(s).</span>
         <?php } ?>
     </div>
+<?php } ?>
+
+<?php if (isset($errors) && count($errors)>0) { ?>
+<div class="error">
+    <?php foreach ($errors as $key => $error) {
+        echo "(".$key.") ".$error."<br>";
+    } ?>
+</div>
 <?php } ?>
 
 <div class="list">
@@ -32,5 +38,9 @@
 <style>
     .list{
         margin-top: 30px;
+    }
+
+    .error{
+        color:red;
     }
 </style>

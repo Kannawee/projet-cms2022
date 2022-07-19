@@ -1,3 +1,11 @@
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    tinymce.init({
+        selector: '#contentPost'
+    });
+</script>
+
 <!-- style a faire -->
 <h1>Gestion des posts</h1>
 <!-- modif : form add post voir config dans model post getaddform attribut class pour class css -->
@@ -17,7 +25,7 @@
             <?php foreach ($listPost as $key => $value) { ?>
                 <tr>
                     <td><?= ($value->getTitle()=="")?"<i>Empty</i>":$value->getTitle()?></td>
-                    <td><?=$value->getContent()?></td>
+                    <td><?=html_entity_decode(htmlspecialchars_decode($value->getContent()))?></td>
                     <td><?=$value->getPublished()?></td>
                     <td>
                         <!-- modif : bouton edit/delete sous forme de lien <a></a> -->

@@ -29,7 +29,7 @@ class Installer {
     public function performInstall($data)
     {
 
-      if (count($data)!=6) {
+      if (count($data)!=7) {
         die("Espece de hacker.");
       }
       foreach ($data as $key => $value) {
@@ -84,11 +84,13 @@ class Installer {
         $sql = "CREATE TABLE `".$prefix."comment` (
           `id` int(11) NOT NULL,
           `moded` int(11) NOT NULL,
-          `type` enum('project','concert') NOT NULL,
+          `type` enum('project','concert','post') NOT NULL,
+          `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
           `content` text NOT NULL,
           `id_user` int(11) NOT NULL,
           `id_project` int(11) DEFAULT NULL,
-          `id_concert` int(11) DEFAULT NULL
+          `id_concert` int(11) DEFAULT NULL,
+          `id_post` int(11) DEFAULT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."concert` (
             `id` int(11) NOT NULL,
@@ -97,20 +99,6 @@ class Installer {
             `venue` varchar(50) NOT NULL,
             `city` varchar(50) NOT NULL,
             `link` text NOT NULL
-          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-          CREATE TABLE `".$prefix."elementpage` (
-            `id` int(11) NOT NULL,
-            `type` enum('project','concert','post','') NOT NULL,
-            `ordre` int(11) NOT NULL,
-            `id_page` int(11) NOT NULL,
-            `id_project` int(11) DEFAULT NULL,
-            `id_post` int(11) DEFAULT NULL,
-            `id_concert` int(11) DEFAULT NULL
-          ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-          CREATE TABLE `".$prefix."media` (
-            `id` int(11) NOT NULL,
-            `name` varchar(80) NOT NULL,
-            `filename` varchar(255) NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."newsletter` (
             `id` int(11) NOT NULL,
@@ -122,11 +110,13 @@ class Installer {
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."newsletterlist` (
             `id` int(11) NOT NULL,
-            `id_user` int(11) NOT NULL,
-            `id_newsletter` int(11) NOT NULL
+            `id_user` int(11) NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."page` (
             `id` int(11) NOT NULL,
+            `type` enum('project','post','concert') NOT NULL,
+            `descSEO` text,
+            `kwordsSEO` text,
             `title` varchar(255) NOT NULL,
             `visible` int(11) NOT NULL DEFAULT '0',
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -134,7 +124,7 @@ class Installer {
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."post` (
             `id` int(11) NOT NULL,
-            `title` varchar(255) NOT NULL,
+            `title` varchar(255),
             `content` text NOT NULL,
             `published` int(11) NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -143,12 +133,11 @@ class Installer {
             `name` varchar(50) NOT NULL,
             `releaseDate` date NOT NULL,
             `description` text,
-            `cover` varchar(255) NOT NULL
+            `cover` varchar(255) DEFAULT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."tracklist` (
             `id` int(11) NOT NULL,
             `project` int(11) NOT NULL,
-            `media` int(11) NOT NULL,
             `position` int(11) NOT NULL
           ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
           CREATE TABLE `".$prefix."user` (
@@ -166,23 +155,15 @@ class Installer {
           ADD PRIMARY KEY (`id`),
           ADD KEY `id_user` (`id_user`),
           ADD KEY `id_project` (`id_project`),
-          ADD KEY `id_concert` (`id_concert`);
+          ADD KEY `id_concert` (`id_concert`),
+          ADD KEY `id_post` (`id_post`);
           ALTER TABLE `".$prefix."concert`
-            ADD PRIMARY KEY (`id`);
-          ALTER TABLE `".$prefix."elementpage`
-            ADD PRIMARY KEY (`id`),
-            ADD KEY `id_page` (`id_page`),
-            ADD KEY `id_project` (`id_project`),
-            ADD KEY `id_concert` (`id_concert`),
-            ADD KEY `id_post` (`id_post`);
-          ALTER TABLE `".$prefix."media`
             ADD PRIMARY KEY (`id`);
           ALTER TABLE `".$prefix."newsletter`
             ADD PRIMARY KEY (`id`);
           ALTER TABLE `".$prefix."newsletterlist`
             ADD PRIMARY KEY (`id`),
-            ADD KEY `id_user` (`id_user`),
-            ADD KEY `id_newsletter` (`id_newsletter`);
+            ADD KEY `id_user` (`id_user`);
           ALTER TABLE `".$prefix."page`
             ADD PRIMARY KEY (`id`);
           ALTER TABLE `".$prefix."post`
@@ -197,37 +178,28 @@ class Installer {
           ALTER TABLE `".$prefix."comment`
             MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."concert`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-          ALTER TABLE `".$prefix."elementpage`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-          ALTER TABLE `".$prefix."media`
             MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."newsletter`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."newsletterlist`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."page`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."post`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."project`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."tracklist`
             MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."user`
-            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+            MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
           ALTER TABLE `".$prefix."comment`
             ADD CONSTRAINT `".$prefix."comment_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `".$prefix."user` (`id`) ON DELETE CASCADE,
             ADD CONSTRAINT `".$prefix."comment_ibfk_2` FOREIGN KEY (`id_project`) REFERENCES `".$prefix."project` (`id`) ON DELETE CASCADE,
-            ADD CONSTRAINT `".$prefix."comment_ibfk_3` FOREIGN KEY (`id_concert`) REFERENCES `".$prefix."concert` (`id`) ON DELETE CASCADE;
-          ALTER TABLE `".$prefix."elementpage`
-            ADD CONSTRAINT `".$prefix."elementpage_ibfk_1` FOREIGN KEY (`id_page`) REFERENCES `".$prefix."page` (`id`) ON DELETE CASCADE,
-            ADD CONSTRAINT `".$prefix."elementpage_ibfk_2` FOREIGN KEY (`id_project`) REFERENCES `".$prefix."project` (`id`) ON DELETE CASCADE,
-            ADD CONSTRAINT `".$prefix."elementpage_ibfk_3` FOREIGN KEY (`id_concert`) REFERENCES `".$prefix."concert` (`id`) ON DELETE CASCADE,
-            ADD CONSTRAINT `".$prefix."elementpage_ibfk_4` FOREIGN KEY (`id_post`) REFERENCES `".$prefix."post` (`id`) ON DELETE CASCADE;
+            ADD CONSTRAINT `".$prefix."comment_ibfk_3` FOREIGN KEY (`id_concert`) REFERENCES `".$prefix."concert` (`id`) ON DELETE CASCADE,
+            ADD CONSTRAINT `".$prefix."comment_ibfk_4` FOREIGN KEY (`id_post`) REFERENCES `".$prefix."post` (`id`) ON DELETE CASCADE;
           ALTER TABLE `".$prefix."newsletterlist`
-            ADD CONSTRAINT `".$prefix."newsletterlist_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `".$prefix."user` (`id`) ON DELETE CASCADE,
-            ADD CONSTRAINT `".$prefix."newsletterlist_ibfk_2` FOREIGN KEY (`id_newsletter`) REFERENCES `".$prefix."newsletter` (`id`) ON DELETE CASCADE;
+            ADD CONSTRAINT `".$prefix."newsletterlist_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `".$prefix."user` (`id`) ON DELETE CASCADE;
           COMMIT;";
     
         $res = $dbh->exec($sql);

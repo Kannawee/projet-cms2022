@@ -20,6 +20,46 @@ class Comment {
         $view->assign("listComment", $listComment);
     }
 
+    public function add($data=array())
+    {
+        if (!empty($data['type']) && !empty($data['id_obj'])) {
+            $comm = new commentModel();
+
+            $type = htmlspecialchars($data['type']);
+            $key = "id_".$type;
+            $id_obj = htmlspecialchars($data['id_obj']);
+            $id_user = $_SESSION['idUser'];
+
+            $content = htmlspecialchars($_POST['content']);
+            $redirect = htmlspecialchars($_POST['redirect']);
+
+            $error = Verificator::checkForm($comm->getAddForm($type, $id_obj, $redirect), $_POST);
+
+            if (count($error)==0) {
+
+                $tmpdata = array(
+                    $key=>$id_obj,
+                    "id_user"=>$id_user,
+                    "type"=>$type,
+                    "content"=>$content,
+                    "moded"=>0
+                );
+
+                $comm->setFromArray($tmpdata);
+                $res = $comm->save();
+
+                if ($res) {
+                    header("Location: /page/".$redirect."?success=ok");
+                    exit();
+                }
+
+                header("Location: /page/".$redirect."?success=nok");
+                exit();
+
+            }
+        }
+    }
+
     public function accept($data=array())
     {
         if (isset($data['id'])) {

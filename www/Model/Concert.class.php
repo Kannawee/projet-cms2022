@@ -120,15 +120,16 @@ class Concert extends Sql
             "config"=>[
                 "class"=>"formAddConcert",
                 "method"=>"POST",
-                "action"=>"concerts/add",
+                "action"=>"/administration/concerts/add",
                 "submit"=>"Add"
             ],
             'inputs'=>[
                 "name"=>[
                     "type"=>"text",
                     "placeholder"=>"Concert name...",
-                    "required"=>false,
-                    "error"=>"Incorrect name"
+                    "error"=>"Incorrect name",
+                    "minLength"=>6,
+                    "maxLength"=>50
                 ],
                 "date"=>[
                     "type"=>"date",
@@ -139,13 +140,17 @@ class Concert extends Sql
                     "type"=>"text",
                     "placeholder"=>"Venue...",
                     "required"=>true,
-                    "error"=>"Incorrect venue name"
+                    "error"=>"Incorrect venue name",
+                    "minLength"=>6,
+                    "maxLength"=>50
                 ],
                 "city"=>[
                     "type"=>"text",
                     "placeholder"=>"City...",
                     "required"=>true,
-                    "error"=>"Incorrect city name"
+                    "error"=>"Incorrect city name",
+                    "minLength"=>6,
+                    "maxLength"=>50
                 ],
                 "link"=>[
                     "type"=>"text",

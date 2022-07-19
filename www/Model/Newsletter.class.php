@@ -137,7 +137,6 @@ class Newsletter extends Sql
         $this->reset();
         $this->builder->select(DBPREFIXE.'newsletterlist', ['id']);
         $this->builder->where('id_user',DBPREFIXE.'newsletterlist');
-        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
 
         $check = count($this->execute($data, true));
 
@@ -158,7 +157,6 @@ class Newsletter extends Sql
         $this->reset();
         $this->builder->select(DBPREFIXE.'newsletterlist', ['id']);
         $this->builder->where('id_user',DBPREFIXE.'newsletterlist');
-        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
 
         $check = count($this->execute($data, true));
 
@@ -166,7 +164,6 @@ class Newsletter extends Sql
             $this->reset();
             $this->builder->delete(DBPREFIXE.'newsletterlist');
             $this->builder->where('id_user', DBPREFIXE.'newsletterlist');
-            $this->builder->where('id_newsletter', DBPREFIXE.'newsletterlist');
 
             $res = $this->execute($data);
             return $res;
@@ -174,18 +171,14 @@ class Newsletter extends Sql
         return false;
     }
 
-    public function listemail($id_news)
+    public function listemail()
     {
-        $data = array(
-            "id_newsletter"=>$id_news
-        );
 
         $this->reset();
         $this->builder->select(DBPREFIXE.'user', [DBPREFIXE.'user.email', DBPREFIXE.'user.login']);
         $this->builder->join(DBPREFIXE.'newsletterlist', DBPREFIXE.'user', 'id_user', 'id', 'INNER');
-        $this->builder->where('id_newsletter', DBPREFIXE.'newsletterlist');
         
-        $res = $this->execute($data,true);
+        $res = $this->execute([],true);
 
         return $res;
     }
@@ -224,8 +217,9 @@ class Newsletter extends Sql
             'textAreas'=>[
                 "content"=>[
                     "placeholder"=>"Newsletter content...",
-                    "require"=>true,
-                    "error"=>"Incorrect content"
+                    // "required"=>true,
+                    "error"=>"Incorrect content",
+                    "id"=>"newsContent"
                 ]
             ],
             "select"=>[
@@ -283,10 +277,11 @@ class Newsletter extends Sql
             'textAreas'=>[
                 "content"=>[
                     "placeholder"=>"Newsletter content...",
-                    "require"=>true,
+                    // "required"=>true,
                     "error"=>"Incorrect content",
                     "value"=>$content,
-                    "label"=>"Contenu"
+                    "label"=>"Contenu",
+                    "id"=>"newsContent"
                 ]
             ],
             "select"=>[

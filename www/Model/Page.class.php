@@ -10,6 +10,9 @@ class Page extends Sql
     protected $visible;
     protected $created_at;
     protected $route;
+    protected $type;
+    protected $descSEO;
+    protected $kwordsSEO;
 
     public static $protectedWords = ['delete','add','edit'];
 
@@ -28,6 +31,9 @@ class Page extends Sql
         $this->visible = (isset($data['visible']))?$data['visible']:null;
         $this->created_at = (isset($data['created_at']))?$data['created_at']:null;
         $this->route = (isset($data['route']))?$data['route']:null;
+        $this->type = (isset($data['type']))?$data['type']:null;
+        $this->descSEO = (isset($data['descSEO']))?$data['descSEO']:null;
+        $this->kwordsSEO = (isset($data['kwordsSEO']))?$data['kwordsSEO']:null;
         
     }
 
@@ -44,6 +50,36 @@ class Page extends Sql
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setKwordsSEO($kwordsSEO)
+    {
+        $this->kwordsSEO = $kwordsSEO;
+    }
+
+    public function getKwordsSEO()
+    {
+        return $this->kwordsSEO;
+    }
+
+    public function setDescSEO($descSEO)
+    {
+        $this->descSEO = $descSEO;
+    }
+
+    public function getDescSEO()
+    {
+        return $this->descSEO;
     }
 
     public function setVisible($visible)
@@ -71,6 +107,39 @@ class Page extends Sql
         return $this->route;
     }
 
+    public function getNavLink()
+    {
+        $where = array(
+            "visible"=>1,
+        );
+
+        return $this->select($where);
+    }
+
+    public function checkUnicity()
+    {
+
+        $where = array(
+            "visible"=>1,
+            "type"=>$this->getType(),
+            "id"=>$this->getId(),
+        );
+
+        $this->reset();
+        $this->builder->select($this->table, ['*']);
+        $this->builder->where("visible", $this->table);
+        $this->builder->where("type", $this->table);
+        $this->builder->where("id", $this->table, "!=");
+
+        $res = $this->execute($where, true, true);
+        
+        if ($res && count($res)>0) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function getAddForm(): array
     {
         return [
@@ -93,6 +162,26 @@ class Page extends Sql
                     "required"=>true,
                     "error"=>"Incorrect title"
                 ],
+            ],
+            "textAreas"=>[
+                "descSEO"=>[
+                    "type"=>"text",
+                    "placeholder"=>"Description SEO...",
+                    "error"=>"Incorrect SEO tdescription",
+                ],
+                "kwordsSEO"=>[
+                    "type"=>"text",
+                    "placeholder"=>"SEO KeyWord1, KeyWord2, KeyWord3...",
+                    "error"=>"Incorrect SEO KeyWords",
+                ]
+            ],
+            "select"=>[
+                "type"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect type",
+                    "options"=>["project"=>"Project","post"=>"Post","concert"=>"Concert"],
+                    "label"=>"type"
+                ]
             ]
         ];
     }
@@ -140,6 +229,27 @@ class Page extends Sql
                     "options"=>[0=>"non publiée",1=>"publiée"],
                     "value"=>$this->visible,
                     "label"=>"Visible"
+                ],
+                "type"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect type",
+                    "options"=>["project"=>"Project","post"=>"Post","concert"=>"Concert"],
+                    "value"=>$this->type,
+                    "label"=>"Visible"
+                ]
+            ],
+            "textAreas"=>[
+                "descSEO"=>[
+                    "type"=>"text",
+                    "placeholder"=>"Description SEO...",
+                    "error"=>"Incorrect SEO tdescription",
+                    "value"=>$this->descSEO
+                ],
+                "kwordsSEO"=>[
+                    "type"=>"text",
+                    "placeholder"=>"SEO KeyWord1, KeyWord2, KeyWord3...",
+                    "error"=>"Incorrect SEO KeyWords",
+                    "value"=>$this->kwordsSEO
                 ]
             ]
         ];

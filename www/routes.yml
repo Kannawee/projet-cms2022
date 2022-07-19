@@ -57,14 +57,6 @@
     - admin
     - modo
 
-/administration/concerts:
-  controller: admin
-  action: concerts
-
-/administration/concerts/add:
-  controller: concert
-  action: add
-
 /administration/templates:
   controller: admin
   action: templates
@@ -181,6 +173,12 @@
 
 # ROUTING PROJECT
 
+/project/{id}:
+  controller: project
+  action: seeproject
+  param:
+    - id
+
 /administration/projects:
   controller: project
   action: list
@@ -251,44 +249,7 @@
   param:
     - route
 
-# ROUTING PAGE ELEMENT
-/administration/element/add/{id}:
-  controller: elementpage
-  action: add
-  param:
-    - id
-  security:
-    - admin
-
-/administration/elementpage/edit/{id_page}/{id}:
-  controller: elementpage
-  action: edit
-  param:
-    - id_page
-    - id
-  security:
-    -admin
-
-/administration/elementpage/delete/{id_page}/{id}:
-  controller: elementpage
-  action: delete
-  param:
-    - id_page
-    - id
-  security:
-    -admin
-
-/administration/elementpage/changeordre/{id_page}/{id}/{change}:
-  controller: elementpage
-  action: changeordre
-  param:
-    - id_page
-    - id
-    - change
-  security:
-    -admin
-
-# ROUTING MOD COMMENTS
+# ROUTING COMMENTS
 /administration/commentmod:
   controller: comment
   action: listUnmod
@@ -313,3 +274,20 @@
   security: 
     - modo
     - admin
+
+/administration/comment/add/{type}/{id_obj}:
+  controller: comment
+  action: add
+  param:
+    - type
+    - id_obj
+    - user
+
+# ROUTING CONCERT
+/administration/concerts:
+  controller: concert
+  action: list
+
+/administration/concerts/add:
+  controller: concert
+  action: add

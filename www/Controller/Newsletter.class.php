@@ -77,7 +77,7 @@ class Newsletter {
 
             $users = new userModel();
             
-            $subscribedUsers = $users->getSubscribedUsers($id);
+            $subscribedUsers = $users->getSubscribedUsers();
 
             $idSub = array();
             foreach ($subscribedUsers as $user) {
@@ -106,12 +106,11 @@ class Newsletter {
         $newsletter = new newsletterModel();
 
         if (!empty($data) && count($data)>0) {
-            $id_news = addslashes($data['idnews']);
-            $id_user = addslashes($data['iduser']);
+            $id_user = htmlspecialchars($data['iduser']);
+            $id_news = htmlspecialchars($data['idnews']);
 
             $data = array(
-                "id_user"=>$id_user,
-                "id_newsletter"=>$id_news
+                "id_user"=>$id_user
             );
 
             $res = $newsletter->subscribe($data);
@@ -133,7 +132,6 @@ class Newsletter {
 
             $data = array(
                 "id_user"=>$id_user,
-                "id_newsletter"=>$id_news
             );
 
             $res = $newsletter->unsubscribe($data);
@@ -156,7 +154,7 @@ class Newsletter {
             if (count($tmp_tab)>0) {
                 $newscontent = $tmp_tab[0];
                 $newsletter->setFromArray($newscontent);
-                $emails = $newsletter->listemail($id_news);
+                $emails = $newsletter->listemail();
 
                 foreach ($emails as $email) {
                     $tmp_mail = array();

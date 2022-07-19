@@ -47,24 +47,24 @@ class Project {
 
                 header('Location: /administration/project/edit/'.$project->getId()."?success=notok");
                 exit();
-            } else {
-                $project = $project->getById($id);
-                if ($project!==false) {
-                    $success = (isset($_GET['success']))?htmlspecialchars($_GET["success"]):"";
+            }
+            
+            $project = $project->getById($id);
+            if ($project!==false) {
+                $success = (isset($_GET['success']))?htmlspecialchars($_GET["success"]):"";
 
-                    $comment = new commentModel();
-                    $listComment = $comment->getModedCommentFromObjId($project->getId(), "project");
+                $comment = new commentModel();
+                $listComment = $comment->getModedCommentFromObjId($project->getId(), "project");
 
-                    $view = new View("projectedit", "back");
-                    $view->assign("listComment",$listComment);
-                    $view->assign('project', $project);
-                    $view->assign('success',$success);
-                    exit();
-                }
-                
-                header("Location: /administration/projects");
+                $view = new View("projectedit", "back");
+                $view->assign("listComment",$listComment);
+                $view->assign('project', $project);
+                $view->assign('success',$success);
                 exit();
             }
+            
+            header("Location: /administration/projects");
+            exit();
 
         }
 
@@ -74,22 +74,23 @@ class Project {
     {
         $project = new projectModel();
         if (!empty($_POST)) {
-
             $result = Verificator::checkForm($project->getAddForm(), $_POST, $_FILES);
             $data = array(
                 "name"=>htmlspecialchars($_POST['name']),
                 "releaseDate"=>htmlspecialchars($_POST['releaseDate']),
                 "description"=>htmlspecialchars($_POST['description']),
-                "cover"=>"",
+                "cover"=>null,
             );
 
             $project->setFromArray($data);            
             $res = $project->save();
 
             if (is_numeric($res) && $res!=0) {
-                $project = $project->getById($res);
-                $project->setCover($_FILES['cover']);
-                $project->save();
+                if (isset($_FILES) && is_array($_FILES) && $_FILES['name']!="") {
+                    $project = $project->getById($res);
+                    $project->setCover($_FILES['cover']);
+                    $rescover = $project->save();
+                }
                 // move_uploaded_file($_FILES['picture1']['tmp_name'], $image_path1);
                 header('Location: /administration/project/edit/'.$res.'?success=ok');
                 exit();
@@ -125,6 +126,18 @@ class Project {
             }
         } else {
             die("Missing parameters");
+        }
+    }
+
+    public function seeproject($data=array())
+    {
+        if (isset($data['id'])) {
+            $project = new projectModel();
+            $id = htmlspecialchars($data['id']);
+
+            $tmpproject = $project->getById($id);
+
+            var_dump($tmpproject);die;
         }
     }
 

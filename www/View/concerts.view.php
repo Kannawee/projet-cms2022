@@ -3,6 +3,14 @@
 
 <?php $this->includePartial("form", $concert->getAddForm()) ?>
 
+<?php if (isset($errors) && is_array($errors) && count($errors)>0) { ?>
+<div class="error">
+    <?php foreach ($errors as $key => $error) {
+        echo "(".$key.") ".$error."<br>";
+    } ?>
+</div>
+<?php } ?>
+
 <?php
 foreach($tabConcerts as $key=>$val) {
     ?>
@@ -14,3 +22,10 @@ foreach($tabConcerts as $key=>$val) {
     <?php
 }
 ?>
+
+
+<style>
+    .error{
+        color: red;
+    }
+</style>

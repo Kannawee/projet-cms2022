@@ -3,18 +3,18 @@
 namespace App\Controller;
 
 use App\Core\View;
+use App\Model\Page as pageModel;
 
 class Main {
 
     public function home()
     {
-        $connect = false;
-        if (isset($_SESSION['idUser']) && $_SESSION['idUser']!=0) {
-            $connect = true;
-        }
+
+        $page = new pageModel();
+        $navLinks = $page->getNavLink();
 
         $view = new View("home");
-        $view->assign("connect", $connect);
+        $view->assign("navLinks", $navLinks);
     }
 
 

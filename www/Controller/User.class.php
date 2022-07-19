@@ -24,27 +24,37 @@ class User {
     {
         if (count($data)>0 && isset($data['id'])) {
             $id = htmlspecialchars($data['id']);
+            $error = [];
             $user = new userModel();
 
             $user = $user->getById($id, ['id', 'login', 'email', 'status', 'token']);
 
             if (!$user) {
-                die("404 : User not found");
+                $error[] = "User not found";
             }
 
             if (!empty($_POST)) {
-                $status = htmlspecialchars($_POST['status']);
-                $user->setStatus($status);
-                $res = $user->save();
+                $error = array_merge(Verificator::checkForm($user->getRoleForm(), $_POST));
 
-                if ($res) {
-                    header("Location: /administration/users?success=ok");
-                    exit();
+                if (count($error)==0) {
+                    $status = htmlspecialchars($_POST['status']);
+                    $user->setStatus($status);
+                    $res = $user->save();
+
+                    if ($res) {
+                        header("Location: /administration/users?success=ok");
+                        exit();
+                    }
+
+                    $error[] = "Problem during insertion in database";
                 }
-
-                header("Location: /administration/users?success=notok");
-                exit();
             }
+
+            $listUser = $user->select();
+            $view = new View("Users", 'back');
+            $view->assign("listUser",$listUser);
+            $view->assign("success", "");            
+            $view->assign("errors",$error);
         }
     }
 
@@ -109,23 +119,31 @@ class User {
 
         if( !empty($_POST)){
 
-            $result = Verificator::checkForm($user->getRegisterForm(), $_POST);
-            $user->setEmail(htmlspecialchars($_POST['email']));
-            $user->setLogin(htmlspecialchars($_POST['login']));
-            $user->setPassword(htmlspecialchars($_POST['password']));
-            $user->setConfirmed(0);
-
-            $error = $this->getUnique($user);
+            $error = Verificator::checkForm($user->getRegisterForm(), $_POST);
 
             if (count($error)==0) {
-                $user->generateToken();
-                $res = $user->save();
+                $user->setEmail(htmlspecialchars($_POST['email']));
+                $user->setLogin(htmlspecialchars($_POST['login']));
+                $user->setPassword(htmlspecialchars($_POST['password']));
+                $user->setConfirmed(0);
                 
-                if ($res!==false) {
-                    $resbis = $user->sendConfirm($res);
-                    $success[] = "Un email de confirmation vous a été envoyé.";
-                } else {
-                    $error[] = "Erreur dans la sauvegarde de votre user";
+                $error = array_merge($this->getUnique($user), $error);
+
+                if (count($error)==0) {
+                    $user->generateToken();
+                    $res = $user->save();
+                    
+                    if ($res!==false) {
+
+                        if (!empty($_POST['newssub'])) {
+                            $sub = $user->subscribeNews($res);
+                        }
+
+                        $resbis = $user->sendConfirm($res);
+                        $success[] = "Un email de confirmation vous a été envoyé.";
+                    } else {
+                        $error[] = "Erreur dans la sauvegarde de votre user";
+                    }
                 }
             }
         
@@ -144,24 +162,27 @@ class User {
         $error = $success = array();
 
         if( !empty($_POST)){
-            $col = ["id","email","token","login"];
+            $error = Verificator::checkForm($user->getFgtPwdForm(), $_POST);
 
-            ////VERIFICATION FORM
+            if (count($error)==0) {
+                $col = ["id","email","token","login"];
 
-            $where = array(
-                "email"=>htmlspecialchars($_POST['email'])
-            );
-            $user = $user->getUnique($col, $where);
-            
-            if ($user!==false) {
-                $res = $user->sendResetPwd();
-                if ($res=="OK") {
-                    $success[] = "Email envoyé avec succès";
+                $where = array(
+                    "email"=>htmlspecialchars($_POST['email'])
+                );
+                $user = $user->getUnique($col, $where);
+                
+                if ($user!==false) {
+
+                    $res = $user->sendResetPwd();
+                    if ($res=="OK") {
+                        $success[] = "Email envoyé avec succès";
+                    } else {
+                        $error[] = "Erreur dans l'envoie de l'email";
+                    }
                 } else {
-                    $error[] = "Erreur dans l'envoie de l'email";
+                    $error[] = "Erreur utilisateur non trouvé";
                 }
-            } else {
-                $error[] = "Erreur utilisateur non trouvé";
             }
         }
 
@@ -207,8 +228,8 @@ class User {
     public function resetpwd($data=array())
     {
         if (is_array($data) && isset($data['id']) && isset($data['token'])) {
-            $error = array();
             $user = new UserModel();
+            $error = []; 
 
             $id = htmlspecialchars($data['id']);
             $token = htmlspecialchars($data['token']);
@@ -218,15 +239,20 @@ class User {
             if ($user!==false) {
                 if ($user->getToken()==$token) {
                     if (!empty($_POST)) {
-                        $user->setPassword(htmlspecialchars($_POST['password']));
-                        $user->generateToken();
-                        $res = $user->save();
-                        
-                        if ($res!==false) {
-                            header('Location: /login');
-                            exit();
-                        } else {
-                            $error[] = "Erreur dans la modification du mot de passe";
+
+                        $error = array_merge(Verificator::checkForm($user->getResetPwdForm(), $_POST), $error);
+
+                        if (count($error)==0) {
+                            $user->setPassword(htmlspecialchars($_POST['password']));
+                            $user->generateToken();
+                            $res = $user->save();
+                            
+                            if ($res!==false) {
+                                header('Location: /login');
+                                exit();
+                            } else {
+                                $error[] = "Erreur dans la modification du mot de passe";
+                            }
                         }
                     }
                 } else {

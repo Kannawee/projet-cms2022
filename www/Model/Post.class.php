@@ -65,21 +65,21 @@ class Post extends Sql
                 "class"=>"formAddPage",
                 "method"=>"POST",
                 "action"=>"/administration/post/add",
-                "submit"=>"Add"
+                "submit"=>"Add",
             ],
             'inputs'=>[
                 "title"=>[
                     "type"=>"text",
                     "placeholder"=>"Post title...",
-                    "error"=>"Incorrect title"
+                    "error"=>"Incorrect title",
                 ],
             ],
             'textAreas'=>[
                 "content"=>[
                     "type"=>"text",
                     "placeholder"=>"Post content...",
-                    "required"=>true,
-                    "error"=>"Incorrect content"
+                    "error"=>"Incorrect content",
+                    "id"=>"contentPost"
                 ],
             ]
         ];
@@ -107,9 +107,9 @@ class Post extends Sql
                 "content"=>[
                     "type"=>"text",
                     "placeholder"=>"Post content...",
-                    "required"=>true,
                     "value"=>$this->content,
-                    "error"=>"Incorrect content"
+                    "error"=>"Incorrect content",
+                    "id"=>"contentPost"
                 ],
             ],
             "select"=>[

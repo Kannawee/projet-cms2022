@@ -40,7 +40,7 @@ class Mymail
 	{
 		$this->mailer->Subject = $subject;
 
-		$this->mailer->set('Body', $body);
+		$this->mailer->set('Body', html_entity_decode($body));
 		// echo $this->mailer->Body;die;
 		foreach ($adressee as $email) {
 			$this->mailer->AddAddress($email);

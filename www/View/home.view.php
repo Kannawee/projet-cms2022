@@ -1,7 +1,7 @@
  <!-- J'ai juste rajouter une condition pour voir si user est connecté -->
 
 <div id="title">
-    <h1>Artistery.</h1>
+    <h1><?=SITENAME?></h1>
 </div>
 
 <style>

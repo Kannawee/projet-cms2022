@@ -290,13 +290,15 @@ body {
   width: 22%;
   height: 100%;
   background: linear-gradient(180deg, var(--main-purple) 10%, var(--main-blue) 100%);
-  overflow: scroll;
+  /* overflow: scroll; */
+  overflow: hidden;
 }
 .navbar ul {
   list-style: none;
   padding-inline-start: 0;
   margin-top: 1rem;
-  overflow: scroll;
+  /* overflow: scroll; */
+  overflow: hidden;
 }
 .navbar ul .selected > a {
   font-weight: bold;

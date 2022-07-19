@@ -30,14 +30,6 @@ class Admin
         $view = new View("users", "back");
     }
 
-    public function concerts() {
-        $concert = new ConcertModel();
-        $tabConcerts = $concert->getAll();
-        $view = new View("concerts", "back");
-        $view->assign("concert", $concert);
-        $view->assign("tabConcerts", $tabConcerts);
-    }
-
     public function templates() {
         $view = new View("templates", "back");
     }

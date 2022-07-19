@@ -106,9 +106,9 @@ class Project extends Sql
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getCover(): string
+    public function getCover(): ?string
     {
         return $this->cover;
     }
@@ -154,7 +154,6 @@ class Project extends Sql
                 "cover"=>[
                     "type"=>"file",
                     "placeholder"=>"",
-                    "required"=>true,
                     "accept"=>".jpg, .jpeg, .png",
                     "error"=>"Incorrect cover"
                 ],

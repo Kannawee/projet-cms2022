@@ -8,6 +8,9 @@ use App\Core\View;
 use App\Model\User as userModel;
 use App\Model\Page as pageModel;
 use App\Model\Post as postModel;
+use App\Model\Comment as commentModel;
+use App\Model\Concert as concertModel;
+use App\Model\Project as projectModel;
 use App\Model\Elementpage as elementpageModel;
 
 class Page {
@@ -32,6 +35,9 @@ class Page {
             $tmp_tab = array(
                 "title"=>htmlspecialchars($_POST['title']),
                 "route"=>htmlspecialchars($_POST['route']),
+                "type"=>htmlspecialchars($_POST['type']),
+                "descSEO"=>htmlspecialchars($_POST['descSEO']),
+                "kwordsSEO"=>htmlspecialchars($_POST['kwordsSEO']),
                 "visible"=>0
             );
 
@@ -93,6 +99,9 @@ class Page {
                     "visible"=>htmlspecialchars($_POST['visible']),
                     "created_at"=>htmlspecialchars($_POST['created_at']),
                     "route"=>htmlspecialchars($_POST['route']),
+                    "descSEO"=>htmlspecialchars($_POST['descSEO']),
+                    "kwordsSEO"=>htmlspecialchars($_POST['kwordsSEO']),
+                    "type"=>htmlspecialchars($_POST['type']),
                 );
 
                 $tmpdata['route'] = preg_replace("/\ /", "", $tmpdata['route']);
@@ -114,14 +123,21 @@ class Page {
                     }
 
                     $page->setFromArray($tmpdata);
-                    $res = $page->save();
 
-                    if ($res) {
-                        header('Location: /administration/page/edit/'.$id.'?success=ok');
-                        exit();
+                    $unicity = $page->checkUnicity();
+
+                    if ($unicity) {
+                        $res = $page->save();
+
+                        if ($res) {
+                            header('Location: /administration/page/edit/'.$id.'?success=ok');
+                            exit();
+                        }
+
+                        $error[] = "Error during insertion in database.";
+                    } else {
+                        $error[] = "A page with the same type is already visible, please make it not visible or check the other one";
                     }
-
-                    $error[] = "Error during insertion in database.";
                 }
             }
             $page = $page->getById($id);
@@ -162,6 +178,7 @@ class Page {
     {
         if (count($data)>0 && isset($data['route'])) {
             $page = new pageModel();
+            $comm = new commentModel();
             $error = array();
             $route = htmlspecialchars($data['route']);
 
@@ -181,9 +198,86 @@ class Page {
                 }
             }
 
+            $obj = $listObj = $listComm = "";
+
+            if ($page->getType()=="post") {
+                $obj = new postModel();
+
+                $where = array(
+                    "published"=>1
+                );
+
+                $listObj = $obj->select($where);
+                $listComm = array();
+                $key = "id_".$page->getType();
+
+                if (is_array($listObj)) {
+                    foreach ($listObj as $obje) {
+                        $where = array(
+                            $key=>$obje->getId(),
+                            "moded"=>1
+                        );
+
+                        $tmpcomm = $comm->getModedCommentFromObjId($obje->getId(), $page->getType());
+
+                        if ($tmpcomm && count($tmpcomm)>0) {
+                            $listComm[$obje->getId()] = $tmpcomm;
+                        }
+                    }
+                }
+            } elseif ($page->getType()=="concert") {
+                $obj = new concertModel();
+
+                $listObj = $obj->select();
+                $listComm = array();
+                $key = "id_".$page->getType();
+
+                if (is_array($listObj)) {
+                    foreach ($listObj as $obje) {
+                        $where = array(
+                            $key=>$obje->getId(),
+                            "moded"=>1,
+                        );
+
+                        $tmpcomm = $comm->getModedCommentFromObjId($obje->getId(), $page->getType());
+                        if ($tmpcomm && count($tmpcomm)>0) {
+                            $listComm[$obje->getId()] = $tmpcomm;
+                        }
+                    }
+                }
+            } elseif ($page->getType()=="project") {
+                $obj = new projectModel();
+
+                $listObj = $obj->select();
+
+                $listComm = array();
+                $key = "id_".$page->getType();
+
+                if (is_array($listObj)) {
+                    foreach ($listObj as $obje) {
+                        $where = array(
+                            $key=>$obje->getId(),
+                            "moded"=>1,
+                        );
+
+                        $tmpcomm = $comm->getModedCommentFromObjId($obje->getId(), $page->getType());
+                        if ($tmpcomm && count($tmpcomm)>0) {
+                            $listComm[$obje->getId()] = $tmpcomm;
+                        }
+                    }
+                }
+            }
+
+            $navLink = $page->getNavLink();
+
             $view = new View("","page");
             $view->assign("errors", $error);
             $view->assign("page", $page);
+            $view->assign("listObj", $listObj);
+            $view->assign("type", $page->getType());
+            $view->assign("comm", $comm);
+            $view->assign("listComm", $listComm);
+            $view->assign("navLink", $navLink);
         }
     }
 }

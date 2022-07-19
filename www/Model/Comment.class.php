@@ -13,10 +13,25 @@ class Comment extends Sql
     protected $id_user;
     protected $id_project;
     protected $id_concert;
+    protected $id_post;
+    protected $created_at;
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function setFromArray($data)
+    {
+        $this->id = (isset($data['id']))?$data['id']:null;
+        $this->moded = (isset($data['moded']))?$data['moded']:null;
+        $this->type = (isset($data['type']))?$data['type']:null;
+        $this->content = (isset($data['content']))?$data['content']:null;
+        $this->id_user = (isset($data['id_user']))?$data['id_user']:null;
+        $this->id_project = (isset($data['id_project']))?$data['id_project']:null;
+        $this->id_concert = (isset($data['id_concert']))?$data['id_concert']:null;
+        $this->id_post = (isset($data['id_post']))?$data['id_post']:null;
+        $this->created_at = (isset($data['created_at']))?$data['created_at']:null;
     }
 
     public function getId()
@@ -84,6 +99,26 @@ class Comment extends Sql
         $this->id_concert = $id_concert;
     }
 
+    public function getIdPost()
+    {
+        return $this->$id_post;
+    }
+
+    public function setIdPost($id_post)
+    {
+        $this->id_post = $id_post;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->$created_at;
+    }
+
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+    }
+
     public function getModedCommentFromObjId($id, $type)
     {
 
@@ -91,7 +126,8 @@ class Comment extends Sql
 
         $where = array(
             "moded"=>1,
-            $col=>$id
+            $col=>$id,
+            "status"=>3
         );
 
         $this->reset();
@@ -99,6 +135,7 @@ class Comment extends Sql
         $this->builder->join(DBPREFIXE."user", $this->table, "id", "id_user", "INNER");
         $this->builder->where("moded", $this->table);
         $this->builder->where($col, $this->table);
+        $this->builder->where("status", DBPREFIXE."user", "!=");
 
         $res = $this->execute($where, true);
 
@@ -127,6 +164,35 @@ class Comment extends Sql
         }
         return false;
         
+    }
+
+    public function getAddForm($type, $id, $redirect): array
+    {
+
+        return [
+            "config"=>[
+                "class"=>"formAddPage",
+                "method"=>"POST",
+                "action"=>"/administration/comment/add/".$type."/".$id,
+                "submit"=>"Comment"
+            ],
+            "textAreas"=>[
+                "content"=>[
+                    "type"=>"text",
+                    "required"=>true,
+                    "placeholder"=>"Comment content...",
+                    "error"=>"Incorrect content",
+                ],
+            ],
+            "inputs"=>[
+                "redirect"=>[
+                    "type"=>"hidden",
+                    "required"=>true,
+                    "value"=>$redirect,
+                    "error"=>"Incorrect redirect",
+                ]
+            ]
+        ];
     }
 
 }
