@@ -1,3 +1,11 @@
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+    tinymce.init({
+        selector: '#newsContent'
+    });
+</script>
+
 <!-- style a faire -->
 <h1>Newsletter</h1>
 
@@ -23,7 +31,9 @@
 <!-- modif : div qui va contenir les boutons envoyer et delete sous forme de lien <a> -->
 <div class="form-action">
 
+    <?php if($newsletter->getActive()!=1) {  ?>
     <a href="/administration/newsletter/send/<?=$newsletter->getId()?>" class="button">SEND</a>
+    <?php } ?>
     &nbsp;&nbsp;&nbsp;
     <a href="/administration/newsletter/delete/<?=$newsletter->getId()?>" class="button">DEL</a>
 </div>

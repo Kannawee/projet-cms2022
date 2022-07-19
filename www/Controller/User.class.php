@@ -24,52 +24,78 @@ class User {
     {
         if (count($data)>0 && isset($data['id'])) {
             $id = htmlspecialchars($data['id']);
+            $error = [];
             $user = new userModel();
 
             $user = $user->getById($id, ['id', 'login', 'email', 'status', 'token']);
 
             if (!$user) {
-                die("404 : User not found");
+                $error[] = "User not found";
             }
 
             if (!empty($_POST)) {
-                $status = htmlspecialchars($_POST['status']);
-                $user->setStatus($status);
-                $res = $user->save();
+                $error = array_merge(Verificator::checkForm($user->getRoleForm(), $_POST));
 
-                if ($res) {
-                    header("Location: /administration/users?success=ok");
-                    exit();
+                if (count($error)==0) {
+                    $status = htmlspecialchars($_POST['status']);
+                    $user->setStatus($status);
+                    $res = $user->save();
+
+                    if ($res) {
+                        header("Location: /administration/users?success=ok");
+                        exit();
+                    }
+
+                    $error[] = "Problem during insertion in database";
                 }
-
-                header("Location: /administration/users?success=notok");
-                exit();
             }
+
+            $listUser = $user->select();
+            $view = new View("Users", 'back');
+            $view->assign("listUser",$listUser);
+            $view->assign("success", "");            
+            $view->assign("errors",$error);
         }
     }
 
     public function login()
     {
         $user = new UserModel();
-        $error = array();
+        $error = $success = array();
+
+        if (isset($_GET['confirm'])) {
+            $confirm = htmlspecialchars($_GET['confirm']);
+
+            if ($confirm=="success") {
+                $success[] = "Vous avez bien confirmé votre compte";
+            } elseif ($confirm=="error") {
+                $error[] = "Erreur dans la confirmation de votre compte";
+            }
+        }
         if (!empty($_POST)) {
             $result = Verificator::checkForm($user->getLoginForm(), $_POST);
             /* SI RESULT != EMPTY -> REDIRECT /LOGIN */
             $user->setEmail($_POST['email']);
             $user->setPassword($_POST['password']);
             $req = $user->checkLogin();
+
             if (count($req)>0) {
                 $res = $req[0];
+                
+
                 if ($user->getEmail() === $res->getEmail() && password_verify($_POST['password'], $res->getPassword())) {
-                    $_SESSION["idUser"] = $res->getId();
-                    $_SESSION["token"] = $res->getToken();
-                    if ($res->getStatus() == "1") {
-                        $_SESSION['isAdmin'] = 1;
-                        header("Location: /administration");
+                    if ($res->getConfirmed()==1) {
+                        $_SESSION["idUser"] = $res->getId();
+                        $_SESSION["token"] = $res->getToken();
+                        if ($res->getStatus() == 1 || $res->getStatus() == 2) {
+                            $_SESSION['isAdmin'] = $res->getStatus();
+                            header("Location: /administration");
+                            exit();
+                        }
+                        header("Location: /");
                         exit();
                     }
-                    header("Location: /home");
-                    exit();
+                    $error[] = "Veuillez confirmer votre email avant de vous connecter";
                 } else {
                     $error[] = "Mot de passe incorrect";
                 }
@@ -77,10 +103,11 @@ class User {
                 $error[] = "Email incorrect.";
             }
         }
-            // AJOUTER LA REDIRECTION SI USER!=ADMIN-> HOME PAGE
+
         $view = new View("Login", "front" );
         $view->assign("user", $user);
         $view->assign("errors", $error);
+        $view->assign("success", $success);
     }
 
 
@@ -88,22 +115,36 @@ class User {
     {
 
         $user = new UserModel();     
-        $error = array();
+        $error = $success = array();
 
         if( !empty($_POST)){
 
-            $result = Verificator::checkForm($user->getRegisterForm(), $_POST);
-            $user->setEmail($_POST['email']);
-            $user->setLogin($_POST['login']);
-            $user->setPassword($_POST['password']);
-
-            $error = $this->getUnique($user);
+            $error = Verificator::checkForm($user->getRegisterForm(), $_POST);
 
             if (count($error)==0) {
-                $user->generateToken();
-                $user->save();
-                header('Location: /login');
-                exit();
+                $user->setEmail(htmlspecialchars($_POST['email']));
+                $user->setLogin(htmlspecialchars($_POST['login']));
+                $user->setPassword(htmlspecialchars($_POST['password']));
+                $user->setConfirmed(0);
+                
+                $error = array_merge($this->getUnique($user), $error);
+
+                if (count($error)==0) {
+                    $user->generateToken();
+                    $res = $user->save();
+                    
+                    if ($res!==false) {
+
+                        if (!empty($_POST['newssub'])) {
+                            $sub = $user->subscribeNews($res);
+                        }
+
+                        $resbis = $user->sendConfirm($res);
+                        $success[] = "Un email de confirmation vous a été envoyé.";
+                    } else {
+                        $error[] = "Erreur dans la sauvegarde de votre user";
+                    }
+                }
             }
         
         }
@@ -111,21 +152,135 @@ class User {
         $view = new View("register");
         $view->assign("user", $user);
         $view->assign("errors",$error);
+        $view->assign("success", $success);
         exit();
     }
+
+    public function forgottenpwd()
+    {
+        $user = new UserModel();     
+        $error = $success = array();
+
+        if( !empty($_POST)){
+            $error = Verificator::checkForm($user->getFgtPwdForm(), $_POST);
+
+            if (count($error)==0) {
+                $col = ["id","email","token","login"];
+
+                $where = array(
+                    "email"=>htmlspecialchars($_POST['email'])
+                );
+                $user = $user->getUnique($col, $where);
+                
+                if ($user!==false) {
+
+                    $res = $user->sendResetPwd();
+                    if ($res=="OK") {
+                        $success[] = "Email envoyé avec succès";
+                    } else {
+                        $error[] = "Erreur dans l'envoie de l'email";
+                    }
+                } else {
+                    $error[] = "Erreur utilisateur non trouvé";
+                }
+            }
+        }
+
+        if ($user===false) {
+            $user = new UserModel();
+        }
+
+        $view = new View("forgottenpwd");
+        $view->assign("user", $user);
+        $view->assign("errors",$error);
+        $view->assign("success",$success);
+    }
+
+    public function confirmuser($data)
+    {
+        $user = new UserModel();     
+        
+        if (is_array($data) && isset($data['id']) && isset($data['token'])) {
+            $col = ["id","token"];
+            $id = htmlspecialchars($data['id']);
+            $token = htmlspecialchars($data['token']);
+            $user = $user->getById($id, ['id','token']);
+            
+            if ($user!==false && $token==$user->getToken()) {
+                $user->setConfirmed(1);
+                $user->generateToken();
+
+                $res = $user->save();
+
+                if ($res!==false) {
+                    header('Location: /login?confirm=success');
+                    exit();
+                }
+                header('Location: /login?confirm=error');
+                exit();
+            }
+            header('Location: /login?confirm=error');
+            exit();
+
+        }
+    }
+
+    public function resetpwd($data=array())
+    {
+        if (is_array($data) && isset($data['id']) && isset($data['token'])) {
+            $user = new UserModel();
+            $error = []; 
+
+            $id = htmlspecialchars($data['id']);
+            $token = htmlspecialchars($data['token']);
+            
+            $user = $user->getById($id);
+
+            if ($user!==false) {
+                if ($user->getToken()==$token) {
+                    if (!empty($_POST)) {
+
+                        $error = array_merge(Verificator::checkForm($user->getResetPwdForm(), $_POST), $error);
+
+                        if (count($error)==0) {
+                            $user->setPassword(htmlspecialchars($_POST['password']));
+                            $user->generateToken();
+                            $res = $user->save();
+                            
+                            if ($res!==false) {
+                                header('Location: /login');
+                                exit();
+                            } else {
+                                $error[] = "Erreur dans la modification du mot de passe";
+                            }
+                        }
+                    }
+                } else {
+                    $error[] = "Tokens diffèrents, tentative de hack détectée";
+                }
+            } else {
+                $error[] = "Utilsateur non trouvé";
+            }
+
+            $view = new View("resetpwd");
+            $view->assign("user", $user);
+            $view->assign("errors", $error);
+        }
+    }
+
 
     public function getUnique($user)
     {
         $error = array();
+
         $email = array(
             "email"=>$user->getEmail()
         );
+        $mailcheck = $user->getUnique(['*'],$email);
 
         $login = array(
             "login"=>$user->getLogin()
         );
-        
-        $mailcheck = $user->getUnique(['*'],$email);
         $logincheck = $user->getUnique(['*'], $login);
 
         if ($mailcheck!=false) {

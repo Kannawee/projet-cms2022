@@ -1,28 +1,28 @@
-<!-- je n'y ai pas touché mais en gros il faudrait prévoir une section ou je peux display des errors tu peux mettre en dur, je m'occuperai d'appliquer le php dessus :) -->
-
-    <div>
-        <div class="card">
-            <div>
-                <h1>S'inscrire</h1>
-            </div>
-            <?php if(isset($errors) && count($errors)>0) { ?>
-                <div class="error">
-                    <?php foreach ($errors as $key => $error) { ?>
-                        <p>(<?=$key?>) <?=$error?></p>
-                    <?php } ?>
-                </div>
-            <?php } ?>
-
-            <?php if(isset($success) && count($success)>0) { ?>
-                <div class="success">
-                    <?php foreach ($success as $key => $succ) { ?>
-                        <p>(<?=$key?>) <?=$succ?></p>
-                    <?php } ?>
-                </div>
-            <?php } ?>
-            <?php $this->includePartial("form", $user->getRegisterForm()) ?>
+<div>
+    <div class="card">
+        <div>
+            <h1>Votre Email</h1>
         </div>
+        <?php if (count($errors)>0) { ?>
+            <div class="error">
+            <?php foreach ($errors as $key => $error) {
+                echo '('.$key.') '.$error.'<br>';
+            } ?>
+            </div>
+        <?php } ?>
+        <?php if (count($success)>0) { ?>
+            <div class="success">
+            <?php foreach ($success as $key => $succ) {
+                echo '('.$key.') '.$succ.'<br>';
+            } ?>
+            </div>
+        <?php } ?>
+        <?php if($user!==false){
+            $this->includePartial("form", $user->getFgtPwdForm());
+        } ?>
     </div>
+</div>
+
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;400&display=swap');
@@ -33,12 +33,6 @@
 
     .success{
         color: green;
-    }
-
-    body {
-        margin: 0 !important;
-        font-family: 'Manrope', sans-serif;
-        color: whitesmoke;
     }
 
     .card {

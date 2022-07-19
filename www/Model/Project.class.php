@@ -9,6 +9,7 @@ class Project extends Sql
     protected $name;
     protected $releaseDate;
     protected $description;
+    protected $cover;
 
     public function __construct()
     {
@@ -31,6 +32,10 @@ class Project extends Sql
 
         if (isset($data['description'])) {
             $this->description = $data['description'];
+        }
+
+        if (isset($data['cover'])) {
+            $this->cover = $data['cover'];
         }
     }
 
@@ -100,6 +105,28 @@ class Project extends Sql
         $this->description = $description;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    /**
+     * @param array $cover
+     */
+    public function setCover(array $cover): void
+    {
+        $image_name = $this->getId();
+        $filename = $cover['name'];
+        $temp_array = explode(".", $filename);
+        $extension = end($temp_array);
+        $image_path = './uploads/covers/' . $image_name . '.' . $extension;
+
+        $this->cover = $image_path;
+    }
+
     public function getAddForm(): array
     {
         return [
@@ -107,7 +134,9 @@ class Project extends Sql
                 "class"=>"formAddProject",
                 "method"=>"POST",
                 "action"=>"/administration/project/add",
-                "submit"=>"Add"
+                "submit"=>"Add",
+                // CODE IZIA
+                "enctype"=>"multipart/form-data",
             ],
             'inputs'=>[
                 "name"=>[
@@ -122,11 +151,18 @@ class Project extends Sql
                     "required"=>true,
                     "error"=>"Incorrect date"
                 ],
+                "cover"=>[
+                    "type"=>"file",
+                    "placeholder"=>"",
+                    "accept"=>".jpg, .jpeg, .png",
+                    "error"=>"Incorrect cover"
+                ],
             ],
             'textAreas'=>[
                 "description"=>[
                     "placeholder"=>"A few words about your project...",
                     "required"=>true,
+                    "rows"=>10,
                     "error"=>"Incorrect description"
                 ],
             ]

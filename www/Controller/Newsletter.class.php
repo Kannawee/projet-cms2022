@@ -23,11 +23,23 @@ class Newsletter {
     {
         $newsletter = new newsletterModel();
         $result = Verificator::checkForm($newsletter->getAddForm(), $_POST);
-        $newsletter->setTitle($_POST['title']);
-        $newsletter->setContent($_POST['content']);
+        $newsletter->setTitle(htmlspecialchars($_POST['title']));
+        $newsletter->setContent(htmlspecialchars($_POST['content']));
+        $newsletter->setType(htmlspecialchars($_POST['type']));
+        $newsletter->setActive(0);
         $newsletter->setDate(date('Y-m-d H:i:s'));
-        $newsletter->save();
-        header('Location: /administration/newsletter');
+        $res = $newsletter->save();
+
+        if ($res) {
+            header('Location: /administration/newsletter?success=ok');
+            exit();
+        }
+
+        var_dump($res);die;
+        header('Location: /administration/newsletter?success=notok');
+        exit();
+
+
     }
 
     public function edit($data)
@@ -37,10 +49,12 @@ class Newsletter {
         
         if (!empty($_POST)) {
             $data = array(
-                "id"=>addslashes($_POST['idnews']),
-                "title"=>addslashes($_POST['title']),
-                "content"=>addslashes($_POST['content']),
-                "date"=>addslashes($_POST['date']),
+                "id"=>htmlspecialchars($_POST['idnews']),
+                "title"=>htmlspecialchars($_POST['title']),
+                "content"=>htmlspecialchars($_POST['content']),
+                "date"=>htmlspecialchars($_POST['date']),
+                "active"=>htmlspecialchars($_POST['active']),
+                "type"=>htmlspecialchars($_POST['type']),
             );
 
             $newsletter->setFromArray($data);
@@ -63,7 +77,7 @@ class Newsletter {
 
             $users = new userModel();
             
-            $subscribedUsers = $users->getSubscribedUsers($id);
+            $subscribedUsers = $users->getSubscribedUsers();
 
             $idSub = array();
             foreach ($subscribedUsers as $user) {
@@ -92,12 +106,11 @@ class Newsletter {
         $newsletter = new newsletterModel();
 
         if (!empty($data) && count($data)>0) {
-            $id_news = addslashes($data['idnews']);
-            $id_user = addslashes($data['iduser']);
+            $id_user = htmlspecialchars($data['iduser']);
+            $id_news = htmlspecialchars($data['idnews']);
 
             $data = array(
-                "id_user"=>$id_user,
-                "id_newsletter"=>$id_news
+                "id_user"=>$id_user
             );
 
             $res = $newsletter->subscribe($data);
@@ -119,7 +132,6 @@ class Newsletter {
 
             $data = array(
                 "id_user"=>$id_user,
-                "id_newsletter"=>$id_news
             );
 
             $res = $newsletter->unsubscribe($data);
@@ -142,7 +154,7 @@ class Newsletter {
             if (count($tmp_tab)>0) {
                 $newscontent = $tmp_tab[0];
                 $newsletter->setFromArray($newscontent);
-                $emails = $newsletter->listemail($id_news);
+                $emails = $newsletter->listemail();
 
                 foreach ($emails as $email) {
                     $tmp_mail = array();
@@ -182,7 +194,7 @@ class Newsletter {
             if ($res) {
                 header('Location: /administration/newsletter?success=ok');
                 exit();
-            } else {
+            } else {                
                 header('Location: /administration/newsletter?success=notok');
                 exit();
             }

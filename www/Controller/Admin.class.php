@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\View;
 use App\Model\User as UserModel;
 use App\Model\Project as ProjectModel;
+use App\Model\Tracklist as TracklistModel;
 use App\Model\Concert as ConcertModel;
 use App\Model\Newsletter as NewsletterModel;
 
@@ -27,12 +28,6 @@ class Admin
 
     public function users() {
         $view = new View("users", "back");
-    }
-
-    public function concerts() {
-        $concert = new ConcertModel();
-        $view = new View("concerts", "back");
-        $view->assign("concert", $concert);
     }
 
     public function templates() {

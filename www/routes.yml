@@ -1,3 +1,12 @@
+# ROUTING INSTALL
+/install/step2:
+  controller: installer
+  action: step2
+
+/install/step3:
+  controller: installer
+  action: step3
+
 # ROUTING FRONT
 /:
   controller: main
@@ -21,10 +30,23 @@
   controller: user
   action: register
 
-/forget:
+/forgottenpwd:
   controller: user
-  action: pwdforget
+  action: forgottenpwd
 
+/resetpwd/{id}/{token}:
+  controller: user
+  action: resetpwd
+  param:
+    - id
+    - token
+
+/confirmuser/{id}/{token}:
+  controller: user
+  action: confirmuser
+  param:
+    - id
+    - token
 
 ### ROUTING BACK
 
@@ -33,14 +55,7 @@
   action: dashboard
   security:
     - admin
-
-/administration/concerts:
-  controller: admin
-  action: concerts
-
-/administration/concerts/add:
-  controller: concert
-  action: add
+    - modo
 
 /administration/templates:
   controller: admin
@@ -158,6 +173,12 @@
 
 # ROUTING PROJECT
 
+/project/{id}:
+  controller: project
+  action: seeproject
+  param:
+    - id
+
 /administration/projects:
   controller: project
   action: list
@@ -220,40 +241,53 @@
     - id
   security:
     - admin
-
-# ROUTING PAGE ELEMENT
-/administration/element/add/{id}:
-  controller: elementpage
-  action: add
+  
+# ROUTING AFFICHAGE PAGE FRONT
+/page/{route}:
+  controller: page
+  action: displaypage
   param:
-    - id
+    - route
+
+# ROUTING COMMENTS
+/administration/commentmod:
+  controller: comment
+  action: listUnmod
   security:
+    - modo
     - admin
 
-/administration/elementpage/edit/{id_page}/{id}:
-  controller: elementpage
-  action: edit
+/administration/comment/accept/{id}:
+  controller: comment
+  action: accept
   param:
-    - id_page
     - id
-  security:
-    -admin
+  security: 
+    - modo
+    - admin
 
-/administration/elementpage/delete/{id_page}/{id}:
-  controller: elementpage
-  action: delete
+/administration/comment/decline/{id}:
+  controller: comment
+  action: decline
   param:
-    - id_page
     - id
-  security:
-    -admin
+  security: 
+    - modo
+    - admin
 
-/administration/elementpage/changeordre/{id_page}/{id}/{change}:
-  controller: elementpage
-  action: changeordre
+/administration/comment/add/{type}/{id_obj}:
+  controller: comment
+  action: add
   param:
-    - id_page
-    - id
-    - change
-  security:
-    -admin
+    - type
+    - id_obj
+    - user
+
+# ROUTING CONCERT
+/administration/concerts:
+  controller: concert
+  action: list
+
+/administration/concerts/add:
+  controller: concert
+  action: add

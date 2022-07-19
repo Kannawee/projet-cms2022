@@ -2,6 +2,7 @@
 namespace App\Model;
 
 use App\Core\Sql;
+use App\Model\Mymail as mymailModel;
 
 class User extends Sql
 {
@@ -11,6 +12,7 @@ class User extends Sql
     protected $password;
     protected $status = 0;
     protected $token = null;
+    protected $confirmed;
 
     public function __construct()
     {
@@ -39,6 +41,16 @@ class User extends Sql
     public function setEmail(string $email): void
     {
         $this->email = strtolower(trim($email));
+    }
+
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(string $confirmed): void
+    {
+        $this->confirmed = strtolower(trim($confirmed));
     }
 
     /**
@@ -105,19 +117,115 @@ class User extends Sql
         $this->token = substr(bin2hex(random_bytes(128)), 0, 255);
     }
 
-    public function getSubscribedUsers($id)
+    public function getSubscribedUsers()
     {
-        $where = array(
-            "id_newsletter"=>$id
-        );
 
         $this->reset();
         $this->builder->select(DBPREFIXE.'newsletterlist', ['login','email',DBPREFIXE.'user.id as id']);
         $this->builder->join(DBPREFIXE.'user',DBPREFIXE.'newsletterlist','id','id_user');
-        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
-        $res = $this->execute($where, true, true);
+        $res = $this->execute([], true, true);
 
         return $res;        
+    }
+
+    public function subscribeNews($id_user)
+    {
+        $data = array(
+            "id_user"=>$id_user
+        );
+        $this->reset();
+        $this->builder->insert(DBPREFIXE."newsletterlist", $data);
+        
+        return $this->execute($data);
+    }
+
+    public function sendResetPwd()
+    {
+        $mail = new mymailModel();
+        $body = "<a href=\"http://".$_SERVER['HTTP_HOST']."/resetpwd/".$this->id."/".$this->token."\">Cliquer ici pour réinitialiser votre mot de passe</a>";
+        // echo $body;die;
+        $subject = "Reset Password ".$this->login;
+        $addr = [$this->email];
+        $mail->setupMyMail($subject, $body, $addr);
+        $res = $mail->sendMyMail();
+
+        return $res;
+    }
+
+    public function sendConfirm($id)
+    {
+        $mail = new mymailModel();
+        $body = "<a href=\"http://".$_SERVER['HTTP_HOST']."/confirmuser/".$id."/".$this->token."\">Cliquer ici pour confirmer votre compte</a>";
+        // echo $body;die;
+        $subject = "Confirmer votre compte ".$this->login;
+        $addr = [$this->email];
+        $mail->setupMyMail($subject, $body, $addr);
+        $res = $mail->sendMyMail();
+
+        return $res;
+    }
+
+    public function checkSuperAdmin()
+    {
+        $where = array(
+            "status"=>1
+        );
+        $res = $this->select($where);
+
+        if ($res!==false && count($res)>0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function getResetPwdForm()
+    {
+        return [
+            "config"=>[
+                "method"=>"POST",
+                "action"=>"/resetpwd/".$this->id."/".$this->token,
+                "submit"=>"Confirmer"
+            ],
+            "inputs"=>[
+                "password"=>[
+                    "type"=>"password",
+                    "required"=>true,
+                    "class"=>"inputForm",
+                    "id"=>"pwdForm",
+                    "error"=>"Votre mot de passe doit faire au min 8 caractères avec majuscule, minuscules et des chiffres"
+                ],
+                "passwordConfirm"=>[
+                    "type"=>"password",
+                    "required"=>true,
+                    "class"=>"inputForm",
+                    "id"=>"pwdConfForm",
+                    "error"=>"Password confirm doesn't match password",
+                    "confirm"=>"password"
+                ]
+            ]
+        ];
+    }
+
+
+    public function getFgtPwdForm(): array
+    {
+        return [
+            "config"=>[
+                "method"=>"POST",
+                "action"=>"/forgottenpwd",
+                "submit"=>"S'inscrire"
+            ],
+            "inputs"=>[
+                "email"=>[
+                    "type"=>"email",
+                    "placeholder"=>"Votre email ...",
+                    "required"=>true,
+                    "class"=>"inputForm",
+                    "id"=>"emailForm",
+                    "error"=>"Email incorrect",
+                ]
+            ]
+        ];
     }
 
 
@@ -146,8 +254,8 @@ class User extends Sql
                     "placeholder"=>"Votre login ...",
                     "class"=>"inputForm",
                     "id"=>"loginForm",
-                    "min"=>2,
-                    "max"=>50,
+                    "minLength"=>6,
+                    "maxLength"=>50,
                     "error"=>"Login incorrect",
                     "value"=>(isset($this->login) && !is_null($this->login))?$this->login:"",
                 ],
@@ -158,7 +266,7 @@ class User extends Sql
                     "class"=>"inputForm",
                     "id"=>"pwdForm",
                     "error"=>"Votre mot de passe doit faire au min 8 caractères avec majuscule, minuscules et des chiffres"
-                    ],
+                ],
                 "passwordConfirm"=>[
                     "type"=>"password",
                     "placeholder"=>"Confirmation ...",
@@ -168,6 +276,14 @@ class User extends Sql
                     "confirm"=>"password",
                     "error"=>"Votre mot de passe de confirmation ne correspond pas",
                 ],
+            ],
+            'checkbox'=>[
+                "newssub"=>[
+                    "class"=>"checkbox-news",
+                    "id"=>"checkbox-news",
+                    "error"=>"Subscription to news incorrect",
+                    "label"=>"Sub to mailing list"
+                ]
             ]
         ];
     }
@@ -215,7 +331,8 @@ class User extends Sql
             "select"=>[
                 "status"=>[
                     "required"=>true,
-                    "error"=>"Incorrect visible",
+                    "error"=>"Incorrect role",
+                    "placeholder"=>"Chose a role",
                     "options"=>ROLES,
                     "value"=>$this->status,
                     "label"=>"Role"

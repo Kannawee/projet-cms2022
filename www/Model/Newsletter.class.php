@@ -10,6 +10,8 @@ class Newsletter extends Sql
     protected $title;
     protected $content;
     protected $date;
+    protected $active;
+    protected $type;
     
     public function __construct()
     {
@@ -33,6 +35,14 @@ class Newsletter extends Sql
         if (isset($data['date'])) {
             $this->date = $data['date'];
         }
+
+        if (isset($data['active'])) {
+            $this->active = $data['active'];
+        }
+
+        if (isset($data['type'])) {
+            $this->type = $data['type'];
+        }
     }
 
     /**
@@ -41,6 +51,15 @@ class Newsletter extends Sql
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return null|array
+     */
+    public function getAll(): ?array
+    {
+        $res = $this->select();
+        return $res;
     }
 
     /**
@@ -92,13 +111,32 @@ class Newsletter extends Sql
         $this->date = $date;
     }
 
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        return $this->type = $type;
+    }
+
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    public function setActive($active)
+    {
+        return $this->active = $active;
+    }
+
     public function subscribe($data)
     {
         $data = array_map('intval', $data);
         $this->reset();
         $this->builder->select(DBPREFIXE.'newsletterlist', ['id']);
         $this->builder->where('id_user',DBPREFIXE.'newsletterlist');
-        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
 
         $check = count($this->execute($data, true));
 
@@ -119,7 +157,6 @@ class Newsletter extends Sql
         $this->reset();
         $this->builder->select(DBPREFIXE.'newsletterlist', ['id']);
         $this->builder->where('id_user',DBPREFIXE.'newsletterlist');
-        $this->builder->where('id_newsletter',DBPREFIXE.'newsletterlist');
 
         $check = count($this->execute($data, true));
 
@@ -127,7 +164,6 @@ class Newsletter extends Sql
             $this->reset();
             $this->builder->delete(DBPREFIXE.'newsletterlist');
             $this->builder->where('id_user', DBPREFIXE.'newsletterlist');
-            $this->builder->where('id_newsletter', DBPREFIXE.'newsletterlist');
 
             $res = $this->execute($data);
             return $res;
@@ -135,18 +171,14 @@ class Newsletter extends Sql
         return false;
     }
 
-    public function listemail($id_news)
+    public function listemail()
     {
-        $data = array(
-            "id_newsletter"=>$id_news
-        );
 
         $this->reset();
         $this->builder->select(DBPREFIXE.'user', [DBPREFIXE.'user.email', DBPREFIXE.'user.login']);
         $this->builder->join(DBPREFIXE.'newsletterlist', DBPREFIXE.'user', 'id_user', 'id', 'INNER');
-        $this->builder->where('id_newsletter', DBPREFIXE.'newsletterlist');
         
-        $res = $this->execute($data,true);
+        $res = $this->execute([],true);
 
         return $res;
     }
@@ -185,8 +217,18 @@ class Newsletter extends Sql
             'textAreas'=>[
                 "content"=>[
                     "placeholder"=>"Newsletter content...",
-                    "require"=>true,
-                    "error"=>"Incorrect content"
+                    // "required"=>true,
+                    "error"=>"Incorrect content",
+                    "id"=>"newsContent"
+                ]
+            ],
+            "select"=>[
+                "type"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect statut",
+                    "options"=>NEWSTYPE,
+                    "value"=>$this->type,
+                    "label"=>"Type"
                 ]
             ]
         ];
@@ -235,10 +277,27 @@ class Newsletter extends Sql
             'textAreas'=>[
                 "content"=>[
                     "placeholder"=>"Newsletter content...",
-                    "require"=>true,
+                    // "required"=>true,
                     "error"=>"Incorrect content",
                     "value"=>$content,
-                    "label"=>"Contenu"
+                    "label"=>"Contenu",
+                    "id"=>"newsContent"
+                ]
+            ],
+            "select"=>[
+                "active"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect statut",
+                    "options"=>[0=>"Manuel",1=>"Auto"],
+                    "value"=>$this->active,
+                    "label"=>"Statut"
+                ],
+                "type"=>[
+                    "required"=>true,
+                    "error"=>"Incorrect statut",
+                    "options"=>NEWSTYPE,
+                    "value"=>$this->type,
+                    "label"=>"Statut"
                 ]
             ]
         ];
