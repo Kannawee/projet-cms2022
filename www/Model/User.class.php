@@ -268,7 +268,6 @@ class User extends Sql
                     "error"=>"Votre mot de passe doit faire au min 8 caractères avec majuscule, minuscules et des chiffres"
                 ],
                 "passwordConfirm"=>[
-                "passwordConfirm"=>[
                     "type"=>"password",
                     "placeholder"=>"Confirmation ...",
                     "required"=>true,

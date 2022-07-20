@@ -3,7 +3,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Template FRONT</title>
+    <title><?= SITENAME ?></title>
     <meta name="description" content="Description de ma page">
 </head>
 <body>

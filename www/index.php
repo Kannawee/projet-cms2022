@@ -9,10 +9,6 @@ include "./Model/User.class.php";
 use App\Core\Sql;
 use App\Model\User as userModel;
 
-if ($_SESSION["isAdmin"]==3){
-    die("You have been ban from this website");
-}
-
 function myAutoloader($class)
 {
     // $class => CleanWords
@@ -32,6 +28,10 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
     session_start();
 
+}
+
+if (isset($_SESSION['isAdmin']) &&  $_SESSION["isAdmin"]==3){
+    die("You have been ban from this website");
 }
 
 if (!file_exists("conf_perso.inc.php")) {
