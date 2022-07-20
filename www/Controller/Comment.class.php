@@ -9,7 +9,10 @@ use App\Model\Comment as commentModel;
 
 class Comment {
 
-    public function listUnmod()
+    /**
+	 * @return void
+	**/
+    public function listUnmod():void
     {
         $comment = new commentModel();
         $success = (isset($_GET['success']))?htmlspecialchars($_GET['success']):"";
@@ -20,7 +23,11 @@ class Comment {
         $view->assign("listComment", $listComment);
     }
 
-    public function add($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function add($data=array()):void
     {
         if (!empty($data['type']) && !empty($data['id_obj'])) {
             $comm = new commentModel();
@@ -60,7 +67,11 @@ class Comment {
         }
     }
 
-    public function accept($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function accept($data=array()):void
     {
         if (isset($data['id'])) {
             $id = htmlspecialchars($data['id']);
@@ -85,7 +96,11 @@ class Comment {
         }
     }
 
-    public function decline($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function decline($data=array()):void
     {
         if (isset($data['id'])) {
             $id = htmlspecialchars($data['id']);

@@ -10,7 +10,10 @@ use App\Model\User as UserModel;
 
 class User {
 
-    public function list()
+    /**
+	 * @return void
+	**/
+    public function list():void
     {
         $user = new userModel();
         $listUser = $user->select();
@@ -20,7 +23,11 @@ class User {
         $view->assign("success", $success);
     }
 
-    public function role($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function role($data=array()):void
     {
         if (count($data)>0 && isset($data['id'])) {
             $id = htmlspecialchars($data['id']);
@@ -58,7 +65,10 @@ class User {
         }
     }
 
-    public function login()
+    /**
+	 * @return void
+	**/
+    public function login():void
     {
         $user = new UserModel();
         $error = $success = array();
@@ -87,8 +97,8 @@ class User {
                     if ($res->getConfirmed()==1) {
                         $_SESSION["idUser"] = $res->getId();
                         $_SESSION["token"] = $res->getToken();
+                        $_SESSION['isAdmin'] = $res->getStatus();
                         if ($res->getStatus() == 1 || $res->getStatus() == 2) {
-                            $_SESSION['isAdmin'] = $res->getStatus();
                             header("Location: /administration");
                             exit();
                         }
@@ -110,8 +120,10 @@ class User {
         $view->assign("success", $success);
     }
 
-
-    public function register()
+    /**
+	 * @return void
+	**/
+    public function register():void
     {
 
         $user = new UserModel();     
@@ -156,7 +168,10 @@ class User {
         exit();
     }
 
-    public function forgottenpwd()
+    /**
+	 * @return void
+	**/
+    public function forgottenpwd():void
     {
         $user = new UserModel();     
         $error = $success = array();
@@ -196,7 +211,11 @@ class User {
         $view->assign("success",$success);
     }
 
-    public function confirmuser($data)
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function confirmuser($data):void
     {
         $user = new UserModel();     
         
@@ -225,7 +244,11 @@ class User {
         }
     }
 
-    public function resetpwd($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function resetpwd($data=array()):void
     {
         if (is_array($data) && isset($data['id']) && isset($data['token'])) {
             $user = new UserModel();
@@ -268,8 +291,11 @@ class User {
         }
     }
 
-
-    public function getUnique($user)
+    /**
+	 * @param userModel $user
+	 * @return array
+	**/
+    public function getUnique($user):array
     {
         $error = array();
 
@@ -294,17 +320,13 @@ class User {
         return $error;
     }
 
-
-    public function logout()
+    /**
+	 * @return void
+	**/
+    public function logout():void
     {
         session_destroy();
         header("location: /");
-    }
-
-
-    public function pwdforget()
-    {
-        echo "Mot de passe oublié";
     }
 
 }

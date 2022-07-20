@@ -10,16 +10,32 @@ class MySqlBuilder implements QueryBuilder {
 
     private $query;
 
-    public function init() {
+    /**
+	 * @return void
+	**/
+    public function init():void
+    {
         $this->query = new \StdClass;
     }
 
-    public function insert (string $table, array $values) : QueryBuilder {
+    /**
+	 * @param string $table
+     * @param array $values
+	 * @return QueryBuilder
+	**/
+    public function insert (string $table, array $values) : QueryBuilder 
+    {
         $this->query->base = "INSERT INTO ".$table." (".implode(",",array_keys($values)).") VALUES ( :".implode(",:",array_keys($values)).")";
         return $this;
     }
 
-    public function select (string $table, array $columns): QueryBuilder {
+    /**
+	 * @param string $login
+     * @param array $columns
+	 * @return QueryBuilder
+	**/
+    public function select (string $table, array $columns): QueryBuilder 
+    {
         $tmp_str = "SELECT ";
 
         foreach ($columns as $col) {
@@ -32,27 +48,41 @@ class MySqlBuilder implements QueryBuilder {
         return $this;
     }
 
-    public function where (string $column, string $table, string $operator = '=', $ind=null): QueryBuilder
+    /**
+	 * @param string $login
+     * @param string $table
+     * @param string $operator
+	 * @return QueryBuilder
+	**/
+    public function where (string $column, string $table, string $operator = '='): QueryBuilder
     {
         $tmp_str = $table . ".";
 
         if ($operator=="NOT IN") {
             $tmp_str .= $column . " " . $operator . "(?)";
         } else {
-            $tmp = (!is_null($ind))?$ind:"";
-            $tmp_str .= $column . $operator . ":" . $column . $tmp;
+            $tmp_str .= $column . $operator . ":" . $column;
         }
 
         $this->query->where[] = $tmp_str;
         return $this;
     }
 
-    public function delete($table): QueryBuilder
+    /**
+	 * @param string $table
+	 * @return QueryBuilder
+	**/
+    public function delete(string $table): QueryBuilder
     {
         $this->query->base = "DELETE FROM $table";
         return $this;
     }
 
+    /**
+	 * @param int $from
+     * @param int $offset
+	 * @return QueryBuilder
+	**/
     public function limit (int $from, int $offset=0): QueryBuilder {
         $this->query->limit = 'LIMIT ' . $from;
         if ($offset!=0) {
@@ -61,13 +91,26 @@ class MySqlBuilder implements QueryBuilder {
         return $this;
     }
 
-    public function join($table1, $table2, $on1, $on2, $type="")
+    /**
+	 * @param string $table1
+     * @param string $table2
+     * @param string $on1
+     * @param string $on2
+     * @param string $type
+	 * @return QueryBuilder
+	**/
+    public function join(string $table1, string $table2, string $on1, string $on2, string $type=""): QueryBuilder
     {
         $this->query->join[] = " $type JOIN ".$table1." ON($table1.$on1=$table2.$on2)";
         return $this;
     }
 
-    public function update($table, $data)
+    /**
+	 * @param string $table
+     * @param array $data
+	 * @return QueryBuilder
+	**/
+    public function update(string $table, array $data): QueryBuilder
     {
         $this->query->base = "UPDATE $table SET ";
 
@@ -76,14 +119,25 @@ class MySqlBuilder implements QueryBuilder {
         }
 
         $this->query->base = trim($this->query->base, ", ");
+
+        return $this;
     }
 
-    public function order($order)
+    /**
+	 * @param string $order
+	 * @return QueryBuilder
+	**/
+    public function order(string $order): QueryBuilder
     {
         $this->query->order[] = $order;
+        return $this;
     }
 
-    public function getQuery () {
+    /**
+	 * @return string
+	**/
+    public function getQuery (): string
+    {
 
         $sql = $this->query->base;
 

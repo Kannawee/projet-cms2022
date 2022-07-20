@@ -12,7 +12,7 @@
     <nav class="navbar">
         <ul>
             <?php if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']==1) { ?>
-                <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_dashboard.svg" alt="logo dashboard"><a href="/administration/dashboard">Dashboard</a></li>
+                <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_dashboard.svg" alt="logo dashboard"><a href="/administration/">Dashboard</a></li>
                 <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_users.svg" alt="logo user"><a href="/administration/users">Users</a></li>
                 <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_pages.svg" alt="logo posts"><a href="/administration/posts">Posts</a></li>
                 <li class="nav-button"><img class="icon-nav" src="/assets/icones/icon_projects.svg" alt="logo projets"><a href="/administration/projects">Projects</a></li>

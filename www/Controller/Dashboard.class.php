@@ -10,7 +10,10 @@ use App\Model\Dashboard as dashboardModel;
 
 class Dashboard {
 
-    public function dashboard()
+    /**
+	 * @return void
+	**/
+    public function dashboard():void
     {
         $view = new View("dashboard","back");
     }

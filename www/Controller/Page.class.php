@@ -15,7 +15,10 @@ use App\Model\Elementpage as elementpageModel;
 
 class Page {
 
-    public function list()
+    /**
+	 * @return void
+	**/
+    public function list():void
     {
         $page =  new pageModel();
         $error = array();
@@ -26,7 +29,10 @@ class Page {
         $view->assign('errors', $error);
     }
 
-    public function add()
+    /**
+	 * @return void
+	**/
+    public function add():void
     {
         if (!empty($_POST)) {
             $page = new pageModel();
@@ -84,8 +90,11 @@ class Page {
         }
     }
 
-
-    public function edit($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function edit($data=array()):void
     {
         if (!empty($data) && count($data)>0) {
             $page = new pageModel();
@@ -158,7 +167,11 @@ class Page {
         }
     }
 
-    public function delete($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function delete($data=array()):void
     {
         if (count($data)>0) {
             $id = htmlspecialchars($data['id']);
@@ -174,7 +187,11 @@ class Page {
         }
     }
 
-    public function displaypage($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function displaypage($data=array()):void
     {
         if (count($data)>0 && isset($data['route'])) {
             $page = new pageModel();

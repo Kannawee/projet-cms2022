@@ -10,6 +10,9 @@ abstract class Sql
     protected $table;
     protected $builder;
 
+    /**
+	 * @return void
+	**/
     public function __construct()
     {
         //Se connecter à la bdd
@@ -32,7 +35,7 @@ abstract class Sql
     }
 
     /**
-     * @param int $id
+     * @param ?int $id
      */
     public function checkId(?int $id): object
     {
@@ -85,7 +88,7 @@ abstract class Sql
         
     }
 
-    public function select($where=array(), $limit=null, $orders=null)
+    public function select(array $where=array(), int $limit=null, string $orders=null)
     {
         $this->reset();
         $this->builder->select($this->table, ["*"]);
@@ -119,7 +122,7 @@ abstract class Sql
         return $stmt->fetchAll(self::$pdo::FETCH_CLASS, get_called_class());
     }
 
-    public function getById($id, $col=['*'])
+    public function getById(int $id, array $col=['*'])
     {
         $this->reset();
         $this->builder->select($this->table, $col);
@@ -135,7 +138,7 @@ abstract class Sql
 
     }
 
-    public function getUnique($col, $where)
+    public function getUnique(array $col, array $where)
     {
         $this->reset();
         $this->builder->select($this->table, $col);
@@ -155,7 +158,7 @@ abstract class Sql
         return $res;
     }
 
-    public function delete($where=array())
+    public function delete(array $where=array()): ?bool
     {
         $this->reset();
         $this->builder->delete($this->table);
@@ -177,7 +180,7 @@ abstract class Sql
 
     }
 
-    public function execute($data=array(),$fetch=false, $obj=false)
+    public function execute(array $data=array(),bool $fetch=false, bool $obj=false)
     {
 
         if (is_array($data) && count($data)>0) {
@@ -207,12 +210,12 @@ abstract class Sql
         return $stmt->fetchAll(self::$pdo::FETCH_ASSOC);
     }
 
-    public function getBuilder()
+    public function getBuilder(): QueryBuilder
     {
         return $this->builder;
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->builder->init();
     }

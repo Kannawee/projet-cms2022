@@ -9,7 +9,10 @@ use App\Model\Post as postModel;
 
 class Post {
 
-    public function list()
+    /**
+	 * @return void
+	**/
+    public function list():void
     {
         $post = new postModel();
         $listPost = $post->select();
@@ -18,7 +21,10 @@ class Post {
         $view->assign("listPost", $listPost);
     }
 
-    public function add()
+    /**
+	 * @return void
+	**/
+    public function add():void
     {
         if (!empty($_POST)) {
             $post = new postModel();
@@ -40,7 +46,11 @@ class Post {
         }
     }
 
-    public function edit($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function edit($data=array()):void
     {
 
         if (count($data)>0 && isset($data['id'])) {
@@ -75,7 +85,11 @@ class Post {
         }
     }
 
-    public function delete($data)
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function delete($data):void
     {
         
         if (count($data)>0 && isset($data['id'])) {

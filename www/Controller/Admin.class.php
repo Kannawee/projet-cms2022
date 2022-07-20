@@ -12,8 +12,10 @@ use App\Model\Newsletter as NewsletterModel;
 
 class Admin
 {
-
-    public function dashboard()
+    /**
+	 * @return void
+	**/
+    public function dashboard():void
     {
         if (isset($_SESSION["userId"]) && isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"] === 1) {
             echo "Ceci est un beau dashboard";
@@ -26,15 +28,27 @@ class Admin
         }
     }
 
-    public function users() {
+    /**
+	 * @return void
+	**/
+    public function users():void
+    {
         $view = new View("users", "back");
     }
 
-    public function templates() {
+    /**
+	 * @return void
+	**/
+    public function templates():void
+    {
         $view = new View("templates", "back");
     }
 
-    public function isAdmin() {
+    /**
+	 * @return void
+	**/
+    public function isAdmin():void
+    {
         if (isset($_SESSION["userId"]) && isset($_SESSION["isAdmin"]) && $_SESSION["isAdmin"] === 1) {
             echo "Ceci est un beau dashboard";
         } else {
