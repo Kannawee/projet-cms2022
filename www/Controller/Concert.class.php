@@ -9,7 +9,11 @@ use App\Model\Concert as concertModel;
 
 class Concert {
 
-    public function list() {
+    /**
+	 * @return void
+	**/
+    public function list():void
+    {
         $concert = new ConcertModel();
         $tabConcerts = $concert->getAll();
         $view = new View("concerts", "back");
@@ -18,7 +22,10 @@ class Concert {
         $view->assign("errors",[]);
     }
 
-    public function add()
+    /**
+	 * @return void
+	**/
+    public function add():void
     {
         $concert = new concertModel();
         $error = Verificator::checkForm($concert->getAddForm(), $_POST);

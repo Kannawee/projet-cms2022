@@ -7,7 +7,10 @@ use App\Model\Page as pageModel;
 
 class Main {
 
-    public function home()
+    /**
+	 * @return void
+	**/
+    public function home():void
     {
 
         $page = new pageModel();
@@ -17,8 +20,10 @@ class Main {
         $view->assign("navLinks", $navLinks);
     }
 
-
-    public function contact()
+    /**
+	 * @return void
+	**/
+    public function contact():void
     {
         $view = new View("contact");
     }

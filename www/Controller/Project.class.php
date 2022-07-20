@@ -11,7 +11,11 @@ use App\Model\Comment as commentModel;
 
 class Project {
 
-    public function list() {
+    /**
+	 * @return void
+	**/
+    public function list():void
+    {
         $project = new ProjectModel();
         $tabProjects = $project->select();
 
@@ -20,8 +24,11 @@ class Project {
         $view->assign("tabProjects", $tabProjects);
     }
 
-
-    public function edit($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function edit($data=array()):void
     {
         $project = new projectModel();
 
@@ -70,7 +77,10 @@ class Project {
 
     }
 
-    public function add()
+    /**
+	 * @return void
+	**/
+    public function add():void
     {
         $project = new projectModel();
         if (!empty($_POST)) {
@@ -101,7 +111,11 @@ class Project {
         }
     }
 
-    public function delete($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function delete($data=array()):void
     {
         if (count($data)>0 && isset($data['id'])) {
             $id = htmlspecialchars($data['id']);
@@ -129,7 +143,11 @@ class Project {
         }
     }
 
-    public function seeproject($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function seeproject($data=array()):void
     {
         if (isset($data['id'])) {
             $project = new projectModel();

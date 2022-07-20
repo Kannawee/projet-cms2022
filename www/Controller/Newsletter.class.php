@@ -11,7 +11,11 @@ use App\Model\Mymail as mymailModel;
 
 class Newsletter {
 
-    public function list() {
+    /**
+	 * @return void
+	**/
+    public function list():void
+    {
         $newsletter = new newsletterModel();
         $list = $newsletter->select();
         $view = new View("newsletter", "back");
@@ -19,7 +23,10 @@ class Newsletter {
         $view->assign("list", $list);
     }
 
-    public function add()
+    /**
+	 * @return void
+	**/
+    public function add():void
     {
         $newsletter = new newsletterModel();
         $result = Verificator::checkForm($newsletter->getAddForm(), $_POST);
@@ -42,7 +49,11 @@ class Newsletter {
 
     }
 
-    public function edit($data)
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function edit($data):void
     {
 
         $newsletter = new newsletterModel();
@@ -101,7 +112,11 @@ class Newsletter {
         }
     }
 
-    public function subscribe($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function subscribe($data=array()):void
     {
         $newsletter = new newsletterModel();
 
@@ -121,8 +136,11 @@ class Newsletter {
         }
     }
 
-
-    public function unsubscribe($data)
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function unsubscribe($data):void
     {
         $newsletter = new newsletterModel();
 
@@ -142,8 +160,11 @@ class Newsletter {
         }
     }
 
-
-    public function send($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function send($data=array()):void
     {
         $newsletter = new newsletterModel();
 
@@ -176,8 +197,11 @@ class Newsletter {
         }
     }
 
-
-    public function delete($data=array())
+    /**
+	 * @param array $data
+	 * @return void
+	**/
+    public function delete($data=array()):void
     {
         $newsletter = new newsletterModel();
 
@@ -200,12 +224,5 @@ class Newsletter {
             }
         }
     }
-
-
-    public function test($data)
-    {
-        echo "ID USER : ".$data['iduser']."<br>ID NEWS : ".$data['idnews'];die;
-    }
-
 
 }

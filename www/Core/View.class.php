@@ -30,7 +30,7 @@ class View
         return "La vue est : ". $this->view;
     }
 
-    public function includePartial($partial, $data):void
+    public function includePartial(string $partial, array $data):void
     {
         if(!file_exists("View/Partial/".$partial.".partial.php")){
             die("Le partial ".$partial." n'existe pas");
