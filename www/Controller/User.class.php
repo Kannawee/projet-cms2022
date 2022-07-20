@@ -102,6 +102,10 @@ class User {
                             header("Location: /administration");
                             exit();
                         }
+                        else if($res->getStatus() == 3){
+                            die("You have been ban from this website");
+
+                        }
                         header("Location: /");
                         exit();
                     }
@@ -330,3 +334,5 @@ class User {
     }
 
 }
+
+

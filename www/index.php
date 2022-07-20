@@ -9,6 +9,9 @@ include "./Model/User.class.php";
 use App\Core\Sql;
 use App\Model\User as userModel;
 
+if ($_SESSION["isAdmin"]==3){
+    die("You have been ban from this website");
+}
 
 function myAutoloader($class)
 {
@@ -25,25 +28,19 @@ spl_autoload_register("App\myAutoloader");
 $params = array();
 $controller = $action = "";
 
+if (session_status() != PHP_SESSION_ACTIVE) {
+
+    session_start();
+
+}
+
 if (!file_exists("conf_perso.inc.php")) {
 
     $controller = "Installer";
     $action = "install";
     
 } else {
-    if (session_status() != PHP_SESSION_ACTIVE) {
 
-        session_start();
-    
-    }
-    
-    
-    
-    if (session_status() != PHP_SESSION_ACTIVE) {
-    
-        session_start();
-    
-    }
     
     
     
@@ -198,31 +195,30 @@ if (!file_exists("conf_perso.inc.php")) {
         }
     
     }
-    
-    
-    
+
+
+    $user = new userModel();
+    if (isset($_SESSION['idUser'])) {
+        $user = $user->getById($_SESSION['idUser'],['id','status','token']);
+
+        if ($user===false) {
+            session_destroy();
+            die("User connected not found");
+        }
+
+        if ($user->getToken()!=$_SESSION['token'] ) {
+            session_destroy();
+            die("Token different : hack intrusion detected !!!!");
+        } elseif($user->getStatus()!=$_SESSION['isAdmin']) {
+            session_destroy();
+            die("Role different : hack intrusion detected !!!");
+        }
+    }
+
     if (!empty($routes[$uri]['security'])) {
 
-        $user = new userModel();
 
         if (!empty($_SESSION)) {
-
-            if (isset($_SESSION['idUser'])) {
-                $user = $user->getById($_SESSION['idUser'],['id','status','token']);
-
-                if ($user===false) {
-                    session_destroy();
-                    die("User connected not found");
-                }
-
-                if ($user->getToken()!=$_SESSION['token'] ) {
-                    session_destroy();
-                    die("Token different : hack intrusion detected !!!!");
-                } elseif($user->getStatus()!=$_SESSION['isAdmin']) {
-                    session_destroy();
-                    die("Role different : hack intrusion detected !!!");
-                }
-            }
 
             $checkSecu = false;
 
